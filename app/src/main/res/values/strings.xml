@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name">Mama\'s Biz</string>
+    <string name="total_payment">Total Payment: KES 40K</string>
+    <string name="customer">Customer</string>
+    <string name="supplier">Supplier</string>
+    <string name="_10k">10K</string>
+    <string name="_30k">30K</string>
+    <string name="create_credit">CREATE CREDIT</string>
+    <string name="create_debt">Create Debt</string>
+    <string name="profit">Profit</string>
+    <string name="activity">Activity</string>
+    <string name="home">Home</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_credit">CreditActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="title_activity_debt">DebtActivity</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="kindly_fill_all_the_additional_details">Kindly fill all the additional details:</string>
+    <string name="name_of_the_debtor">Name of the debtor</string>
+    <string name="name_of_the_creditor">Name of the creditor</string>
+    <string name="e_g_john_doe">e.g John Doe</string>
+    <string name="phone_number_of_the_debtor_optional">Phone number of the debtor (optional)</string>
+    <string name="phone_number_of_the_creditor_optional">Phone number of the creditor (optional)</string>
+    <string name="_2547xxxxxxxx">+2547XXXXXXXX</string>
+    <string name="status_of_the_payment">Status of the payment</string>
+    <string name="kindly_fill_all_the_products_bought">Kindly fill all the products purchased:</string>
+    <string name="name">Name</string>
+    <string name="qty">Qty</string>
+    <string name="unit">Unit</string>
+    <string name="price">Price</string>
+    <string name="amt">Amt</string>
+    <string name="meat">Meat</string>
+    <string name="kg">Kg</string>
+    <string name="_200">0</string>
+    <string name="intestines">Intestines</string>
+    <string name="african_sausage">African Sausage</string>
+    <string name="no">No.</string>
+    <string name="head_and_legs">Head and Legs</string>
+    <string name="kidney">Kidney</string>
+    <string name="liver">Liver</string>
+    <string name="fillet">Fillet</string>
+    <string name="skin">Skin</string>
+    <string name="total">Total :</string>
+    <string name="kindly_select_the_date_to_be_paid">Kindly Select the date the debt will be paid:</string>
+    <string name="preview">Preview</string>
+    <string name="debtor_name">Debtor Name: </string>
+    <string name="creditor_name">Creditor Name: </string>
+    <string name="john_doe">John Doe</string>
+    <string name="debtor_number">Debtor Number:</string>
+    <string name="creditor_number">Creditor Number:</string>
+    <string name="_2547xx_xxx_xxx">+2547XX XXX XXX</string>
+    <string name="total_debt">Total Debt:</string>
+    <string name="total_credit">Total Credit:</string>
+    <string name="kes_4000">KES 0</string>
+    <string name="debt_status">Debt Status:</string>
+    <string name="credit_status">Credit Status:</string>
+    <string name="not_paid">Not Paid</string>
+    <string name="payment_date">Payment Date</string>
+    <string name="_31_3_2021">31/3/2021</string>
+    <string name="pay_date">Pay Date:</string>
+    <array name="status">
+        <item>Select Status</item>
+        <item>Paid</item>
+        <item>Not Paid</item>
+    </array>
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="splash">Splash</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="_254">+254</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="an_otp_has_been_sent_to_this_number">An OTP has been sent to this number:</string>
+    <string name="no_otp_sent_retry">No OTP sent? Retry.</string>
+    <string name="submit">Submit</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+</resources>

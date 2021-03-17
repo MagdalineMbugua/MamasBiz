@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.magda.mamasbiz">
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".main.userInterface.activities.PasswordActivity"></activity>
+        <activity android:name=".main.userInterface.activities.OtpActivity" />
+        <activity android:name=".main.userInterface.activities.LoginActivity" />
+        <activity android:name=".main.userInterface.activities.SignUpActivity" />
+        <activity android:name=".main.userInterface.activities.SplashScreenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".main.userInterface.activities.CreditDebtActivity"
+            android:label="@string/title_activity_credit" />
+        <activity android:name=".main.userInterface.activities.DashboardActivity" />
+    </application>
+
+</manifest>

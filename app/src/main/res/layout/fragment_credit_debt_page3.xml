@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".main.userInterface.fragments.CreditPage3Fragment">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvInfo"
+        android:text="@string/kindly_select_the_date_to_be_paid"
+        android:textSize="20sp"
+        android:fontFamily="@font/cormorantsc_bold"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="55dp"/>
+    <CalendarView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvInfo"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:id="@+id/calendarView"
+        android:focusableInTouchMode="true"
+        android:dateTextAppearance="@style/CalenderViewDateCustomText"
+        android:weekDayTextAppearance="@style/CalenderViewMonthCustomText"
+        android:theme="@style/CalenderViewCustom"
+        android:background="@drawable/orange_rounded_rectangle"/>
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pay_date"
+        android:id="@+id/tvPayDate"
+        app:layout_constraintTop_toBottomOf="@id/calendarView"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="100dp"
+        android:fontFamily="@font/cormorantsc_semibold"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvDate"
+        app:layout_constraintTop_toBottomOf="@id/calendarView"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toEndOf="@id/tvPayDate"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/cormorantsc_semibold"
+        android:textColor="@color/colorDarkFont"
+        android:textSize="16sp"/>
+
+
+    <include
+        layout="@layout/next_layout"
+        android:id="@+id/nextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="587dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

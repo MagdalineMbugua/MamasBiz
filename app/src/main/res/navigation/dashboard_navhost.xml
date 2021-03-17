@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboard_navhost"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/activityFragment"
+        android:name="com.magda.mamasbiz.main.userInterface.fragments.ActivityFragment"
+        android:label="fragment_activity"
+        tools:layout="@layout/fragment_activity"
+        />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.magda.mamasbiz.main.userInterface.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/profitFragment"
+        android:name="com.magda.mamasbiz.main.userInterface.fragments.ProfitFragment"
+        android:label="fragment_profit"
+        tools:layout="@layout/fragment_profit" />
+    <fragment
+        android:id="@+id/customerFragment"
+        android:name="com.magda.mamasbiz.main.userInterface.fragments.CustomerFragment"
+        android:label="fragment_customer"
+        tools:layout="@layout/fragment_customer" />
+    <fragment
+        android:id="@+id/supplierFragment"
+        android:name="com.magda.mamasbiz.main.userInterface.fragments.SupplierFragment"
+        android:label="fragment_supplier"
+        tools:layout="@layout/fragment_supplier" />
+</navigation>

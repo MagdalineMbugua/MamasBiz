@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".main.userInterface.fragments.CreditDebtPage2Fragment"
+    android:id="@+id/mainLayout">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvInfo"
+        android:text="@string/kindly_fill_all_the_products_bought"
+        android:textSize="20sp"
+        android:fontFamily="@font/cormorantsc_bold"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="55dp"/>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/purchasedProductTable"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:stretchColumns="*">
+        <TableRow android:background="@drawable/table_borderline">
+            <TextView android:text="@string/name"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvName"/>
+
+            <TextView android:text="@string/unit"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvUnit"/>
+            <TextView android:text="@string/qty"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvqty"/>
+            <TextView android:text="@string/price"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvPrice"/>
+            <TextView android:text="@string/amt"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvAmt"
+                />
+        </TableRow>
+        <TableRow android:background="@drawable/table_inner_row">
+            <TextView android:text="@string/meat"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvMeat"/>
+
+            <TextView android:text="@string/kg"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvMeatUnit"/>
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etMeatQty"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etMeatPrice"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <TextView android:text="@string/_200"
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvMeatAmt"/>
+        </TableRow>
+        <TableRow android:background="@drawable/table_inner_row">
+            <TextView android:text="@string/intestines"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvIntestines"/>
+
+            <TextView android:text="@string/kg"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvIntestinesUnit"/>
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etIntestinesQty"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etIntestinesPrice"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <TextView android:text="@string/_200"
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvIntestinesAmt"/>
+        </TableRow>
+        <TableRow android:background="@drawable/table_inner_row">
+            <TextView android:text="@string/african_sausage"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvAfricanSausage"/>
+
+            <TextView android:text="@string/no"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvAfricanSausageUnit"/>
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etAfricanSausageQty"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etAfricanSausagePrice"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <TextView android:text="@string/_200"
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvAfricanSausageAmt"/>
+        </TableRow>
+        <TableRow android:background="@drawable/table_inner_row">
+            <TextView android:text="@string/head_and_legs"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvHeadAndLegs"/>
+
+            <TextView android:text="@string/no"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvHeadAndLegsUnit"/>
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etHeadAndLegsQty"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etHeadAndLegsPrice"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <TextView android:text="@string/_200"
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvHeadAndLegsAmt"/>
+        </TableRow>
+        <TableRow android:background="@drawable/table_inner_row">
+            <TextView android:text="@string/liver"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvLiver"/>
+
+            <TextView android:text="@string/kg"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvLiverUnit"/>
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etLiverQty"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etLiverPrice"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <TextView android:text="@string/_200"
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvLiverAmt"/>
+        </TableRow>
+        <TableRow android:background="@drawable/table_inner_row">
+            <TextView android:text="@string/fillet"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvFillet"/>
+
+            <TextView android:text="@string/kg"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvFilletUnit"/>
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etFilletQty"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etFilletPrice"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <TextView android:text="@string/_200"
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvFilletAmt"/>
+        </TableRow>
+        <TableRow android:background="@drawable/table_bottom_borderline">
+            <TextView android:text="@string/skin"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvSkin"/>
+
+            <TextView android:text="@string/kg"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvSkinUnit"/>
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etSkinQty"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <EditText
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/etSkinPrice"
+                android:inputType="number"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <TextView android:text="@string/_200"
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvSkinAmt"/>
+        </TableRow>
+    </TableLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/purchasedProductTable"
+        android:text="@string/total"
+        android:fontFamily="@font/cormorantsc_bold"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="100dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tvTotal"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/purchasedProductTable"
+        android:text="@string/kes_4000"
+        android:fontFamily="@font/cormorantsc_bold"
+        android:textSize="16sp"
+        android:textColor="@color/colorDarkFont"
+        app:layout_constraintStart_toEndOf="@id/tvTotal"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tvSum"/>
+    <include
+        layout="@layout/next_layout"
+        android:id="@+id/nextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="587dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

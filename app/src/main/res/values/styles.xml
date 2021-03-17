@@ -1,0 +1,25 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="otpViewStyle">@style/OtpWidget.OtpView</item>
+
+    </style>
+    <style name="CalenderViewDateCustomText" >
+        <item name="android:fontFamily">@font/cormorantsc_semibold</item>
+        <item name="android:textColor">@color/colorDarkFont</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="CalenderViewMonthCustomText" >
+        <item name="android:fontFamily">@font/cormorantsc_bold</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+    </style>
+
+</resources>

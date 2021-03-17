@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.userInterface.activities.SplashScreenActivity"
+    android:background="@color/splashScreen">
+    <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/splash_screen_background"
+    android:scaleType="centerCrop"
+        android:contentDescription="@string/splash"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:weightSum="100"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:src="@drawable/splash_cow"
+            android:layout_weight="50"
+            android:layout_marginTop="40dp"
+            android:contentDescription="@string/splash"
+            android:id="@+id/ivImageLogo"
+            android:transitionName="imageLogoTransition"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:src="@drawable/mama_biz_logo1"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center"
+            android:id="@+id/ivTextLogo"
+            android:layout_weight="15"
+            android:contentDescription="@string/splash"
+            android:transitionName="textLogoTransition"
+            />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

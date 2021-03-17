@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "222523320169",
+    "project_id": "mama-s-biz",
+    "storage_bucket": "mama-s-biz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222523320169:android:c238b477c9825ca943bff8",
+        "android_client_info": {
+          "package_name": "com.magda.mamasbiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222523320169-nl76hcqb8cn178aimmekd93qpbpovhql.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm9k4gGD7ovlbU2X6An9J3yQnlUdelK10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222523320169-nl76hcqb8cn178aimmekd93qpbpovhql.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

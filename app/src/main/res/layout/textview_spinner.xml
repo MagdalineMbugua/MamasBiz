@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/spinnerTextView"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fontFamily="@font/cormorantsc_semibold"
+    android:textSize="16sp"
+    android:textColor="@color/colorIcon"
+    app:drawableEndCompat="@drawable/ic_baseline_arrow_drop_down_24">
+
+
+</TextView>
