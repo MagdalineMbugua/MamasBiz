@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class CreditDebt(
     @PrimaryKey(autoGenerate = true)
-    val creditDebtId: String,
+    val creditDebtId: Int,
     val userId: String,
     val type : String,
     val name :String,

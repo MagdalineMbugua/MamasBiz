@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.magda.mamasbiz.databinding.ActivityPasswordBinding
 import com.magda.mamasbiz.main.businessLogic.UserViewModel
 import com.magda.mamasbiz.main.data.entity.User
+import com.magda.mamasbiz.main.utils.ConnectionLiveData
 import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.Constants.Companion.PHONE_NUMBER
 import com.magda.mamasbiz.main.utils.SessionManager
@@ -17,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.properties.Delegates
 
 class PasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPasswordBinding
@@ -24,11 +27,22 @@ class PasswordActivity : AppCompatActivity() {
     private var lastName: String? =""
     private var phoneNumber: String? =""
     private lateinit var userViewModel: UserViewModel
+    private lateinit var connectionLiveData: ConnectionLiveData
+    private var isNetworkAvailable by Delegates.notNull<Boolean>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityPasswordBinding.inflate(layoutInflater)
+
+        //Instantiate Connection Live date
+        connectionLiveData= ConnectionLiveData(this)
+        updateUiOnConnectivity()
         setContentView(binding.root)
+
+        //Instantiate the view model and view model factory
+
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
 
         //getting Extras from the OTP Activity
 
@@ -42,6 +56,14 @@ class PasswordActivity : AppCompatActivity() {
         binding.btSignUp.setOnClickListener{toCheckPassword()}
 
 
+    }
+
+    private fun updateUiOnConnectivity() {
+        connectionLiveData.observe(this, { isNetworkAvailable->
+            if(isNetworkAvailable){
+                Snackbar.make(binding.btSignUp,"Valid Connection",Snackbar.LENGTH_LONG)
+            }else Snackbar.make(binding.btSignUp,"No Connection",Snackbar.LENGTH_LONG)
+        })
     }
 
     private fun toCheckPassword() {
@@ -66,7 +88,7 @@ class PasswordActivity : AppCompatActivity() {
 
     private fun toDashboardActivity(password: String) {
         val sessionManager = SessionManager(this)
-        sessionManager.storeInfo(phoneNumber!!,firstName!!,lastName!!,phoneNumber!!,password,true)
+        sessionManager.storeInfo(phoneNumber!!,firstName!!,lastName!!,password,true)
         toStoreInDatabase(phoneNumber!!,firstName!!,lastName!!,password)
         val intent = Intent(this@PasswordActivity, DashboardActivity::class.java)
         intent.putExtra(PHONE_NUMBER,phoneNumber!!)
@@ -85,11 +107,13 @@ class PasswordActivity : AppCompatActivity() {
     ) {
         val dateCreated = getDateCreated()
         val user= User(phoneNumber,firstName,lastName,password,dateCreated)
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-        userViewModel.adduser(user)
+
+        userViewModel.addUser(user)
         Log.d(Companion.TAG, "toStoreInDatabase: $user")
 
     }
+
+    //Get date and time of the sign up
     private fun getDateCreated():String{
         var dateToString=""
         dateToString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

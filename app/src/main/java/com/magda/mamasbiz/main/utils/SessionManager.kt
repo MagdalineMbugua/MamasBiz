@@ -22,11 +22,10 @@ class SessionManager(context: Context) {
     }
 
 
-    public fun storeInfo(userId:String, firstName: String, lastName:String, phoneNumber: String, password:String,isLoggedIn:Boolean){
+    public fun storeInfo(userId:String, firstName: String, lastName:String, password:String,isLoggedIn:Boolean){
         editor.putString(USER_ID, userId)
         editor.putString(FIRST_NAME, firstName)
         editor.putString(LAST_NAME, lastName)
-        editor.putString(PHONE_NUMBER, phoneNumber)
         editor.putString(PASSWORD, password)
         editor.putBoolean(IS_LOGGED_IN,true)
         editor.apply()

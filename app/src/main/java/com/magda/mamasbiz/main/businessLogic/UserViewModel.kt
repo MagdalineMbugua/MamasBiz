@@ -1,25 +1,29 @@
 package com.magda.mamasbiz.main.businessLogic
 
 import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.magda.mamasbiz.main.data.Repository
+import com.magda.mamasbiz.main.data.repository.UserRepository
 import com.magda.mamasbiz.main.data.dao.UserDao
 import com.magda.mamasbiz.main.data.database.MamaBizDatabase
 import com.magda.mamasbiz.main.data.entity.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class UserViewModel(application: Application): ViewModel() {
-    private val userRepository: Repository
-    private val userDao: UserDao
+open class UserViewModel(application: Application): AndroidViewModel(application) {
+    private val userUserRepository: UserRepository
+
+
     init {
-        userDao=MamaBizDatabase.getDatabase(application).userDao()
-        userRepository= Repository(null, userDao)
+        val userDao: UserDao = MamaBizDatabase.getDatabase(application).userDao()
+        userUserRepository= UserRepository( userDao)
     }
-    fun adduser(user: User){
+    fun addUser(user: User){
       viewModelScope.launch(Dispatchers.IO) {
-          userRepository.addUser(user)
+          userUserRepository.addUser(user)
       }
     }
+
 }
