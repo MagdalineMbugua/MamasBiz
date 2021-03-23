@@ -46,6 +46,7 @@ class SignUpActivity : AppCompatActivity() {
         intent.putExtra(Constants.FIRST_NAME, firstName)
         intent.putExtra(Constants.LAST_NAME, lastName)
         intent.putExtra(Constants.PHONE_NUMBER, phoneNumber)
+        intent.putExtra(Constants.IS_LOGGED_IN, false)
         startActivity(intent)
 
     }

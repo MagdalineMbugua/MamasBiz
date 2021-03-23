@@ -31,8 +31,6 @@ A
 gradle.properties,2\a\2afbb999f001938c88fa43fc2ef52abf0f8213e4
 ?
 settings.gradle,0\5\05efc8b1657769a27696d478ded1e95f38737233
-l
-<app/src/main/java/com/magda/mamasbiz/main/data/Repository.kt,6\8\68ea05c57a2b3d82c048d1e88f9e10fe0f4694b8
 s
 Capp/src/main/java/com/magda/mamasbiz/main/data/entity/CreditDebt.kt,f\7\f7c4d0fc5bcdde5a14ce49240d346d02ed9cf962
 w
@@ -109,10 +107,6 @@ R
 +app/src/main/res/layout/activity_credit.xml,8\f\8fcbd0383d740c4f55755bd8452e81c10b525997
 ^
 .app/src/main/res/layout/activity_dashboard.xml,5\c\5c708354d1e40c2b7572553d99ed6bddbc10fd54
-Z
-*app/src/main/res/layout/activity_login.xml,1\f\1f7e901185d74bf05f9fcb38f9ed35ea78cd4c6e
-\
-,app/src/main/res/layout/activity_sign_up.xml,b\3\b32acfa5b25626d9cecbf5439a9ef6b8a5e6aa51
 b
 2app/src/main/res/layout/activity_splash_screen.xml,f\7\f7df685f78aceccfe92840b30dd70c70674d7944
 h
@@ -129,8 +123,6 @@ f
 6app/src/main/res/layout/fragment_credit_debt_page2.xml,a\9\a9139749fc5fe6fd3887e731915b3aaf5838ec5c
 f
 6app/src/main/res/layout/fragment_credit_debt_page3.xml,5\4\5400361a82c5e8cfc74d7a2bbc5b479c330e6817
-f
-6app/src/main/res/layout/fragment_credit_debt_page4.xml,c\b\cbf61e1f3f87232c02dd7323d4b44ed86c31468f
 ]
 -app/src/main/res/layout/fragment_customer.xml,1\8\18e3333c3128434d7ef6a8630230adbf2b696d0a
 Y
@@ -184,3 +176,19 @@ L
 gradlew,5\b\5bbfa66edb4db3c7c33c5181f43510990d3307f9
 ;
 gradlew.bat,2\a\2a45a911a8f1836b0b6c5b758962572012d8f8c3
+X
+(app/src/main/res/layout/activity_otp.xml,9\1\918ac708a45712c9d17008185c801666c03a5cb6
+
+Qapp/src/main/java/com/magda/mamasbiz/main/data/repository/CreditDebtRepository.kt,7\a\7ad0074ab084918d7232b81592f93e6afce728ba
+{
+Kapp/src/main/java/com/magda/mamasbiz/main/data/repository/UserRepository.kt,8\e\8e5f58cb5291eb84bf9605815b38e8b248631241
+u
+Eapp/src/main/java/com/magda/mamasbiz/main/utils/ConnectionLiveData.kt,a\c\ac9b6587a5cad4402b9857c52f9888b5410e4b90
+z
+Japp/src/main/java/com/magda/mamasbiz/main/utils/DoesNetworkHaveInternet.kt,5\8\58ea4079b9248397459ef14f0be41d9ce2bdf4dc
+Œ
+\app/src/main/java/com/magda/mamasbiz/main/userInterface/activities/ForgotPasswordActivity.kt,2\5\25129e3f583dd43a6e55c89d90dc08f26e8fc787
+j
+:app/src/main/java/com/magda/mamasbiz/main/utils/Results.kt,4\5\456429193d03b0a4a87919cb3f0d2466a2c30796
+~
+Napp/src/main/java/com/magda/mamasbiz/main/businessLogic/CreditDebtViewModel.kt,8\3\83b8f09a8eaccb64de12761456888f646d4e6757

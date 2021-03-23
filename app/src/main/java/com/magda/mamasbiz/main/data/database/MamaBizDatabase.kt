@@ -25,7 +25,7 @@ abstract class MamaBizDatabase: RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     MamaBizDatabase::class.java,
-                    "user_database"
+                    "MamaBiz_database"
                 ).build()
                 INSTANCE= instance
                 return instance

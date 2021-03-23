@@ -1,10 +1,7 @@
 package com.magda.mamasbiz.main.data.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.magda.mamasbiz.main.data.entity.User
 @Dao
 interface UserDao {
@@ -13,4 +10,8 @@ interface UserDao {
 
     @Query("SELECT* From User_Table Order By dateCreated ASC")
     fun readAllUsers(): LiveData<List<User>>
+
+
+    @Update
+    fun updateUser(user: User)
 }

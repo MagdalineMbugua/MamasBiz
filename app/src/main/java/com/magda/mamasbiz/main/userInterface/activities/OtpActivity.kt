@@ -23,6 +23,9 @@ class OtpActivity : AppCompatActivity() {
     private var firstName: String? = ""
     private var lastName: String? = ""
     private var phoneNumber: String? = ""
+    private var password: String? = ""
+    private var isLoggedIn: Boolean? = false
+    private var dateCreated: String? = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +40,9 @@ class OtpActivity : AppCompatActivity() {
         firstName = intent.getStringExtra(Constants.FIRST_NAME)
         lastName = intent.getStringExtra(Constants.LAST_NAME)
         phoneNumber = intent.getStringExtra(Constants.PHONE_NUMBER)
+        password = intent.getStringExtra(Constants.PASSWORD)
+        isLoggedIn = intent.getBooleanExtra(Constants.IS_LOGGED_IN,false)
+        dateCreated = intent.getStringExtra(Constants.DATE_CREATED)
         Log.d(TAG, "onCreate: $phoneNumber")
 
         // Send verification code
@@ -137,6 +143,12 @@ class OtpActivity : AppCompatActivity() {
         intent.putExtra(Constants.FIRST_NAME, firstName)
         intent.putExtra(Constants.LAST_NAME, lastName)
         intent.putExtra(Constants.PHONE_NUMBER, phoneNumber)
+        intent.putExtra(Constants.PASSWORD, password)
+        intent.putExtra(Constants.DATE_CREATED, dateCreated)
+
+        if(isLoggedIn == true){
+            intent.putExtra(Constants.IS_LOGGED_IN,true)
+        } else intent.putExtra(Constants.IS_LOGGED_IN,false)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent)

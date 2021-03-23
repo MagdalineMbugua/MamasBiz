@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.magda.mamasbiz">
-    <uses-permission android:name="android.permission.INTERNET"/>
 
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,10 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.userInterface.activities.PasswordActivity"
-            android:windowSoftInputMode="adjustResize">
-
-        </activity>
+        <activity android:name=".main.userInterface.activities.ForgotPasswordActivity"></activity>
+        <activity android:name=".main.userInterface.activities.PasswordActivity"></activity>
         <activity android:name=".main.userInterface.activities.OtpActivity" />
         <activity android:name=".main.userInterface.activities.LoginActivity" />
         <activity android:name=".main.userInterface.activities.SignUpActivity" />

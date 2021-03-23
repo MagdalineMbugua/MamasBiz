@@ -18,6 +18,9 @@ class Constants {
         const val USER: String ="user"
         const val PASSWORD: String ="password"
         const val IS_LOGGED_IN: String ="is logged in"
+        const val DATE_CREATED : String ="Date created"
+        const val CREDIT_DEBT_REFERENCE : String ="Credit Debt Reference"
+
 
 
     }
