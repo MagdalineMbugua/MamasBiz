@@ -1,33 +1,53 @@
 package com.magda.mamasbiz.main.userInterface.fragments
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.magda.mamasbiz.R
+import com.magda.mamasbiz.databinding.FragmentCustomerBinding
+import com.magda.mamasbiz.databinding.FragmentSupplierBinding
+import com.magda.mamasbiz.main.businessLogic.adapter.CreditDebtAdapter
+import com.magda.mamasbiz.main.businessLogic.adapter.ItemClickListener
+import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
+import com.magda.mamasbiz.main.businessLogic.viewModels.ProductViewModel
+import com.magda.mamasbiz.main.data.entity.CreditDebt
+import com.magda.mamasbiz.main.userInterface.activities.CreditDebtActivity
+import com.magda.mamasbiz.main.userInterface.activities.DetailsActivity
+import com.magda.mamasbiz.main.utils.Constants
+import com.magda.mamasbiz.main.utils.SessionManager
+import com.magda.mamasbiz.main.utils.Status
+import kotlinx.android.synthetic.main.customer_cardview.view.*
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SupplierFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SupplierFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class SupplierFragment : Fragment(), ItemClickListener {
+    private lateinit var binding: FragmentSupplierBinding
+    private val _binding get() = binding!!
+    private var creditList : MutableList<CreditDebt> = mutableListOf()
+    private lateinit var creditDebtViewModel: CreditDebtViewModel
+    private lateinit var productViewModel: ProductViewModel
+    private lateinit var creditDebtAdapter: CreditDebtAdapter
+    private val TAG = "Supplier Fragment"
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        //instantiate view model
+        creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+
     }
 
     override fun onCreateView(
@@ -35,26 +55,157 @@ class SupplierFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_supplier, container, false)
-    }
+        binding = FragmentSupplierBinding.inflate(inflater, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SupplierFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SupplierFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        //instantiate the credit list form the view model
+        fetchDebtData()
+
+
+
+        //Observe the data fetched
+        creditDebtViewModel._fetchCDLiveData.observe(viewLifecycleOwner,{
+
+
+            when (it.status) {
+                Status.LOADING -> {
+                    binding.progressbar.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    binding.progressbar.visibility = View.GONE
+                    val creditDebtList = it.data!!
+
+                    Log.d(TAG, "onCreateView: ${creditDebtList.size}")
+                    getDebtList(creditDebtList)
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireActivity(), it.error, Toast.LENGTH_SHORT).show()
+                    binding.progressbar.visibility = View.GONE
                 }
             }
+        })
+
+
+        searchData()
+
+
+
+
+
+        binding.tvCreateCredit.setOnClickListener {
+            val intent = Intent(requireActivity(), CreditDebtActivity::class.java)
+            intent.putExtra(Constants.CREDIT,"Credit")
+            startActivity(intent) }
+
+
+
+
+        return _binding.root
     }
+
+    private fun searchData() {
+        binding.etSearch.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //method sub
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                //method sub
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if( !s.isNullOrEmpty()) {
+                    val string = s.toString().toLowerCase(Locale.ROOT)
+                    filterUsingTheText(string)
+
+                }else {binding.consumerRecyclerView.visibility = View.VISIBLE
+                    creditDebtAdapter.addList(creditList)
+                    binding.ivUserNotFound.visibility = View.GONE
+                    binding.tvUserNotFound.visibility = View.GONE}
+            }
+
+        })
+    }
+
+    private fun filterUsingTheText(string: String) {
+        val filteredList = creditList.filter {
+            it.name?.contains(string)!!  || it.status?.contains(string)!!
+        }.toMutableList()
+        if(filteredList.size>0){
+            creditDebtAdapter.filteredList(filteredList)
+
+        } else {
+        binding.ivUserNotFound.visibility = View.VISIBLE
+        binding.tvUserNotFound.visibility = View.VISIBLE
+        binding.consumerRecyclerView.visibility = View.GONE}
+
+
+    }
+
+    private fun initViews() {
+        setViews()
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.orientation = RecyclerView.VERTICAL
+        binding.consumerRecyclerView.apply {
+            setLayoutManager(layoutManager)
+            setHasFixedSize(true)
+            adapter = creditDebtAdapter
+        }
+    }
+
+    private fun setViews() {
+        if(creditList.size>0){
+            binding.apply {
+                consumerRecyclerView.visibility = View.VISIBLE
+                etSearch.visibility = View.VISIBLE
+                tvCreateCredit.visibility = View.GONE
+                tvRecords.visibility = View.GONE
+                ivSplashImage.visibility = View.GONE
+            }
+        } else{
+            binding.apply {
+                consumerRecyclerView.visibility = View.GONE
+                etSearch.visibility = View.GONE
+                tvCreateCredit.visibility = View.VISIBLE
+                tvRecords.visibility = View.VISIBLE
+                ivSplashImage.visibility = View.VISIBLE
+            }
+        }
+    }
+    //Fetch data from Firestore using the view model
+    private fun fetchDebtData() {
+
+        val userId = SessionManager(requireContext()).getUserId()
+        creditDebtViewModel.getCreditDebt(userId!!)
+
+    }
+    //Get debt list from the list with both credit and debt
+    private fun getDebtList(creditDebtList: MutableList<CreditDebt>) {
+        creditList .addAll(creditDebtList.filter {it.type == Constants.CREDIT  }
+            .toMutableList())
+        creditDebtAdapter = CreditDebtAdapter(requireContext(), this)
+        creditDebtAdapter.addList(creditList)
+        Log.d(TAG, "getDebtList: ${creditList.size}")
+        initViews()
+
+
+    }
+
+    override fun itemClicked(creditDebt: CreditDebt, view: View) {
+        if(view.id == R.id.consumerCardView){
+            toDetailsActivity(creditDebt)
+        }
+
+    }
+
+    private fun toDetailsActivity(creditDebt: CreditDebt) {
+        val intent =Intent(requireActivity(), DetailsActivity::class.java)
+        intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
+        intent.putExtra(Constants.REVIEW, "Review")
+        intent.putExtra(Constants.CREDIT, "Credit")
+        startActivity(intent)
+    }
+
+
+
+
 }

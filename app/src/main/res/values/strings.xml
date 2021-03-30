@@ -48,6 +48,7 @@
     <string name="skin">Skin</string>
     <string name="total">Total :</string>
     <string name="kindly_select_the_date_to_be_paid">Kindly Select the date the debt will be paid:</string>
+    <string name="kindly_select_the_date_credit_to_be_paid">Kindly Select the date the credit will be paid:</string>
     <string name="preview">Preview</string>
     <string name="debtor_name">Debtor Name: </string>
     <string name="creditor_name">Creditor Name: </string>
@@ -55,7 +56,7 @@
     <string name="debtor_number">Debtor Number:</string>
     <string name="creditor_number">Creditor Number:</string>
     <string name="_2547xx_xxx_xxx">+2547XX XXX XXX</string>
-    <string name="total_debt">Total Debt:</string>
+    <string name="total_paid">Total Paid:</string>
     <string name="total_credit">Total Credit:</string>
     <string name="kes_4000">KES 0</string>
     <string name="debt_status">Debt Status:</string>
@@ -85,4 +86,13 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
+    <string name="no_records">No Records have been created yet. But don\'t worry we can create one now!</string>
+    <string name="_31_2_2021">31/2/2021</string>
+    <string name="search">Search Name or Payment Status</string>
+    <string name="balance">Balance</string>
+    <string name="total_amount_paid">Total Amount Paid:</string>
+    <string name="_0">0</string>
+    <string name="user_not_found">User not found. Do not worry,let us try another word.</string>
+    <string name="details_of_the_customer">Details of the Customer</string>
+    <string name="update">Update</string>
 </resources>

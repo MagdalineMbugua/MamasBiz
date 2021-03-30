@@ -1,11 +1,9 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar" >
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="otpViewStyle">@style/OtpWidget.OtpView</item>
-
     </style>
     <style name="CalenderViewDateCustomText" >
         <item name="android:fontFamily">@font/cormorantsc_semibold</item>

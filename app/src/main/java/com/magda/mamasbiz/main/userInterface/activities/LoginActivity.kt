@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.magda.mamasbiz.databinding.ActivityLoginBinding
-import com.magda.mamasbiz.main.businessLogic.UserViewModel
+import com.magda.mamasbiz.main.businessLogic.viewModels.UserViewModel
 import com.magda.mamasbiz.main.utils.Constants
 import kotlinx.android.synthetic.main.activity_login.*
 

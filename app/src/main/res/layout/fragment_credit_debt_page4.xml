@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.userInterface.fragments.CreditPage4Fragment">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/appbar">
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="55dp"/>
+    </com.google.android.material.appbar.AppBarLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,10 +23,10 @@
         android:textSize="20sp"
         android:fontFamily="@font/cormorantsc_bold"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="55dp"/>
+        android:layout_marginTop="16dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,7 +48,8 @@
         android:fontFamily="@font/cormorantsc_bold"
         android:textColor="@color/colorDarkFont"
         app:layout_constraintTop_toBottomOf="@id/tvInfo"
-       app:layout_constraintStart_toEndOf="@id/tvName"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"/>
     <TextView
@@ -62,14 +73,15 @@
         android:fontFamily="@font/cormorantsc_bold"
         android:textColor="@color/colorDarkFont"
         app:layout_constraintTop_toBottomOf="@id/tvDebtorName"
-        app:layout_constraintStart_toEndOf="@id/tvNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTotalDebt"
-        android:text="@string/total_debt"
+        android:text="@string/total_paid"
         android:textSize="16sp"
         android:fontFamily="@font/cormorantsc_bold"
         android:textColor="@color/colorPrimary"
@@ -86,18 +98,44 @@
         android:fontFamily="@font/cormorantsc_bold"
         android:textColor="@color/colorDarkFont"
         app:layout_constraintTop_toBottomOf="@id/tvDebtorNumber"
-        app:layout_constraintStart_toEndOf="@id/tvTotalDebt"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTotalBalance"
+        android:text="@string/balance"
+        android:textSize="16sp"
+        android:fontFamily="@font/cormorantsc_bold"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalDebt"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvDebtorTotalBalance"
+        android:text="@string/kes_4000"
+        android:textSize="16sp"
+        android:fontFamily="@font/cormorantsc_bold"
+        android:textColor="@color/colorDarkFont"
+        app:layout_constraintTop_toBottomOf="@id/tvDebtorTotalDebt"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvStatus"
-        android:text="@string/debt_status"
+        android:text="@string/status_of_the_payment"
         android:textSize="16sp"
         android:fontFamily="@font/cormorantsc_bold"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@id/tvTotalDebt"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalBalance"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"/>
@@ -109,8 +147,9 @@
         android:textSize="16sp"
         android:fontFamily="@font/cormorantsc_bold"
         android:textColor="@color/colorDarkFont"
-        app:layout_constraintTop_toBottomOf="@id/tvDebtorTotalDebt"
-        app:layout_constraintStart_toEndOf="@id/tvStatus"
+        app:layout_constraintTop_toBottomOf="@id/tvDebtorTotalBalance"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"/>
     <TextView
@@ -134,7 +173,8 @@
         android:fontFamily="@font/cormorantsc_bold"
         android:textColor="@color/colorDarkFont"
         app:layout_constraintTop_toBottomOf="@id/tvDebtorStatus"
-        app:layout_constraintStart_toEndOf="@id/tvPaymentDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"/>
     <TableLayout
@@ -388,7 +428,7 @@
                 android:textSize="14sp"
                 android:id="@+id/tvFilletAmt"/>
         </TableRow>
-        <TableRow android:background="@drawable/table_bottom_borderline"
+        <TableRow android:background="@drawable/table_inner_row"
             android:id="@+id/skinRow">
             <TextView android:text="@string/skin"
                 android:textColor="@color/colorPrimary"
@@ -422,6 +462,42 @@
                 android:fontFamily="@font/cormorantsc_semibold"
                 android:textSize="14sp"
                 android:id="@+id/tvSkinAmt"/>
+        </TableRow>
+        <TableRow android:background="@drawable/table_bottom_borderline"
+            android:id="@+id/TotalRow">
+            <TextView
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvTSkin"/>
+
+            <TextView
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvTSkinUnit"/>
+            <TextView
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvTSkinQty"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <TextView
+                android:textColor="@color/colorDarkFont"
+                android:text="@string/total"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvTotal"
+                android:autofillHints="null"
+                android:backgroundTint="@color/colorIcon"
+                tools:ignore="LabelFor" />
+            <TextView android:text="@string/_200"
+                android:textColor="@color/colorDarkFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="14sp"
+                android:id="@+id/tvTotalAmt"/>
         </TableRow>
     </TableLayout>
     <TextView

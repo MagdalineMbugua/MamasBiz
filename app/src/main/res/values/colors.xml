@@ -5,4 +5,5 @@
     <color name="colorIcon">#A9A6A6</color>
     <color name="colorDarkFont">#000000</color>
     <color name="splashScreen">#50FD5B2C</color>
+    <color name="colorBackground">#EAEAEA</color>
 </resources>

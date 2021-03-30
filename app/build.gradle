@@ -102,8 +102,16 @@ dependencies {
     //Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
 
-    //Viewmodel
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
+    //View model
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+
+    //Paging and Recyclerview
+    implementation "androidx.paging:paging-runtime:2.1.2"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+
+    //Floating action button
+    implementation 'com.github.clans:fab:1.6.4'
 
 
 

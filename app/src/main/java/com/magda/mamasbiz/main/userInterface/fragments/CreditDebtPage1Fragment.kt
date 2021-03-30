@@ -16,12 +16,15 @@ import com.magda.mamasbiz.R
 import com.magda.mamasbiz.databinding.FragmentCreditDebtPage1Binding
 import com.magda.mamasbiz.main.userInterface.activities.DashboardActivity
 import com.magda.mamasbiz.main.utils.Constants
+import java.util.*
 
 
 class CreditDebtPage1Fragment : Fragment() {
     private lateinit var _binding: FragmentCreditDebtPage1Binding
     private val binding get() = _binding!!
     private lateinit var status: String
+    private  var credit: String? =""
+    private  var debt: String? = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +50,8 @@ class CreditDebtPage1Fragment : Fragment() {
     private fun creditOrDebtFragment() {
         val intent = requireActivity().intent
         if (intent != null) {
-            val credit: String? = intent.getStringExtra(Constants.CREDIT)
-            val debt: String? = intent.getStringExtra(Constants.DEBT)
+           credit = intent.getStringExtra(Constants.CREDIT)
+           debt= intent.getStringExtra(Constants.DEBT)
             toAlterCreditWords(credit, debt)
         }
 
@@ -88,11 +91,11 @@ class CreditDebtPage1Fragment : Fragment() {
 
     private fun checkData() {
         binding.apply {
-            if (statusSPinner.selectedItemPosition == 0) {
-                status = ""
-            } else status = statusSPinner.selectedItem.toString().trim()
-            val name = etName.text.toString().trim()
-            var phoneNumber: String? = etPhone.text.toString().trim()
+            status = if (statusSPinner.selectedItemPosition == 0) {
+                ""
+            } else statusSPinner.selectedItem.toString().trim().toLowerCase(Locale.ROOT)
+            val name = etName.text.toString().toLowerCase(Locale.ROOT).trim()
+            var phoneNumber: String? = etPhone.text.toString().toLowerCase(Locale.ROOT).trim()
             if (phoneNumber.isNullOrEmpty()) phoneNumber = "+254 XXX XXX XXX"
 
             if (name.isNotEmpty()) {
@@ -115,6 +118,11 @@ class CreditDebtPage1Fragment : Fragment() {
         arg.putString(Constants.DEBTOR_NAME, name)
         arg.putString(Constants.DEBTOR_NUMBER, phoneNumber)
         arg.putString(Constants.DEBTOR_STATUS, status)
+        if(credit!=null){
+            arg.putString(Constants.CREDIT, credit)
+        } else if (debt!=null){
+            arg.putString(Constants.DEBT, debt)
+        }
         Log.d(TAG, "toTheNextPage: $name $phoneNumber $status")
         navController.navigate(R.id.action_creditPage1Fragment_to_creditPage2Fragment, arg)
 

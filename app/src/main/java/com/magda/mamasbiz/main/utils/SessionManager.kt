@@ -22,7 +22,7 @@ class SessionManager(context: Context) {
     }
 
 
-    public fun storeInfo(userId:String, firstName: String, lastName:String, password:String,isLoggedIn:Boolean){
+    fun storeInfo(userId:String, firstName: String, lastName:String, password:String,isLoggedIn:Boolean){
         editor.putString(USER_ID, userId)
         editor.putString(FIRST_NAME, firstName)
         editor.putString(LAST_NAME, lastName)
@@ -33,7 +33,7 @@ class SessionManager(context: Context) {
 
 
     }
-    private fun getInfo(){
+    fun getInfo(){
         sharedPreferences.getString(USER_ID,"")
         sharedPreferences.getString(FIRST_NAME,"")
         sharedPreferences.getString(LAST_NAME,"")
@@ -41,6 +41,10 @@ class SessionManager(context: Context) {
         sharedPreferences.getString(PASSWORD,"")
 
 
+
+    }
+    fun getUserId():String?{
+        return sharedPreferences.getString(USER_ID,"")
     }
     private fun clearInfo(){
         editor.clear()

@@ -1,8 +1,10 @@
 package com.magda.mamasbiz.main.userInterface.fragments
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +14,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.magda.mamasbiz.R
-import com.magda.mamasbiz.databinding.FragmentCreditDebtPage3Binding
 import com.magda.mamasbiz.databinding.FragmentCreditDebtPage4Binding
-import com.magda.mamasbiz.main.businessLogic.CreditDebtViewModel
+import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
+import com.magda.mamasbiz.main.businessLogic.viewModels.ProductViewModel
 import com.magda.mamasbiz.main.data.entity.CreditDebt
-import com.magda.mamasbiz.main.data.entity.ProductsBought
+import com.magda.mamasbiz.main.data.entity.Products
 import com.magda.mamasbiz.main.userInterface.activities.DashboardActivity
 import com.magda.mamasbiz.main.utils.Constants
+import com.magda.mamasbiz.main.utils.DateCreated
+import com.magda.mamasbiz.main.utils.SessionManager
+import com.magda.mamasbiz.main.utils.Status
 import kotlinx.android.synthetic.main.fragment_credit_debt_page4.*
 
 
@@ -26,18 +31,24 @@ class CreditPage4Fragment : Fragment() {
     private lateinit var binding: FragmentCreditDebtPage4Binding
     private val _binding get() = binding!!
     private lateinit var paymentDate: String
-    private lateinit var productsBought: ProductsBought
+    private lateinit var products: Products
     private lateinit var debtorName: String
     private lateinit var phoneNumber: String
     private lateinit var status: String
     private lateinit var totalAmount: String
     private lateinit var creditDebtViewModel: CreditDebtViewModel
+    private lateinit var productViewModel: ProductViewModel
+    private lateinit var type: String
+    private var credit: String? = ""
+    private var debt: String? = ""
+    private lateinit var totalPaid: String
+    private lateinit var totalBalance: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Getting the argument extras
-        arguments?.getParcelable<ProductsBought>(Constants.PRODUCTS_BOUGHT)?.let { productsBought ->
-            this.productsBought = productsBought
+        arguments?.getParcelable<Products>(Constants.PRODUCTS_BOUGHT)?.let { productsBought ->
+            this.products = productsBought
         }
         arguments?.getString(Constants.DEBTOR_NAME)?.let { debtorName ->
             this.debtorName = debtorName
@@ -54,36 +65,146 @@ class CreditPage4Fragment : Fragment() {
         arguments?.getString(Constants.PAYMENT_DATE)?.let { paymentDate ->
             this.paymentDate = paymentDate
         }
+        debt =arguments?.getString(Constants.DEBT)
+        credit = arguments?.getString(Constants.CREDIT)
 
-        //instantiate view model
+        arguments?.getString(Constants.TOTAL_PAID)?.let { totalPaid ->
+            this.totalPaid = totalPaid
+        }
+        arguments?.getString(Constants.BALANCE)?.let { totalBalance ->
+            this.totalBalance = totalBalance
+        }
+
+
+        //instantiate view model for creditdebt and product
         creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentCreditDebtPage4Binding.inflate(inflater)
-        initViews()
 
-        binding.tvBack.setOnClickListener {
-            toPreviousPage()
+        //Setting text to the text views
+        initViews()
+        binding.apply {
+            if (credit?.isNotEmpty() == true) {
+                val creditName = resources.getString(R.string.creditor_name)
+                val creditNumber = resources.getString(R.string.creditor_number)
+                tvName.text = creditName
+                tvNumber.text = creditNumber
+                type = Constants.CREDIT
+
+            }else type = Constants.DEBT
+
+            tvBack.setOnClickListener { toPreviousPage() }
+            tvNext.setOnClickListener { toUploadCreditDebtData() }
         }
-        binding.tvNext.setOnClickListener { toSubmitData() }
+        creditDebtViewModel._loadCDLiveData.observe(viewLifecycleOwner, {
+            Log.d(TAG, "toSubmitData: Called viewmodel")
+            when (it.status) {
+                Status.LOADING -> {
+                    Toast.makeText(requireActivity(), "Uploading...", Toast.LENGTH_SHORT).show()
+
+                }
+                Status.SUCCESS -> {
+                    toUpdateProductData()
+                    Toast.makeText(
+                        requireActivity(),
+                        "Uploading was successful",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    startActivity(Intent(requireActivity(), DashboardActivity::class.java))
+
+
+
+
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireActivity(), it.error, Toast.LENGTH_SHORT).show()
+
+                }
+            }
+
+        })
+        productViewModel._liveDataAddProduct.observe(viewLifecycleOwner, {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Uploading product successful",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Uploading product not successful",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+                Status.LOADING -> {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Uploading products ...",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            }
+        })
+
+
         return _binding.root
     }
 
-    // Submit data to firebase
-    private fun toSubmitData() {
+    private fun toUpdateProductData() {
+        productViewModel.addProducts(products)
+    }
+
+
+    // Upload data to firebase
+    private fun toUploadCreditDebtData() {
+        Log.d(TAG, "toSubmitData: data")
+        val dateCreated = DateCreated.getDateCreated()
+        val creditDebtId = creditDebtViewModel.getCreditDebtId()
+        val userId = getUserId()
         val creditDebt =
-            CreditDebt(1, "", "", debtorName, phoneNumber, status, paymentDate, "", totalAmount, "")
+            CreditDebt(
+                creditDebtId,
+                userId,
+                type,
+                debtorName,
+                phoneNumber,
+                status,
+                paymentDate,
+                dateCreated,
+                totalAmount,
+                products.productId,
+                totalPaid,
+                totalBalance
+            )
+        Log.d(TAG, "toSubmitData: $creditDebt")
         creditDebtViewModel.addCreditDebt(creditDebt)
-        Toast.makeText(requireContext(), "Successfully uploaded", Toast.LENGTH_SHORT).show()
-        startActivity(Intent(requireActivity(), DashboardActivity::class.java))
+
+        Log.d(TAG, "toSubmitData: after Viewmodel")
+
+
+    }
+    private fun getUserId():String{
+        val sessionManager = SessionManager(requireContext())
+        val userId =sessionManager.getUserId()
+        return userId!!
 
 
     }
 
+    //Navigating back on fragment
     private fun toPreviousPage() {
         val navController: NavController = Navigation.findNavController(binding.root)
         navController.navigate(R.id.action_creditPage4Fragment_to_creditPage3Fragment)
@@ -96,48 +217,50 @@ class CreditPage4Fragment : Fragment() {
             tvDebtorNumber.text = phoneNumber
             tvDebtorStatus.text = status
             tvDebtorPaymentDate.text = paymentDate
-            tvDebtorTotalDebt.text = "KES: $totalAmount "
+            tvDebtorTotalDebt.text = "KES: $totalPaid"
+            tvDebtorTotalBalance.text = "KES: $totalBalance"
+            tvTotalAmt.text = "KES: $totalAmount"
             toFillTable()
         }
     }
 
-    //Setting text on the text views
+    //Setting the table to only show filled data
     private fun toFillTable() {
         binding.apply {
-            if (productsBought.meatAmt != "0") {
-                tvMeatPrice.text = productsBought.meatPrice
-                tvMeatQty.text = productsBought.meatQty
-                tvMeatAmt.text = productsBought.meatAmt
+            if (products.meatAmt != "0") {
+                tvMeatPrice.text = products.meatPrice
+                tvMeatQty.text = products.meatQty
+                tvMeatAmt.text = products.meatAmt
             } else meatRow.visibility = View.GONE
-            if (productsBought.intestineAmt != "0") {
-                tvIntestinesPrice.text = productsBought.intestinePrice
-                tvIntestinesQty.text = productsBought.intestineQty
-                tvIntestinesAmt.text = productsBought.intestineAmt
+            if (products.intestineAmt != "0") {
+                tvIntestinesPrice.text = products.intestinePrice
+                tvIntestinesQty.text = products.intestineQty
+                tvIntestinesAmt.text = products.intestineAmt
             } else intestinesRow.visibility = View.GONE
-            if (productsBought.africanSausageAmt != "0") {
-                tvAfricanSausageQty.text = productsBought.africanSausageQty
-                tvAfricanSausagePrice.text = productsBought.africanSausagePrice
-                tvAfricanSausageAmt.text = productsBought.africanSausageAmt
+            if (products.africanSausageAmt != "0") {
+                tvAfricanSausageQty.text = products.africanSausageQty
+                tvAfricanSausagePrice.text = products.africanSausagePrice
+                tvAfricanSausageAmt.text = products.africanSausageAmt
             } else africanSausageRow.visibility = View.GONE
-            if (productsBought.headAndLegsAmt != "0") {
-                tvHeadAndLegsPrice.text = productsBought.headAndLegsPrice
-                tvHeadAndLegsQty.text = productsBought.headAndLegsQty
-                tvHeadAndLegsAmt.text = productsBought.headAndLegsAmt
+            if (products.headAndLegsAmt != "0") {
+                tvHeadAndLegsPrice.text = products.headAndLegsPrice
+                tvHeadAndLegsQty.text = products.headAndLegsQty
+                tvHeadAndLegsAmt.text = products.headAndLegsAmt
             } else headAndToeRow.visibility = View.GONE
-            if (productsBought.liverAmt != "0") {
-                tvLiverQty.text = productsBought.liverQty
-                tvLiverPrice.text = productsBought.liverPrice
-                tvLiverAmt.text = productsBought.liverAmt
+            if (products.liverAmt != "0") {
+                tvLiverQty.text = products.liverQty
+                tvLiverPrice.text = products.liverPrice
+                tvLiverAmt.text = products.liverAmt
             } else liverRow.visibility = View.GONE
-            if (productsBought.skinAmt != "0") {
-                tvSkinQty.text = productsBought.skinQty
-                tvSkinPrice.text = productsBought.skinPrice
-                tvSkinAmt.text = productsBought.skinAmt
+            if (products.skinAmt != "0") {
+                tvSkinQty.text = products.skinQty
+                tvSkinPrice.text = products.skinPrice
+                tvSkinAmt.text = products.skinAmt
             } else skinRow.visibility = View.GONE
-            if (productsBought.filletAmt != "0") {
-                tvFilletQty.text = productsBought.filletQty
-                tvFilletPrice.text = productsBought.filletPrice
-                tvFilletAmt.text = productsBought.filletAmt
+            if (products.filletAmt != "0") {
+                tvFilletQty.text = products.filletQty
+                tvFilletPrice.text = products.filletPrice
+                tvFilletAmt.text = products.filletAmt
             } else filletRow.visibility = View.GONE
         }
     }

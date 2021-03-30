@@ -1,4 +1,4 @@
-package com.magda.mamasbiz.main.businessLogic
+package com.magda.mamasbiz.main.businessLogic.viewModels
 
 import android.app.Application
 import androidx.lifecycle.*

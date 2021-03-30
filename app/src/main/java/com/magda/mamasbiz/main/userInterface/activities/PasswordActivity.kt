@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.magda.mamasbiz.databinding.ActivityPasswordBinding
-import com.magda.mamasbiz.main.businessLogic.UserViewModel
+import com.magda.mamasbiz.main.businessLogic.viewModels.UserViewModel
 import com.magda.mamasbiz.main.data.entity.User
 import com.magda.mamasbiz.main.utils.ConnectionLiveData
 import com.magda.mamasbiz.main.utils.Constants.Companion.DATE_CREATED
@@ -19,6 +19,7 @@ import com.magda.mamasbiz.main.utils.Constants.Companion.IS_LOGGED_IN
 import com.magda.mamasbiz.main.utils.Constants.Companion.LAST_NAME
 import com.magda.mamasbiz.main.utils.Constants.Companion.PASSWORD
 import com.magda.mamasbiz.main.utils.Constants.Companion.PHONE_NUMBER
+import com.magda.mamasbiz.main.utils.DateCreated
 import com.magda.mamasbiz.main.utils.SessionManager
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -149,7 +150,8 @@ class PasswordActivity : AppCompatActivity() {
         lastName: String,
         password: String
     ) {
-        val dateCreated = getDateCreated()
+        //Get date and time of the sign up
+        val dateCreated = DateCreated.getDateCreated()
         val user= User(phoneNumber,firstName,lastName,password,dateCreated)
 
         userViewModel.addUser(user)
@@ -159,26 +161,11 @@ class PasswordActivity : AppCompatActivity() {
     }
 
     private fun storeInFirebaseDatabase(user: User) {
-        TODO("Not yet implemented")
+        //will do
     }
 
-    //Get date and time of the sign up
-    private fun getDateCreated():String{
-        val dateToString: String
-        dateToString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val currentDateTime=LocalDateTime.now()
-            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm:ss")
-            currentDateTime.format(formatter)
 
 
-        } else {
-            val currentDateTime= Date()
-            val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())
-            formatter.format(currentDateTime)
-
-        }
-        return dateToString
-    }
 
     companion object {
         private const val TAG = "Password Activity"

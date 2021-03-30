@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.magda.mamasbiz.databinding.ActivityForgotPasswordBinding
-import com.magda.mamasbiz.main.businessLogic.UserViewModel
+import com.magda.mamasbiz.main.businessLogic.viewModels.UserViewModel
 import com.magda.mamasbiz.main.data.entity.User
 import com.magda.mamasbiz.main.utils.Constants.Companion.DATE_CREATED
 import com.magda.mamasbiz.main.utils.Constants.Companion.FIRST_NAME

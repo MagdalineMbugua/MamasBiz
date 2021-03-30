@@ -12,7 +12,7 @@ class Constants {
         const val TOTAL_AMOUNT: String ="Total Amount"
         const val FIRST_NAME: String ="First name"
         const val LAST_NAME: String ="Last name"
-        const val USER_ID: String ="User Id"
+        const val USER_ID: String ="userId"
         const val PHONE_NUMBER: String ="Phone Number"
         const val SHARED_PREF: String ="Shared Preference"
         const val USER: String ="user"
@@ -20,6 +20,13 @@ class Constants {
         const val IS_LOGGED_IN: String ="is logged in"
         const val DATE_CREATED : String ="Date created"
         const val CREDIT_DEBT_REFERENCE : String ="Credit Debt Reference"
+        const val PRODUCT_REFERENCE : String ="Product Reference"
+        const val BALANCE : String ="Balance"
+        const val TOTAL_PAID : String ="Total paid"
+        const val CREDIT_DEBT : String ="Credit debt"
+        const val REVIEW : String ="Review"
+        const val PRODUCT : String ="Product"
+        const val PRODUCT_WORD : String ="Product word"
 
 
 

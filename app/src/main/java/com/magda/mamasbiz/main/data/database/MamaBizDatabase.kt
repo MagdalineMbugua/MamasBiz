@@ -9,9 +9,8 @@ import com.magda.mamasbiz.main.data.dao.UserDao
 import com.magda.mamasbiz.main.data.entity.CreditDebt
 import com.magda.mamasbiz.main.data.entity.User
 
-@Database(entities = [CreditDebt::class,User::class],version = 1,exportSchema = true )
+@Database(entities = [User::class],version = 4,exportSchema = true )
 abstract class MamaBizDatabase: RoomDatabase() {
-    abstract fun creditDebtDao():CreditDebtDao
     abstract fun userDao(): UserDao
     companion object{
         @Volatile
@@ -25,8 +24,10 @@ abstract class MamaBizDatabase: RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     MamaBizDatabase::class.java,
+
                     "MamaBiz_database"
-                ).build()
+                ).fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE= instance
                 return instance
             }
