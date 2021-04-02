@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.userInterface.activities.DetailsActivity"></activity>
+        <activity android:name=".main.userInterface.activities.EditProductActivity"></activity>
+        <activity android:name=".main.userInterface.activities.DetailsActivity" />
         <activity android:name=".main.userInterface.activities.ForgotPasswordActivity" />
         <activity android:name=".main.userInterface.activities.PasswordActivity" />
         <activity android:name=".main.userInterface.activities.OtpActivity" />
@@ -29,7 +30,7 @@
             android:label="@string/title_activity_credit" />
         <activity
             android:name=".main.userInterface.activities.DashboardActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

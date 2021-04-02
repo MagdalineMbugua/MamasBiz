@@ -114,6 +114,15 @@ dependencies {
     implementation 'com.github.clans:fab:1.6.4'
 
 
+    //Horizontal calendar
+    implementation 'com.github.mybringback22:HorizontalCalendarView-Android-:0.1.0'
+
+
+
+
+
+
+
 
 
 }

@@ -20,4 +20,12 @@
         <item name="android:textColorPrimary">@color/colorPrimary</item>
     </style>
 
+    <style name="bottomDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle"> @style/bottomDialogStyle</item>
+
+    </style>
+    <style name="bottomDialogStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background"> @android:color/transparent </item>
+    </style>
+
 </resources>

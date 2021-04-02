@@ -543,7 +543,7 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
         fab:menu_fab_label="Options">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fabShare"
+            android:id="@+id/fabDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_delete_outline_24"
@@ -551,20 +551,20 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
             fab:fab_label="Delete"
             app:fab_colorNormal="@color/colorPrimary"/>
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fabCall"
+            android:id="@+id/fabEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_edit_24"
             fab:fab_size="mini"
-            fab:fab_label="Edit"
+            fab:fab_label="Edit Product"
             app:fab_colorNormal="@color/colorPrimary"/>
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fabDelete"
+            android:id="@+id/fabUpdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_update_24"
             fab:fab_size="mini"
-            fab:fab_label="Update"
+            fab:fab_label="Update Payment"
             android:visibility="visible"
             app:fab_colorNormal="@color/colorPrimary" />
     </com.github.clans.fab.FloatingActionMenu>

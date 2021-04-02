@@ -95,4 +95,6 @@
     <string name="user_not_found">User not found. Do not worry,let us try another word.</string>
     <string name="details_of_the_customer">Details of the Customer</string>
     <string name="update">Update</string>
+    <string name="update_payment">UPDATE PAYMENT</string>
+    <string name="total_amount_paid_money">Total Amount Paid: Kes </string>
 </resources>

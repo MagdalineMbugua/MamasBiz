@@ -9,6 +9,7 @@ import com.magda.mamasbiz.main.data.entity.CreditDebt
 import com.magda.mamasbiz.main.data.repository.CreditDebtRepository
 import com.magda.mamasbiz.main.data.responses.NetworkResponse
 import com.magda.mamasbiz.main.utils.Results
+import com.magda.mamasbiz.main.utils.Status
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,8 +21,13 @@ class CreditDebtViewModel  : ViewModel() {
 
     private val loadCDLiveData: MutableLiveData<NetworkResponse<Boolean>> = MutableLiveData<NetworkResponse<Boolean>>()
     val _loadCDLiveData:MutableLiveData<NetworkResponse<Boolean>>  get() = loadCDLiveData
+
     private  val fetchCDLiveData:MutableLiveData<NetworkResponse<MutableList<CreditDebt>>> = MutableLiveData<NetworkResponse<MutableList<CreditDebt>>>()
     val _fetchCDLiveData:MutableLiveData<NetworkResponse<MutableList<CreditDebt>>>  get() = fetchCDLiveData
+
+    private val deleteCDLiveData: MutableLiveData<NetworkResponse<Boolean>> = MutableLiveData<NetworkResponse<Boolean>>()
+    val _deleteCDLiveData:MutableLiveData<NetworkResponse<Boolean>>  get() = deleteCDLiveData
+
     fun addCreditDebt(creditDebt : CreditDebt){
         viewModelScope.launch(Dispatchers.IO) {
             Log.d(TAG, "addCreditDebt:on the viewmodel $creditDebt ")
@@ -65,6 +71,21 @@ class CreditDebtViewModel  : ViewModel() {
     }
     fun getCreditDebtId (): String{
         return creditDebtRepository.getCreditDebtId()
+    }
+
+    fun deleteCreditDebt(creditDebt: CreditDebt){
+        deleteCDLiveData.value= NetworkResponse.loading()
+        creditDebtRepository.deleteCreditDebt(creditDebt){
+            when(it){
+                is Results.Success -> {
+                    deleteCDLiveData.value = NetworkResponse.success(true, data = true)
+                }
+                is Results.Error -> {
+                    deleteCDLiveData.value = NetworkResponse.error(it.error)
+                }
+            }
+        }
+
     }
 
 }

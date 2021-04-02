@@ -25,8 +25,8 @@ class Constants {
         const val TOTAL_PAID : String ="Total paid"
         const val CREDIT_DEBT : String ="Credit debt"
         const val REVIEW : String ="Review"
-        const val PRODUCT : String ="Product"
-        const val PRODUCT_WORD : String ="Product word"
+        const val HAS_CREDIT_DEBT : String ="has credit debt"
+
 
 
 

@@ -375,6 +375,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_orange_button"
+        android:text="@string/update"
+        android:textSize="16sp"
+        android:textColor="@color/colorFont"
+        android:fontFamily="@font/cormorantsc_bold"
+        android:id="@+id/btUpdate"
+        android:visibility="gone"/>
+
 
 
 

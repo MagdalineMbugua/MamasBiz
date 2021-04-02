@@ -73,6 +73,19 @@ class CreditDebtRepository {
         return creditDebtReference.document().id
     }
 
+    fun deleteCreditDebt (creditDebt: CreditDebt, callback: (Results<Boolean>) -> Unit){
+        try {
+            creditDebtReference.document(creditDebt.creditDebtId!!).delete().addOnCompleteListener { task ->
+                if (task.isSuccessful){
+                    callback(Results.Success(true))
+                }else  callback(Results.Error("Deleting was not successful"))
+
+            }
+        }catch (e: Exception){
+            callback(Results.Error("Deleting was not successful ${e.message}"))
+        }
+    }
+
 
 }
 
