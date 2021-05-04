@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/activityFragment"
-        android:name="com.magda.mamasbiz.main.userInterface.fragments.ActivityFragment"
+        android:name="com.magda.mamasbiz.main.userInterface.fragments.AccountFragment"
         android:label="fragment_activity"
-        tools:layout="@layout/fragment_activity"
+        tools:layout="@layout/fragment_account"
         />
     <fragment
         android:id="@+id/homeFragment"

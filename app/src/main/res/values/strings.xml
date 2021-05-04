@@ -97,4 +97,18 @@
     <string name="update">Update</string>
     <string name="update_payment">UPDATE PAYMENT</string>
     <string name="total_amount_paid_money">Total Amount Paid: Kes </string>
+    <string name="current_month">Current Month</string>
+    <string name="view_all_payments">View All Payments</string>
+    <string name="update_payment_info">There are no more payments that have been done after the first payment, if there are update payments</string>
+    <string name="update_payments">Update Payments</string>
+    <string name="total_unpaid">Total Unpaid</string>
+    <string name="total_balance">Balance</string>
+    <string name="creditor">Creditor</string>
+    <string name="total_amount">Total Amt</string>
+    <string name="account">Account</string>
+    <string name="biz_owner">Biz Owner</string>
+    <string name="tell_a_friend">Tell A friend</string>
+    <string name="rate_this_app">Rate this app</string>
+    <string name="report_issue">Report Issue</string>
+    <string name="log_out">Log Out</string>
 </resources>

@@ -20,7 +20,6 @@ data class CreditDebt (
     var productId: String ? = null,
     var totalPaid: String? = null,
     var totalBalance: String? = null,
-    var updatedDate: String? = null,
-    var isUpdated : Boolean? = false
+    var updatedId: String? = null
 
 ):Parcelable{}

@@ -1,13 +1,10 @@
 package com.magda.mamasbiz.main.businessLogic.adapter
 
 import android.content.Context
-import android.os.Parcel
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.RecyclerView
 import com.magda.mamasbiz.R
 import com.magda.mamasbiz.main.data.entity.CreditDebt
@@ -75,7 +72,7 @@ class CreditDebtAdapter (private val context: Context, private val itemClickList
         private val mCustomerName = itemView.tvCustomerName
         private val mAmount = itemView.tvAmountPaid
         private val mDateCreated = itemView.tvDate
-        private val mStatus = itemView.tvStatus
+        private val mStatus = itemView.tvBalance
         private val mImage = itemView.ivCowIcon
         private val mCardView = itemView.consumerCardView
 

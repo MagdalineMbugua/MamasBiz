@@ -9,7 +9,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.magda.mamasbiz.databinding.ActivityLoginBinding
 import com.magda.mamasbiz.main.businessLogic.viewModels.UserViewModel
+import com.magda.mamasbiz.main.data.entity.User
 import com.magda.mamasbiz.main.utils.Constants
+import com.magda.mamasbiz.main.utils.Status
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -29,6 +31,23 @@ class LoginActivity : AppCompatActivity() {
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
 
+        //Observe the user if exists on database
+        userViewModel._fetchUserLiveData.observe(this){
+            when (it.status){
+                Status.LOADING -> {
+                   //Method sub
+                }
+                Status.SUCCESS -> {
+                    val user = it.data
+                    fetchData(user)
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+
         //Set on Click Listener on login and signup
 
         binding.apply {
@@ -37,6 +56,17 @@ class LoginActivity : AppCompatActivity() {
 
             btLogin.setOnClickListener{checkInfoReceived()}
         }
+    }
+//To get the user information for the trigger in otp
+    private fun fetchData(user: User?) {
+    if(user!=null){
+        val userFirstName = user.firstName
+        val userLastName = user.lastName
+        val userPassword = user.password
+        val userDateCreated = user.dateCreated
+        toOtpActivity(userFirstName!!, userLastName!!, userPassword!!, userDateCreated!!)
+    } else  Toast.makeText(this@LoginActivity,"$phoneNumber does not exist", Toast.LENGTH_SHORT).show()
+
     }
 
     // Ensure that the info received is valid
@@ -54,18 +84,7 @@ class LoginActivity : AppCompatActivity() {
     //Check if the number exists in the database
 
     private fun checkDatabase() {
-       userViewModel.readAllUsers.observe(this, Observer { users ->
-           for (user in users) {
-               val userPhoneNumber = user.userId
-               if (userPhoneNumber == phoneNumber) {
-                   val userFirstName = user.firstName
-                   val userLastName = user.lastName
-                   val userPassword = user.password
-                   val userDateCreated = user.dateCreated
-                   toOtpActivity(userFirstName, userLastName, userPassword, userDateCreated)
-               } else Toast.makeText(this,"$phoneNumber does not exist", Toast.LENGTH_SHORT).show()
-           }
-       })
+        userViewModel.fetchUser(phoneNumber)
     }
 
     private fun toOtpActivity(

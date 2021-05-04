@@ -18,6 +18,7 @@ import com.magda.mamasbiz.databinding.FragmentCreditDebtPage4Binding
 import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
 import com.magda.mamasbiz.main.businessLogic.viewModels.ProductViewModel
 import com.magda.mamasbiz.main.data.entity.CreditDebt
+import com.magda.mamasbiz.main.data.entity.Metadata
 import com.magda.mamasbiz.main.data.entity.Products
 import com.magda.mamasbiz.main.userInterface.activities.DashboardActivity
 import com.magda.mamasbiz.main.utils.Constants
@@ -43,6 +44,7 @@ class CreditPage4Fragment : Fragment() {
     private var debt: String? = ""
     private lateinit var totalPaid: String
     private lateinit var totalBalance: String
+    private  var  metadata: Metadata? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,6 +119,7 @@ class CreditPage4Fragment : Fragment() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
+                    fetchMetadata()
                     startActivity(Intent(requireActivity(), DashboardActivity::class.java))
 
 
@@ -159,12 +162,57 @@ class CreditPage4Fragment : Fragment() {
             }
         })
 
+        creditDebtViewModel._fetchMetadataLiveData.observe(viewLifecycleOwner){
+            when (it.status){
+                Status.LOADING -> {
+                    // to check on
+                }
+                Status.SUCCESS -> {
+                    metadata = it.data
+                    addMetadata()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(
+                        requireActivity(),
+                        it.error,
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            }
+        }
+
 
         return _binding.root
     }
 
     private fun toUpdateProductData() {
         productViewModel.addProducts(products)
+    }
+
+    private fun fetchMetadata (){
+        creditDebtViewModel.fetchMetadata(getUserId())
+    }
+
+    private fun addMetadata (){
+//       if(metadata!=null){
+//           if(type == Constants.DEBT){
+//               val totalMoneyReceivedPaid = totalPaid.toInt().plus(metadata.)
+//               val totalMoneyReceivedAmt = metadata.
+//               val totalMoneyReceivedBalance
+//               val totalMoneySentPaid
+//               val totalMoneySentAmt
+//               val totalMoneySentBalance
+//
+//           } else if (type == Constants.CREDIT){
+//
+//           }
+//
+//       }else{
+//
+//       }
+
+
     }
 
 

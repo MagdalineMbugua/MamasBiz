@@ -23,18 +23,20 @@ import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
 import com.magda.mamasbiz.main.businessLogic.viewModels.ProductViewModel
 import com.magda.mamasbiz.main.data.entity.CreditDebt
 import com.magda.mamasbiz.main.data.entity.Products
+import com.magda.mamasbiz.main.data.entity.UpdatePayments
 import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.DateCreated
 import com.magda.mamasbiz.main.utils.Status
 
 class DetailsActivity : AppCompatActivity() {
     private val TAG = "Derails Activity"
-    private lateinit var binding : ActivityDetailsBinding
+    private lateinit var binding: ActivityDetailsBinding
     private val _binding get() = binding!!
-    private lateinit var creditDebt : CreditDebt
+    private lateinit var creditDebt: CreditDebt
     private lateinit var productViewModel: ProductViewModel
     private lateinit var creditDebtViewModel: CreditDebtViewModel
     private lateinit var products: Products
+    private lateinit var updatePayments: UpdatePayments
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,11 +49,11 @@ class DetailsActivity : AppCompatActivity() {
         creditDebt = intent.getParcelableExtra(Constants.CREDIT_DEBT)!!
         val debt = intent.getStringExtra(Constants.DEBT)
         val credit = intent.getStringExtra(Constants.CREDIT)
-         if (credit!=null){
-             val creditName = resources.getString(R.string.creditor_name)
-             val creditNumber = resources.getString(R.string.creditor_number)
-             binding.tvName.text = creditName
-             binding.tvNumber.text = creditNumber
+        if (credit != null) {
+            val creditName = resources.getString(R.string.creditor_name)
+            val creditNumber = resources.getString(R.string.creditor_number)
+            binding.tvName.text = creditName
+            binding.tvNumber.text = creditNumber
         }
 
         //initiate view model
@@ -59,27 +61,27 @@ class DetailsActivity : AppCompatActivity() {
         creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
         //Get products
         productViewModel.getProducts(creditDebt.productId!!)
-         Log.d(TAG, "onCreate: ${creditDebt.productId}")
+        Log.d(TAG, "onCreate: ${creditDebt.productId}")
 
         //observe the product data fetched
-        productViewModel._liveDataFetchProduct.observe(this){
-            when(it.status){
+        productViewModel._liveDataFetchProduct.observe(this) {
+            when (it.status) {
                 Status.ERROR -> {
-                  Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
                 }
                 Status.SUCCESS -> {
                     products = it.data!!
                     toFillTable()
                 }
-                Status.LOADING ->{
+                Status.LOADING -> {
                     // Loaded
                 }
             }
         }
 
         // observe the credit debt deleted
-        creditDebtViewModel._deleteCDLiveData.observe(this){
-            when(it.status){
+        creditDebtViewModel._deleteCDLiveData.observe(this) {
+            when (it.status) {
                 Status.SUCCESS -> {
                     Toast.makeText(this, "Successfully deleted", Toast.LENGTH_SHORT).show()
                     finish()
@@ -94,13 +96,12 @@ class DetailsActivity : AppCompatActivity() {
         }
 
         // observe the credit debt updated
-        creditDebtViewModel._loadCDLiveData.observe(this){
-            when(it.status){
+        creditDebtViewModel._updateTotalAmountLiveData.observe(this) {
+            when (it.status) {
                 Status.SUCCESS -> {
                     Toast.makeText(this, "Successfully updated", Toast.LENGTH_SHORT).show()
-                    finish()
-
-                }
+                    creditDebtViewModel.addUpdatePayments(creditDebt, updatePayments)
+                   }
                 Status.LOADING -> {
                     //to check on it later
                 }
@@ -111,19 +112,40 @@ class DetailsActivity : AppCompatActivity() {
 
         }
 
+        //observe the update Payments
+        creditDebtViewModel._updatePaymentLiveData.observe(this) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    Toast.makeText(this, "Successfully updated payments", Toast.LENGTH_SHORT).show()
+                    finish()                }
+                Status.LOADING -> {
+                    //to check on it later
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "onCreate: ${it.error}")
+                }
+            }
+
+        }
+
         //set text on views
         initViews()
 
         //Setting click listeners on the fabs
-         settingFabClickListener()
+        settingFabClickListener()
 
-        
 
+        binding.tvViewUpdatePayment.setOnClickListener {
+            val intent = Intent(this@DetailsActivity, PaymentActivity::class.java)
+            intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
+            startActivity(intent)
+        }
 
 
     }
 
-    private fun settingFabClickListener(){
+    private fun settingFabClickListener() {
         binding.apply {
             fabDelete.setOnClickListener { toDelete() }
             fabEdit.setOnClickListener { toEdit() }
@@ -132,25 +154,26 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun toEdit() {
-       val intent = Intent(this@DetailsActivity, EditProductActivity::class.java)
+        val intent = Intent(this@DetailsActivity, EditProductActivity::class.java)
         intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
         startActivity(intent)
     }
 
     private fun toUpdatePayment() {
-      val bottomSheetDialog = BottomSheetDialog(this, R.style.bottomDialogTheme)
-        val bottomSheetView = LayoutInflater.from(applicationContext).inflate(R.layout.bottom_sheet_update_payment_dialog,
-            findViewById (R.id.updateBottomSheetContainer))
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.bottomDialogTheme)
+        val bottomSheetView = LayoutInflater.from(applicationContext).inflate(
+            R.layout.bottom_sheet_update_payment_dialog,
+            findViewById(R.id.updateBottomSheetContainer)
+        )
         val mTotalAmtPaid = bottomSheetView.findViewById<EditText>(R.id.etTotalAmtPaid)
         val mTotalBalance = bottomSheetView.findViewById<TextView>(R.id.tvExactTotalBal)
         val mTotalAmt = bottomSheetView.findViewById<TextView>(R.id.tvTotalAmt)
         val mUpdatePayment = bottomSheetView.findViewById<Button>(R.id.btUpdate)
-        val totalBalance =creditDebt.totalBalance
+        val totalBalance = creditDebt.totalBalance
         val totalAmount = "Total Amount: Kes ${creditDebt.totalAmount}"
-        mTotalAmt.text =totalAmount
+        mTotalAmt.text = totalAmount
         mTotalBalance.text = totalBalance
-        mTotalAmtPaid.setText(creditDebt.totalPaid)
-        mTotalAmtPaid.addTextChangedListener(object: TextWatcher{
+        mTotalAmtPaid.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //Method sub
             }
@@ -161,7 +184,7 @@ class DetailsActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 val text = s.toString()
-                if(text.isNotEmpty()){
+                if (text.isNotEmpty()) {
                     val totalBal = creditDebt.totalAmount?.toInt()?.minus(text.toInt())
                     mTotalBalance.text = totalBal.toString()
 
@@ -172,13 +195,26 @@ class DetailsActivity : AppCompatActivity() {
         mUpdatePayment.setOnClickListener {
             val newTotalBalance = mTotalBalance.text.toString()
             val newTotalAmountPaid = mTotalAmtPaid.text.toString()
-            val status = if(newTotalBalance == "0"){
+            val updatedTotalAmtPaid =
+                newTotalAmountPaid.toInt().plus(creditDebt.totalPaid!!.toInt())
+            val status = if (newTotalBalance == "0") {
                 "paid"
-            }else "Not Paid"
-            val creditDebt = CreditDebt(creditDebt.creditDebtId, creditDebt.userId,creditDebt.type, creditDebt.name, creditDebt.phoneNumber,
-            status, creditDebt.paymentDate,creditDebt.dateCreated,creditDebt.totalAmount, creditDebt.productId,
-            newTotalAmountPaid,newTotalBalance, DateCreated.getDateCreated(),true)
-            creditDebtViewModel.addCreditDebt(creditDebt)
+            } else "not paid"
+            updatePayments = UpdatePayments(
+                creditDebt.creditDebtId,
+                creditDebtViewModel.getUpdatePaymentId(creditDebt),
+                newTotalAmountPaid,
+                DateCreated.getDateCreated(),
+                newTotalBalance,
+                creditDebt.userId
+            )
+            creditDebtViewModel.updateTotalMoney(
+                creditDebt.creditDebtId!!,
+                updatedTotalAmtPaid.toString(),
+                newTotalBalance,
+                status
+            )
+
             bottomSheetDialog.dismissWithAnimation = true
             bottomSheetDialog.dismiss()
         }
@@ -187,12 +223,12 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun toDelete() {
-       val deleteDialog = AlertDialog.Builder(this)
+        val deleteDialog = AlertDialog.Builder(this)
         deleteDialog.setIcon(R.drawable.ic_baseline_delete_outline_24)
             .setTitle("Delete details")
             .setMessage("Are you sure you want to delete this document?")
             .setCancelable(true)
-            .setPositiveButton("Ok",DialogInterface.OnClickListener{ _, _ -> toDeleteData()  })
+            .setPositiveButton("Ok", DialogInterface.OnClickListener { _, _ -> toDeleteData() })
         deleteDialog.show()
 
     }
@@ -224,36 +260,43 @@ class DetailsActivity : AppCompatActivity() {
                 tvMeatPrice.text = products.meatPrice
                 tvMeatQty.text = products.meatQty
                 tvMeatAmt.text = products.meatAmt
+                meatRow.visibility = View.VISIBLE
             } else meatRow.visibility = View.GONE
             if (products.intestineAmt != "0") {
                 tvIntestinesPrice.text = products.intestinePrice
                 tvIntestinesQty.text = products.intestineQty
                 tvIntestinesAmt.text = products.intestineAmt
+                intestinesRow.visibility = View.VISIBLE
             } else intestinesRow.visibility = View.GONE
             if (products.africanSausageAmt != "0") {
                 tvAfricanSausageQty.text = products.africanSausageQty
                 tvAfricanSausagePrice.text = products.africanSausagePrice
                 tvAfricanSausageAmt.text = products.africanSausageAmt
+                africanSausageRow.visibility = View.VISIBLE
             } else africanSausageRow.visibility = View.GONE
             if (products.headAndLegsAmt != "0") {
                 tvHeadAndLegsPrice.text = products.headAndLegsPrice
                 tvHeadAndLegsQty.text = products.headAndLegsQty
                 tvHeadAndLegsAmt.text = products.headAndLegsAmt
+                headAndToeRow.visibility = View.VISIBLE
             } else headAndToeRow.visibility = View.GONE
             if (products.liverAmt != "0") {
                 tvLiverQty.text = products.liverQty
                 tvLiverPrice.text = products.liverPrice
                 tvLiverAmt.text = products.liverAmt
+                liverRow.visibility = View.VISIBLE
             } else liverRow.visibility = View.GONE
             if (products.skinAmt != "0") {
                 tvSkinQty.text = products.skinQty
                 tvSkinPrice.text = products.skinPrice
                 tvSkinAmt.text = products.skinAmt
+                skinRow.visibility = View.VISIBLE
             } else skinRow.visibility = View.GONE
             if (products.filletAmt != "0") {
                 tvFilletQty.text = products.filletQty
                 tvFilletPrice.text = products.filletPrice
                 tvFilletAmt.text = products.filletAmt
+                filletRow.visibility = View.VISIBLE
             } else filletRow.visibility = View.GONE
         }
 

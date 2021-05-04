@@ -25,7 +25,16 @@ class Constants {
         const val TOTAL_PAID : String ="Total paid"
         const val CREDIT_DEBT : String ="Credit debt"
         const val REVIEW : String ="Review"
-        const val HAS_CREDIT_DEBT : String ="has credit debt"
+        const val UPDATE_REFERENCE : String ="Update Reference"
+        const val STATUS : String ="status"
+        const val TOTAL_BALANCE : String ="totalBalance"
+        const val TOTAL_AMT_PAID : String ="totalPaid"
+        const val CREDIT_DEBT_ID : String ="updateId"
+        const val USER_REFERENCE : String ="user_reference"
+        const val METADATA_REFERENCE : String ="metadata_reference"
+
+
+
 
 
 

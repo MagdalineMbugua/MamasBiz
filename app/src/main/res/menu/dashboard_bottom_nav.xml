@@ -14,8 +14,8 @@
     <item android:id="@+id/profitFragment"
         android:title="@string/profit"
         android:icon="@drawable/profit_icon"/>
-    <item android:id="@+id/activityFragment"
-        android:title="@string/activity"
+    <item android:id="@+id/accountFragment"
+        android:title="@string/account"
         android:icon="@drawable/activity_icon"/>
 
 </menu>

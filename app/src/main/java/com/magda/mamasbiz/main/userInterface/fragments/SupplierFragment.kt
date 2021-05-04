@@ -37,13 +37,14 @@ class SupplierFragment : Fragment(), ItemClickListener {
     private var creditList : MutableList<CreditDebt> = mutableListOf()
     private lateinit var creditDebtViewModel: CreditDebtViewModel
     private lateinit var productViewModel: ProductViewModel
-    private lateinit var creditDebtAdapter: CreditDebtAdapter
+    private lateinit var creditDebtAdapter : CreditDebtAdapter
     private val TAG = "Supplier Fragment"
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         //instantiate view model
         creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
@@ -56,6 +57,9 @@ class SupplierFragment : Fragment(), ItemClickListener {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSupplierBinding.inflate(inflater, container, false)
+
+        creditDebtAdapter= CreditDebtAdapter(requireContext(), this)
+
 
         //instantiate the credit list form the view model
         fetchDebtData()
@@ -75,7 +79,9 @@ class SupplierFragment : Fragment(), ItemClickListener {
                     val creditDebtList = it.data!!
 
                     Log.d(TAG, "onCreateView: ${creditDebtList.size}")
-                    getDebtList(creditDebtList)
+                    creditList = creditDebtList.filter {credit -> credit.type == Constants.CREDIT}.toMutableList()
+                    creditDebtAdapter.addList(creditList)
+                    setViews(showEmptyState = creditList.isEmpty())
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireActivity(), it.error, Toast.LENGTH_SHORT).show()
@@ -83,6 +89,8 @@ class SupplierFragment : Fragment(), ItemClickListener {
                 }
             }
         })
+
+        initViews()
 
 
 
@@ -143,7 +151,6 @@ class SupplierFragment : Fragment(), ItemClickListener {
     }
 
     private fun initViews() {
-        setViews()
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.orientation = RecyclerView.VERTICAL
         binding.consumerRecyclerView.apply {
@@ -151,10 +158,11 @@ class SupplierFragment : Fragment(), ItemClickListener {
             setHasFixedSize(true)
             adapter = creditDebtAdapter
         }
+        creditDebtAdapter.addList(creditList)
     }
 
-    private fun setViews() {
-        if(creditList.size>0){
+    private fun setViews(showEmptyState: Boolean) {
+        if(!showEmptyState){
             binding.apply {
                 consumerRecyclerView.visibility = View.VISIBLE
                 etSearch.visibility = View.VISIBLE
@@ -179,17 +187,7 @@ class SupplierFragment : Fragment(), ItemClickListener {
         creditDebtViewModel.getCreditDebt(userId!!)
 
     }
-    //Get debt list from the list with both credit and debt
-    private fun getDebtList(creditDebtList: MutableList<CreditDebt>) {
-        creditList .addAll(creditDebtList.filter {it.type == Constants.CREDIT  }
-            .toMutableList())
-        creditDebtAdapter = CreditDebtAdapter(requireContext(), this)
-        creditDebtAdapter.addList(creditList)
-        Log.d(TAG, "getDebtList: ${creditList.size}")
-        initViews()
 
-
-    }
 
     override fun itemClicked(creditDebt: CreditDebt, view: View) {
         if(view.id == R.id.consumerCardView){
@@ -201,7 +199,6 @@ class SupplierFragment : Fragment(), ItemClickListener {
     private fun toDetailsActivity(creditDebt: CreditDebt) {
         val intent =Intent(requireActivity(), DetailsActivity::class.java)
         intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
-        intent.putExtra(Constants.REVIEW, "Review")
         intent.putExtra(Constants.CREDIT, "Credit")
         startActivity(intent)
     }

@@ -1,23 +1,61 @@
 package com.magda.mamasbiz.main.data.repository
 
-import androidx.lifecycle.LiveData
-import com.magda.mamasbiz.main.data.dao.CreditDebtDao
-import com.magda.mamasbiz.main.data.dao.UserDao
-import com.magda.mamasbiz.main.data.entity.CreditDebt
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.magda.mamasbiz.main.data.entity.User
+import com.magda.mamasbiz.main.utils.Constants
+import com.magda.mamasbiz.main.utils.Results
 
-class UserRepository( private val userDao: UserDao){
-
-    suspend fun addUser (user: User){
-        return userDao.addUser(user)
-    }
-    fun getUsers(): LiveData<List<User>> {
-        return userDao.readAllUsers()
+class UserRepository{
+    private val userRef : CollectionReference
+    private  val database: FirebaseFirestore = FirebaseFirestore.getInstance()
+    init {
+        userRef = database.collection(Constants.USER_REFERENCE)
     }
 
-    suspend fun updateUser (user: User){
-        return userDao.updateUser(user)
+    suspend fun addUser (user: User, callback: (Results<Boolean>)-> Unit){
+        try{
+            userRef.document(user.userId!!).set(user).addOnCompleteListener{ task ->
+                if(task.isSuccessful){
+                    callback(Results.Success(true))
+                } else callback(Results.Error("User addition was not successful"))
+
+            }
+        } catch (e: Exception){
+            callback(Results.Error("User addition was not successful ${e.message}"))
+        }
+
+
     }
-    //collectionReference. document.getId()
+    fun updateUser (userPassword: String, userId : String, callback: (Results<Boolean>) -> Unit){
+        try {
+            userRef.document(userId).update(Constants.PASSWORD, userPassword).addOnCompleteListener{
+                task->
+                if(task.isSuccessful){
+                    callback(Results.Success(true))
+                } else callback(Results.Error("User addition was not successful"))
+            }
+
+        }catch (e: java.lang.Exception){
+            callback(Results.Error("User addition was not successful ${e.message}"))
+        }
+
+    }
+    fun readUsers(userId: String, callback: (Results<User>) -> Unit){
+        try {userRef.document(userId).get().addOnSuccessListener { documentSnapshot ->
+            val user = documentSnapshot.toObject(User::class.java)
+            if (user!= null){
+                callback(Results.Success(user))
+            } else  callback(Results.Error("User does not exist"))
+
+        }
+        } catch (e: Exception){
+            callback(Results.Error("User fetching was not successful ${e.message}"))
+        }
+    }
+
+
+
+
 
 }

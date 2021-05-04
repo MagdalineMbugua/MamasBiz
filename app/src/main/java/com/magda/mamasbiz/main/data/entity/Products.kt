@@ -4,11 +4,8 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
-
-@Entity(tableName = "Products_Bought_Table")
 @Parcelize
 data class Products(
-    @PrimaryKey
     var productId :String? = null,
     val meatPrice : String? = null,
     val meatQty : String? = null,

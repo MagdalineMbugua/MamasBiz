@@ -21,6 +21,7 @@ import com.magda.mamasbiz.main.utils.Constants.Companion.PASSWORD
 import com.magda.mamasbiz.main.utils.Constants.Companion.PHONE_NUMBER
 import com.magda.mamasbiz.main.utils.DateCreated
 import com.magda.mamasbiz.main.utils.SessionManager
+import com.magda.mamasbiz.main.utils.Status
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -64,8 +65,25 @@ class PasswordActivity : AppCompatActivity() {
         dateCreated = intent.getStringExtra(DATE_CREATED)
         isLoggedIn = intent.getBooleanExtra(IS_LOGGED_IN, false)
 
+        //Observe the live data (user stored in firebase)
 
-        //check and change views if sign up or log in
+        userViewModel._addUserLiveData.observe(this){
+            when (it.status){
+                Status.LOADING ->{
+                    //Nothing much
+                }
+                Status.SUCCESS -> {
+                    Toast.makeText(this, "Successfully in", Toast.LENGTH_SHORT).show()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+
+
+        //check and change the views if it is sign up or log in
 
 
         if(isLoggedIn){
@@ -155,14 +173,12 @@ class PasswordActivity : AppCompatActivity() {
         val user= User(phoneNumber,firstName,lastName,password,dateCreated)
 
         userViewModel.addUser(user)
-        Log.d(TAG, "toStoreInDatabase: $user")
-        storeInFirebaseDatabase(user)
+
+
 
     }
 
-    private fun storeInFirebaseDatabase(user: User) {
-        //will do
-    }
+
 
 
 

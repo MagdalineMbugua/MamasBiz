@@ -131,7 +131,7 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/tvStatus"
+    android:id="@+id/tvBalance"
     android:text="@string/status_of_the_payment"
     android:textSize="16sp"
     android:fontFamily="@font/cormorantsc_bold"
@@ -161,7 +161,7 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
     android:textSize="16sp"
     android:fontFamily="@font/cormorantsc_bold"
     android:textColor="@color/colorPrimary"
-    app:layout_constraintTop_toBottomOf="@id/tvStatus"
+    app:layout_constraintTop_toBottomOf="@id/tvBalance"
     app:layout_constraintStart_toStartOf="parent"
     android:layout_marginStart="16dp"
     android:layout_marginTop="10dp"/>
@@ -220,7 +220,8 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
             />
     </TableRow>
     <TableRow android:background="@drawable/table_inner_row"
-        android:id="@+id/meatRow">
+        android:id="@+id/meatRow"
+        android:visibility="gone">
         <TextView android:text="@string/meat"
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/cormorantsc_semibold"
@@ -255,7 +256,8 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
             android:id="@+id/tvMeatAmt"/>
     </TableRow>
     <TableRow android:background="@drawable/table_inner_row"
-        android:id="@+id/intestinesRow">
+        android:id="@+id/intestinesRow"
+        android:visibility="gone">
         <TextView android:text="@string/intestines"
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/cormorantsc_semibold"
@@ -290,7 +292,8 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
             android:id="@+id/tvIntestinesAmt"/>
     </TableRow>
     <TableRow android:background="@drawable/table_inner_row"
-        android:id="@+id/africanSausageRow">
+        android:id="@+id/africanSausageRow"
+        android:visibility="gone">
         <TextView android:text="@string/african_sausage"
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/cormorantsc_semibold"
@@ -325,7 +328,8 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
             android:id="@+id/tvAfricanSausageAmt"/>
     </TableRow>
     <TableRow android:background="@drawable/table_inner_row"
-        android:id="@+id/headAndToeRow">
+        android:id="@+id/headAndToeRow"
+        android:visibility="gone">
         <TextView android:text="@string/head_and_legs"
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/cormorantsc_semibold"
@@ -360,7 +364,8 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
             android:id="@+id/tvHeadAndLegsAmt"/>
     </TableRow>
     <TableRow android:background="@drawable/table_inner_row"
-        android:id="@+id/liverRow">
+        android:id="@+id/liverRow"
+        android:visibility="gone">
         <TextView android:text="@string/liver"
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/cormorantsc_semibold"
@@ -395,7 +400,8 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
             android:id="@+id/tvLiverAmt"/>
     </TableRow>
     <TableRow android:background="@drawable/table_inner_row"
-        android:id="@+id/filletRow">
+        android:id="@+id/filletRow"
+        android:visibility="gone">
         <TextView android:text="@string/fillet"
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/cormorantsc_semibold"
@@ -430,7 +436,8 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
             android:id="@+id/tvFilletAmt"/>
     </TableRow>
     <TableRow android:background="@drawable/table_inner_row"
-        android:id="@+id/skinRow">
+        android:id="@+id/skinRow"
+        android:visibility="gone">
         <TextView android:text="@string/skin"
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/cormorantsc_semibold"
@@ -568,6 +575,19 @@ tools:context=".main.userInterface.fragments.CreditPage4Fragment">
             android:visibility="visible"
             app:fab_colorNormal="@color/colorPrimary" />
     </com.github.clans.fab.FloatingActionMenu>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvViewUpdatePayment"
+        android:text="@string/view_all_payments"
+        android:textSize="16sp"
+        android:fontFamily="@font/cormorantsc_bold"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="28dp"
+        android:layout_marginTop="10dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

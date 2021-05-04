@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:id="@+id/consumerCardView"
+    android:elevation="8dp"
+    android:background="@drawable/card_view_background"
+    android:padding="8dp"
+    android:layout_marginTop="20dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:padding="4dp">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/debt_money"
+            android:id="@+id/ivPaymentIcon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/splash"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="4dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/first_name"
+            android:fontFamily="@font/cormorantsc_regular"
+            android:textColor="@color/colorDarkFont"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/ivPaymentIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:id="@+id/tvCustomerName"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/creditor"
+            android:fontFamily="@font/cormorantsc_regular"
+            android:textColor="@color/colorIcon"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/ivPaymentIcon"
+            app:layout_constraintTop_toBottomOf="@id/tvCustomerName"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="4dp"
+            android:id="@+id/tvCustomerType"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/kes_4000"
+            android:fontFamily="@font/cormorantsc_regular"
+            android:textColor="@color/colorIcon"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="8dp"
+            android:id="@+id/tvBalance"
+            app:drawableStartCompat="@drawable/ic_outline_attach_money_24"
+            android:drawablePadding="4dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_31_2_2021"
+            android:fontFamily="@font/cormorantsc_regular"
+            android:textColor="@color/colorIcon"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBalance"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="8dp"
+            android:id="@+id/tvDate" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

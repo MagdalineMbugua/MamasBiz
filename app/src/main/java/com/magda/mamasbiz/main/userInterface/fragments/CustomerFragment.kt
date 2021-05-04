@@ -15,12 +15,14 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import com.magda.mamasbiz.R
 import com.magda.mamasbiz.databinding.FragmentCustomerBinding
 import com.magda.mamasbiz.main.businessLogic.adapter.CreditDebtAdapter
 import com.magda.mamasbiz.main.businessLogic.adapter.ItemClickListener
 import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
 import com.magda.mamasbiz.main.data.entity.CreditDebt
 import com.magda.mamasbiz.main.userInterface.activities.CreditDebtActivity
+import com.magda.mamasbiz.main.userInterface.activities.DetailsActivity
 import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.SessionManager
 import com.magda.mamasbiz.main.utils.Status
@@ -185,11 +187,17 @@ class CustomerFragment : Fragment(), ItemClickListener {
 }
 
     override fun itemClicked(creditDebt: CreditDebt, view: View) {
-        view.consumerCardView.setOnClickListener { toDetailsActivity(creditDebt) }
+        if(view.id == R.id.consumerCardView){
+            toDetailsActivity(creditDebt)
+        }
     }
 
     private fun toDetailsActivity(creditDebt: CreditDebt) {
-        //will do
+        val intent =Intent(requireActivity(), DetailsActivity::class.java)
+        intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
+        intent.putExtra(Constants.DEBT, "Debt")
+        startActivity(intent)
+
     }
 
 
