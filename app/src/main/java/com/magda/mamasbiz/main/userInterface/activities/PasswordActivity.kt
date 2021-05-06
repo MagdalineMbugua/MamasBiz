@@ -10,7 +10,9 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.magda.mamasbiz.databinding.ActivityPasswordBinding
+import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
 import com.magda.mamasbiz.main.businessLogic.viewModels.UserViewModel
+import com.magda.mamasbiz.main.data.entity.Metadata
 import com.magda.mamasbiz.main.data.entity.User
 import com.magda.mamasbiz.main.utils.ConnectionLiveData
 import com.magda.mamasbiz.main.utils.Constants.Companion.DATE_CREATED
@@ -38,6 +40,9 @@ class PasswordActivity : AppCompatActivity() {
     private var isLoggedIn:Boolean = false
     private lateinit var userViewModel: UserViewModel
     private lateinit var connectionLiveData: ConnectionLiveData
+    private lateinit var creditDebtViewModel: CreditDebtViewModel
+    private lateinit var passwordInput: String
+    private val metadata = Metadata()
     private var isNetworkAvailable by Delegates.notNull<Boolean>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +59,10 @@ class PasswordActivity : AppCompatActivity() {
 
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
+        //To create the metadata digits as this is the first time they have signed up it should be 0
+        creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
+
+
 
         //getting Extras from the OTP Activity
 
@@ -65,7 +74,10 @@ class PasswordActivity : AppCompatActivity() {
         dateCreated = intent.getStringExtra(DATE_CREATED)
         isLoggedIn = intent.getBooleanExtra(IS_LOGGED_IN, false)
 
+
+
         //Observe the live data (user stored in firebase)
+
 
         userViewModel._addUserLiveData.observe(this){
             when (it.status){
@@ -83,6 +95,8 @@ class PasswordActivity : AppCompatActivity() {
 
 
 
+
+
         //check and change the views if it is sign up or log in
 
 
@@ -97,7 +111,22 @@ class PasswordActivity : AppCompatActivity() {
             }
 
         }else{
-           binding. btSignUp.setOnClickListener{toCheckPassword()}
+            binding. btSignUp.setOnClickListener{toCheckPassword()}
+
+        }
+
+        creditDebtViewModel._addMetadataLiveData.observe(this){
+            when(it.status){
+                Status.LOADING -> {
+                    //method sub
+                }
+                Status.SUCCESS -> {
+                    toDashboardActivity()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this,it.error,Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
 
@@ -105,10 +134,10 @@ class PasswordActivity : AppCompatActivity() {
     }
 
     private fun toConfirmPassword() {
-        val passwordInput = binding.etPassword.text.toString().trim()
+        passwordInput = binding.etPassword.text.toString().trim()
         Log.d(TAG, "toConfirmPassword: $passwordInput $password")
         if(passwordInput==password){
-            toDashboardActivity(passwordInput)
+            toDashboardActivity()
         } else Toast.makeText(this, "Wrong password. Try again", Toast.LENGTH_SHORT).show()
     }
 
@@ -131,13 +160,15 @@ class PasswordActivity : AppCompatActivity() {
 
     private fun toCheckPassword() {
         binding.apply {
-           val  passwordInput = binding.etPassword.text.toString().trim()
+            passwordInput = binding.etPassword.text.toString().trim()
             val confirmPassword = etConfirmPassword.text.toString().trim()
             if(passwordInput.isNotEmpty()){
                 if(confirmPassword.isNotEmpty()){
                     if(passwordInput == confirmPassword){
+                        creditDebtViewModel.addMetadata(metadata,phoneNumber!!)
                         toStoreInDatabase(phoneNumber!!,firstName!!,lastName!!,passwordInput)
-                        toDashboardActivity(passwordInput)
+
+
                     }else{
                         etConfirmPassword.error = "password does not match"
                         etConfirmPassword.requestFocus()
@@ -150,9 +181,9 @@ class PasswordActivity : AppCompatActivity() {
         }
     }
 
-    private fun toDashboardActivity(password: String) {
+    private fun toDashboardActivity() {
         val sessionManager = SessionManager(this)
-        sessionManager.storeInfo(phoneNumber!!,firstName!!,lastName!!,password,true)
+        sessionManager.storeInfo(phoneNumber!!,firstName!!,lastName!!,passwordInput,true)
         val intent = Intent(this@PasswordActivity, DashboardActivity::class.java)
         intent.putExtra(PHONE_NUMBER,phoneNumber!!)
         startActivity(intent)

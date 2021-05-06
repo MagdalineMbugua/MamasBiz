@@ -47,7 +47,7 @@
             android:text="@string/creditor"
             android:fontFamily="@font/cormorantsc_regular"
             android:textColor="@color/colorIcon"
-            android:textSize="16sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@id/ivPaymentIcon"
             app:layout_constraintTop_toBottomOf="@id/tvCustomerName"
             android:layout_marginStart="20dp"
@@ -60,24 +60,24 @@
             android:text="@string/kes_4000"
             android:fontFamily="@font/cormorantsc_regular"
             android:textColor="@color/colorIcon"
-            android:textSize="16sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
             android:id="@+id/tvBalance"
             app:drawableStartCompat="@drawable/ic_outline_attach_money_24"
-            android:drawablePadding="4dp"/>
+            android:drawablePadding="2dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_31_2_2021"
             android:fontFamily="@font/cormorantsc_regular"
             android:textColor="@color/colorIcon"
-            android:textSize="16sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvBalance"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
             android:id="@+id/tvDate" />
 

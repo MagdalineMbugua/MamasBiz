@@ -80,8 +80,11 @@ class SupplierFragment : Fragment(), ItemClickListener {
 
                     Log.d(TAG, "onCreateView: ${creditDebtList.size}")
                     creditList = creditDebtList.filter {credit -> credit.type == Constants.CREDIT}.toMutableList()
+                    setViews()
                     creditDebtAdapter.addList(creditList)
-                    setViews(showEmptyState = creditList.isEmpty())
+                    Log.d(TAG, "onCreateView: ${creditList.size}")
+                    initViews()
+
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireActivity(), it.error, Toast.LENGTH_SHORT).show()
@@ -90,7 +93,7 @@ class SupplierFragment : Fragment(), ItemClickListener {
             }
         })
 
-        initViews()
+
 
 
 
@@ -158,12 +161,14 @@ class SupplierFragment : Fragment(), ItemClickListener {
             setHasFixedSize(true)
             adapter = creditDebtAdapter
         }
-        creditDebtAdapter.addList(creditList)
+
     }
 
-    private fun setViews(showEmptyState: Boolean) {
-        if(!showEmptyState){
+    private fun setViews() {
+        Log.d(TAG, "setViews: passed the set view method")
+        if(creditList.size>0){
             binding.apply {
+                Log.d(TAG, "setViews: creditList is greater than 0")
                 consumerRecyclerView.visibility = View.VISIBLE
                 etSearch.visibility = View.VISIBLE
                 tvCreateCredit.visibility = View.GONE
@@ -172,6 +177,7 @@ class SupplierFragment : Fragment(), ItemClickListener {
             }
         } else{
             binding.apply {
+                Log.d(TAG, "setViews: creditList is less than 0")
                 consumerRecyclerView.visibility = View.GONE
                 etSearch.visibility = View.GONE
                 tvCreateCredit.visibility = View.VISIBLE

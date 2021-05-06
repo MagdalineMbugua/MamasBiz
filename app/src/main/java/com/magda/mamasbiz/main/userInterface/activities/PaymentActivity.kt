@@ -3,6 +3,7 @@ package com.magda.mamasbiz.main.userInterface.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -23,12 +24,14 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var updatePaymentList: MutableList<UpdatePayments>
     private lateinit var creditDebt: CreditDebt
     private val activityAdapter = ActivityAdapter()
+    private val TAG = "Payment Activity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityPaymentBinding.inflate(layoutInflater)
 
         creditDebt = intent.getParcelableExtra(Constants.CREDIT_DEBT)
         activityAdapter.getCreditDebt(creditDebt)
+        Log.d(TAG, "onCreate: $creditDebt")
 
         creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
         fetchUpdatePayments()
@@ -40,7 +43,9 @@ class PaymentActivity : AppCompatActivity() {
                 Status.SUCCESS -> {
                     binding.progressbar.visibility = View.GONE
                     updatePaymentList = it.data!!
+                    Log.d(TAG, "onCreate: ${updatePaymentList.size}")
                     activityAdapter.addList(updatePaymentList)
+                    initViews()
                 }
                 Status.ERROR -> {
                     binding.progressbar.visibility = View.GONE
@@ -49,7 +54,7 @@ class PaymentActivity : AppCompatActivity() {
             }
         }
 
-        initViews()
+
 
         binding.tvUpdatePayment.setOnClickListener {
             startActivity(Intent(this@PaymentActivity, DetailsActivity::class.java))
@@ -58,15 +63,18 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        binding.apply {
+            tvName.text = creditDebt.name
+            tvNumber.text = creditDebt.phoneNumber
+        }
         if(updatePaymentList.size>0){
             binding.apply {
                 activityRecyclerView.visibility = View.VISIBLE
                 tvName.visibility = View.VISIBLE
                 tvNumber.visibility = View.VISIBLE
                 infoLayout.visibility = View.VISIBLE
-                tvInfo.visibility =View.GONE
-                ivPaymentPhoto.visibility = View.GONE
-                tvUpdatePayment.visibility =View.GONE
+                viewLine.visibility = View.VISIBLE
+                noPaymentsLayout.visibility= View.GONE
                 setUpRecyclerView()
                 setUpCardView()
             }
@@ -76,9 +84,8 @@ class PaymentActivity : AppCompatActivity() {
                 tvName.visibility = View.GONE
                 tvNumber.visibility = View.GONE
                 infoLayout.visibility = View.GONE
-                tvInfo.visibility =View.VISIBLE
-                ivPaymentPhoto.visibility = View.VISIBLE
-                tvUpdatePayment.visibility =View.VISIBLE
+                viewLine.visibility = View.GONE
+                noPaymentsLayout.visibility = View.VISIBLE
             }
         }
     }
@@ -107,5 +114,6 @@ class PaymentActivity : AppCompatActivity() {
     private fun fetchUpdatePayments() {
         //Fetch list of update payments to display on the recycler view
         creditDebtViewModel.fetchUpdatePayments(creditDebt.creditDebtId!!)
+        Log.d(TAG, "fetchUpdatePayments: ${creditDebt.creditDebtId}")
     }
 }

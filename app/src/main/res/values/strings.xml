@@ -56,7 +56,7 @@
     <string name="debtor_number">Debtor Number:</string>
     <string name="creditor_number">Creditor Number:</string>
     <string name="_2547xx_xxx_xxx">+2547XX XXX XXX</string>
-    <string name="total_paid">Total Paid:</string>
+    <string name="total_paid">Total Paid</string>
     <string name="total_credit">Total Credit:</string>
     <string name="kes_4000">KES 0</string>
     <string name="debt_status">Debt Status:</string>
@@ -99,7 +99,7 @@
     <string name="total_amount_paid_money">Total Amount Paid: Kes </string>
     <string name="current_month">Current Month</string>
     <string name="view_all_payments">View All Payments</string>
-    <string name="update_payment_info">There are no more payments that have been done after the first payment, if there are update payments</string>
+    <string name="update_payment_info">There are no more payments that have been done other than the first payment. If there are, update payments.</string>
     <string name="update_payments">Update Payments</string>
     <string name="total_unpaid">Total Unpaid</string>
     <string name="total_balance">Balance</string>

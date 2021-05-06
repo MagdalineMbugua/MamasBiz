@@ -44,7 +44,7 @@ class CreditPage4Fragment : Fragment() {
     private var debt: String? = ""
     private lateinit var totalPaid: String
     private lateinit var totalBalance: String
-    private  var  metadata: Metadata? = null
+    private  lateinit var  metadata: Metadata
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +91,8 @@ class CreditPage4Fragment : Fragment() {
 
         //Setting text to the text views
         initViews()
+
+        creditDebtViewModel.fetchMetadata(getUserId())
         binding.apply {
             if (credit?.isNotEmpty() == true) {
                 val creditName = resources.getString(R.string.creditor_name)
@@ -119,7 +121,6 @@ class CreditPage4Fragment : Fragment() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
-                    fetchMetadata()
                     startActivity(Intent(requireActivity(), DashboardActivity::class.java))
 
 
@@ -142,6 +143,7 @@ class CreditPage4Fragment : Fragment() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
+                    fetchMetadata()
                 }
                 Status.ERROR -> {
                     Toast.makeText(
@@ -162,14 +164,13 @@ class CreditPage4Fragment : Fragment() {
             }
         })
 
-        creditDebtViewModel._fetchMetadataLiveData.observe(viewLifecycleOwner){
+        creditDebtViewModel._addMetadataLiveData.observe(viewLifecycleOwner){
             when (it.status){
                 Status.LOADING -> {
                     // to check on
                 }
                 Status.SUCCESS -> {
-                    metadata = it.data
-                    addMetadata()
+                    Toast.makeText(requireContext(),"data has been added", Toast.LENGTH_SHORT).show()
                 }
                 Status.ERROR -> {
                     Toast.makeText(
@@ -178,6 +179,21 @@ class CreditPage4Fragment : Fragment() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
+                }
+            }
+        }
+        creditDebtViewModel._fetchMetadataLiveData.observe(viewLifecycleOwner){
+            when(it.status){
+                Status.LOADING ->{
+                   //Tocheck on
+                }
+                Status.SUCCESS ->{
+                    metadata = it.data!!
+                    addMetadata()
+
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireContext(),it.error,Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -195,22 +211,33 @@ class CreditPage4Fragment : Fragment() {
     }
 
     private fun addMetadata (){
-//       if(metadata!=null){
-//           if(type == Constants.DEBT){
-//               val totalMoneyReceivedPaid = totalPaid.toInt().plus(metadata.)
-//               val totalMoneyReceivedAmt = metadata.
-//               val totalMoneyReceivedBalance
-//               val totalMoneySentPaid
-//               val totalMoneySentAmt
-//               val totalMoneySentBalance
-//
-//           } else if (type == Constants.CREDIT){
-//
-//           }
-//
-//       }else{
-//
-//       }
+        if(type == Constants.DEBT){
+               val totalMoneyReceivedPaid = totalPaid.toInt().plus(metadata.totalMoneyReceivedPaid)
+               val totalMoneyReceivedAmt = totalAmount.toInt().plus(metadata.totalMoneyReceivedAmt)
+               val totalMoneyReceivedBalance = totalBalance.toInt().plus(metadata.totalMoneyReceivedBalance)
+               val totalMoneySentPaid = 0+metadata.totalMoneySentPaid
+               val totalMoneySentAmt = 0+metadata.totalMoneySentAmt
+               val totalMoneySentBalance = 0+metadata.totalMoneySentBalance
+            val metadata = Metadata(totalMoneySentPaid, totalMoneySentAmt,totalMoneySentBalance,
+                totalMoneyReceivedPaid, totalMoneyReceivedAmt,totalMoneyReceivedBalance)
+            creditDebtViewModel.addMetadata(metadata,getUserId())
+
+           } else if (type == Constants.CREDIT){
+
+            val totalMoneyReceivedPaid = 0 + metadata.totalMoneyReceivedPaid
+            val totalMoneyReceivedAmt = 0+ metadata.totalMoneyReceivedAmt
+            val totalMoneyReceivedBalance = 0+ metadata.totalMoneyReceivedBalance
+            val totalMoneySentPaid = totalPaid.toInt().plus(metadata.totalMoneySentPaid)
+            val totalMoneySentAmt =  totalAmount.toInt().plus(metadata.totalMoneySentAmt)
+            val totalMoneySentBalance =  totalBalance.toInt().plus(metadata.totalMoneySentBalance)
+            val metadata = Metadata(totalMoneySentPaid, totalMoneySentAmt,totalMoneySentBalance,
+                totalMoneyReceivedPaid,totalMoneyReceivedAmt,totalMoneyReceivedBalance)
+            creditDebtViewModel.addMetadata(metadata,getUserId())
+           }
+
+
+
+
 
 
     }

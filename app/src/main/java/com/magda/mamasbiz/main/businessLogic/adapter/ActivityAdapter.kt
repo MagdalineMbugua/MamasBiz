@@ -71,9 +71,10 @@ class ActivityAdapter() :  PagedListAdapter<UpdatePayments, ActivityAdapter.View
                 val info ="Debtor"
                 itemView.tvCustomerType.text = info
             }
-            itemView.tvBalance.text = updatePayments.updateBalance
+            val balance = "Bal: Kes ${updatePayments.updateBalance}"
+            itemView.tvBalance.text = balance
             itemView.tvDate.text = updatePayments.updateDate
-            val amount = "KES: ${updatePayments.amountPaid}"
+            val amount = "Paid Kes: ${updatePayments.amountPaid}"
             itemView.tvCustomerName.text = amount
 
         }

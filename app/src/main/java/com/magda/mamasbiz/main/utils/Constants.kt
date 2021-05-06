@@ -18,7 +18,7 @@ class Constants {
         const val USER: String ="user"
         const val PASSWORD: String ="password"
         const val IS_LOGGED_IN: String ="is logged in"
-        const val DATE_CREATED : String ="Date created"
+        const val DATE_CREATED : String ="dateCreated"
         const val CREDIT_DEBT_REFERENCE : String ="Credit Debt Reference"
         const val PRODUCT_REFERENCE : String ="Product Reference"
         const val BALANCE : String ="Balance"
@@ -32,6 +32,7 @@ class Constants {
         const val CREDIT_DEBT_ID : String ="updateId"
         const val USER_REFERENCE : String ="user_reference"
         const val METADATA_REFERENCE : String ="metadata_reference"
+        const val UPDATE_DATE : String = "updateDate"
 
 
 

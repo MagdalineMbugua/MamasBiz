@@ -22,6 +22,7 @@ import com.magda.mamasbiz.databinding.ActivityDetailsBinding
 import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
 import com.magda.mamasbiz.main.businessLogic.viewModels.ProductViewModel
 import com.magda.mamasbiz.main.data.entity.CreditDebt
+import com.magda.mamasbiz.main.data.entity.Metadata
 import com.magda.mamasbiz.main.data.entity.Products
 import com.magda.mamasbiz.main.data.entity.UpdatePayments
 import com.magda.mamasbiz.main.utils.Constants
@@ -37,6 +38,10 @@ class DetailsActivity : AppCompatActivity() {
     private lateinit var creditDebtViewModel: CreditDebtViewModel
     private lateinit var products: Products
     private lateinit var updatePayments: UpdatePayments
+    private var credit: String? = ""
+    private var debt: String? = ""
+    private lateinit var metadata: Metadata
+    private lateinit var newTotalAmountPaid: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +52,8 @@ class DetailsActivity : AppCompatActivity() {
         //Get extras from the previous activity
 
         creditDebt = intent.getParcelableExtra(Constants.CREDIT_DEBT)!!
-        val debt = intent.getStringExtra(Constants.DEBT)
-        val credit = intent.getStringExtra(Constants.CREDIT)
+        debt = intent.getStringExtra(Constants.DEBT)
+        credit = intent.getStringExtra(Constants.CREDIT)
         if (credit != null) {
             val creditName = resources.getString(R.string.creditor_name)
             val creditNumber = resources.getString(R.string.creditor_number)
@@ -62,6 +67,7 @@ class DetailsActivity : AppCompatActivity() {
         //Get products
         productViewModel.getProducts(creditDebt.productId!!)
         Log.d(TAG, "onCreate: ${creditDebt.productId}")
+        creditDebtViewModel.fetchMetadata(creditDebt.userId!!)
 
         //observe the product data fetched
         productViewModel._liveDataFetchProduct.observe(this) {
@@ -83,8 +89,7 @@ class DetailsActivity : AppCompatActivity() {
         creditDebtViewModel._deleteCDLiveData.observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    Toast.makeText(this, "Successfully deleted", Toast.LENGTH_SHORT).show()
-                    finish()
+                    deleteMetadata()
                 }
                 Status.LOADING -> {
                     //to check on it later
@@ -101,7 +106,7 @@ class DetailsActivity : AppCompatActivity() {
                 Status.SUCCESS -> {
                     Toast.makeText(this, "Successfully updated", Toast.LENGTH_SHORT).show()
                     creditDebtViewModel.addUpdatePayments(creditDebt, updatePayments)
-                   }
+                }
                 Status.LOADING -> {
                     //to check on it later
                 }
@@ -116,8 +121,9 @@ class DetailsActivity : AppCompatActivity() {
         creditDebtViewModel._updatePaymentLiveData.observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    Toast.makeText(this, "Successfully updated payments", Toast.LENGTH_SHORT).show()
-                    finish()                }
+                    toUpdateMetadata()
+
+                }
                 Status.LOADING -> {
                     //to check on it later
                 }
@@ -129,6 +135,36 @@ class DetailsActivity : AppCompatActivity() {
 
         }
 
+        creditDebtViewModel._fetchMetadataLiveData.observe(this) {
+            when (it.status) {
+                Status.LOADING -> {
+                    //method sub
+                }
+                Status.SUCCESS -> {
+                    metadata = it.data!!
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        creditDebtViewModel._addMetadataLiveData.observe(this){
+            when (it.status){
+                Status.LOADING -> {
+                    //to figure out
+                }
+                Status.SUCCESS -> {
+                    Toast.makeText(this, "Successfully updated.", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                Status.ERROR ->{
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+
+                }
+            }
+        }
+
         //set text on views
         initViews()
 
@@ -138,11 +174,27 @@ class DetailsActivity : AppCompatActivity() {
 
         binding.tvViewUpdatePayment.setOnClickListener {
             val intent = Intent(this@DetailsActivity, PaymentActivity::class.java)
+            Log.d(TAG, "onCreate: $creditDebt")
             intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
             startActivity(intent)
         }
 
 
+    }
+
+    private fun deleteMetadata() {
+        if (credit!=null){
+            val metadata = Metadata(metadata.totalMoneySentPaid.minus(creditDebt.totalPaid!!.toInt()),metadata.totalMoneySentAmt.minus(creditDebt.totalAmount!!.toInt()),
+            metadata.totalMoneySentBalance.minus(creditDebt.totalBalance!!.toInt()), metadata.totalMoneyReceivedPaid,metadata.totalMoneyReceivedAmt,metadata.totalMoneyReceivedBalance)
+            creditDebtViewModel.addMetadata(metadata,creditDebt.userId!!)
+
+        }else if (debt!=null){
+            val metadata = Metadata(metadata.totalMoneySentPaid,metadata.totalMoneySentAmt,metadata.totalMoneySentBalance,
+            metadata.totalMoneyReceivedPaid.minus(creditDebt.totalPaid!!.toInt()), metadata.totalMoneyReceivedAmt.minus(creditDebt.totalAmount!!.toInt()),
+            metadata.totalMoneyReceivedBalance.minus(creditDebt.totalBalance!!.toInt()))
+            creditDebtViewModel.addMetadata(metadata,creditDebt.userId!!)
+
+        }
     }
 
     private fun settingFabClickListener() {
@@ -194,7 +246,7 @@ class DetailsActivity : AppCompatActivity() {
         })
         mUpdatePayment.setOnClickListener {
             val newTotalBalance = mTotalBalance.text.toString()
-            val newTotalAmountPaid = mTotalAmtPaid.text.toString()
+            newTotalAmountPaid = mTotalAmtPaid.text.toString()
             val updatedTotalAmtPaid =
                 newTotalAmountPaid.toInt().plus(creditDebt.totalPaid!!.toInt())
             val status = if (newTotalBalance == "0") {
@@ -215,11 +267,38 @@ class DetailsActivity : AppCompatActivity() {
                 status
             )
 
+
             bottomSheetDialog.dismissWithAnimation = true
             bottomSheetDialog.dismiss()
         }
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
+    }
+
+    private fun toUpdateMetadata() {
+        if (credit != null) {
+            val metadata = Metadata(
+                metadata.totalMoneySentPaid.plus(newTotalAmountPaid.toInt()),
+                metadata.totalMoneySentAmt,
+                metadata.totalMoneySentBalance.minus(newTotalAmountPaid.toInt()),
+                metadata.totalMoneyReceivedPaid,
+                metadata.totalMoneyReceivedAmt,
+                metadata.totalMoneyReceivedBalance
+            )
+            creditDebtViewModel.addMetadata(metadata, creditDebt.userId!!)
+
+
+        } else if (debt != null) {
+            val metadata = Metadata(
+                metadata.totalMoneySentPaid,
+                metadata.totalMoneySentAmt,
+                metadata.totalMoneySentBalance,
+                metadata.totalMoneyReceivedPaid.plus(newTotalAmountPaid.toInt()),
+                metadata.totalMoneyReceivedAmt,
+                metadata.totalMoneyReceivedBalance.minus(newTotalAmountPaid.toInt())
+            )
+            creditDebtViewModel.addMetadata(metadata, creditDebt.userId!!)
+        }
     }
 
     private fun toDelete() {
