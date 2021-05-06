@@ -6,12 +6,6 @@
     app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/activityFragment"
-        android:name="com.magda.mamasbiz.main.userInterface.fragments.AccountFragment"
-        android:label="fragment_activity"
-        tools:layout="@layout/fragment_account"
-        />
-    <fragment
         android:id="@+id/homeFragment"
         android:name="com.magda.mamasbiz.main.userInterface.fragments.HomeFragment"
         android:label="fragment_home"
@@ -31,4 +25,9 @@
         android:name="com.magda.mamasbiz.main.userInterface.fragments.SupplierFragment"
         android:label="fragment_supplier"
         tools:layout="@layout/fragment_supplier" />
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.magda.mamasbiz.main.userInterface.fragments.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
 </navigation>

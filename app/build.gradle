@@ -56,7 +56,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.firebase:firebase-auth:20.0.3'
+    implementation 'com.google.firebase:firebase-auth:20.0.4'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -70,8 +70,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
 
     //Navigation Control and Fragment
-    implementation "androidx.navigation:navigation-fragment:2.3.4"
-    implementation "androidx.navigation:navigation-ui:2.3.4"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
 
     // Materials Library
     implementation 'com.google.android.material:material:1.3.0'
@@ -79,13 +79,6 @@ dependencies {
 
     //Work Manager
     implementation "androidx.work:work-runtime-ktx:2.5.0"
-
-    //Room
-    implementation "androidx.room:room-runtime:2.2.6"
-    kapt "androidx.room:room-compiler:2.2.6"
-    implementation "androidx.room:room-ktx:2.2.6"
-    testImplementation "androidx.room:room-testing:2.2.6"
-
 
     //Otp Library
     implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.1.2'
@@ -100,22 +93,22 @@ dependencies {
 
 
     //Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3'
 
     //View model
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
 
     //Paging and Recyclerview
-    implementation "androidx.paging:paging-runtime:2.1.2"
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation "androidx.paging:paging-runtime-ktx:3.0.0"
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
 
 
     //Floating action button
     implementation 'com.github.clans:fab:1.6.4'
 
 
-    //Horizontal calendar
-    implementation 'com.github.mybringback22:HorizontalCalendarView-Android-:0.1.0'
+    //Play Core Library
+    implementation 'com.google.android.play:core-ktx:1.8.1'
 
 
 

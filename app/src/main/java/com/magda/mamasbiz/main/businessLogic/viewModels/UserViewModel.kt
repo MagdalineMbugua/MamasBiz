@@ -19,6 +19,9 @@ open class UserViewModel(application: Application): AndroidViewModel(application
     private val fetchUserLiveData : MutableLiveData<NetworkResponse<User>> =MutableLiveData<NetworkResponse<User>>()
     val _fetchUserLiveData get() = fetchUserLiveData
 
+    private val genericUserResponse : MutableLiveData<NetworkResponse<Boolean>> = MutableLiveData<NetworkResponse<Boolean>>()
+    val _genericUserResponse get() = genericUserResponse
+
 
     fun addUser(user: User){
       viewModelScope.launch(Dispatchers.IO) {
@@ -64,6 +67,24 @@ open class UserViewModel(application: Application): AndroidViewModel(application
                     }
                 }
             }
+        }
+    }
+
+    fun logOut (){
+        viewModelScope.launch(Dispatchers.IO) {
+            genericUserResponse.postValue(NetworkResponse.loading())
+            userRepository.logOut {
+                when (it){
+                    is Results.Success ->{
+                        genericUserResponse.postValue(NetworkResponse.success(true, it.data))
+                    }
+                    is Results.Error ->{
+                        genericUserResponse.postValue(NetworkResponse.error(it.error))
+                    }
+
+                }
+            }
+
         }
     }
 

@@ -1,5 +1,9 @@
 package com.magda.mamasbiz.main.data.repository
 
+import android.content.Context
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.magda.mamasbiz.main.data.entity.User
@@ -7,11 +11,23 @@ import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.Results
 
 class UserRepository{
+    private val mAuth : FirebaseAuth = FirebaseAuth.getInstance()
     private val userRef : CollectionReference
     private  val database: FirebaseFirestore = FirebaseFirestore.getInstance()
     init {
         userRef = database.collection(Constants.USER_REFERENCE)
+
     }
+     fun logOut (callback: (Results<Boolean>) -> Unit) {
+         try {
+             mAuth.signOut()
+             callback(Results.Success(mAuth.currentUser==null))
+
+         }catch (e:Exception){
+             callback(Results.Error("Signing out was not successful, ${e.message}"))
+         }
+
+     }
 
     suspend fun addUser (user: User, callback: (Results<Boolean>)-> Unit){
         try{
@@ -53,6 +69,7 @@ class UserRepository{
             callback(Results.Error("User fetching was not successful ${e.message}"))
         }
     }
+
 
 
 

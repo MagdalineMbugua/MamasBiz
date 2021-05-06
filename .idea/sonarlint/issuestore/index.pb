@@ -58,8 +58,6 @@ Uapp/src/main/java/com/magda/mamasbiz/main/userInterface/fragments/SupplierFragm
 Z
 *app/src/main/res/anim/splash_animation.xml,0\0\000ba7e52ce839b4bb1e1c792d308e93d94b29f5
 [
-+app/src/main/res/drawable/activity_icon.xml,7\e\7e82c912a5c102e694c7ef2524a2e029b93ae02d
-[
 +app/src/main/res/drawable/customer_icon.xml,5\e\5e743f70c26156a95ab80559a7793ecaca522250
 [
 +app/src/main/res/drawable/homepage_icon.xml,7\f\7fcb276660d6ae556fe2f0d092795c88fa14ada1
@@ -176,8 +174,6 @@ a
 1app/src/main/res/drawable/grey_rounded_corner.xml,8\1\814e08170b78ea85609139fd923949d80a41e985
 `
 0app/src/main/res/drawable/ic_baseline_add_24.xml,f\1\f1823586c3bcf535e6f3a00196b394cdbe435019
-k
-;app/src/main/res/drawable/ic_baseline_delete_outline_24.xml,f\f\ff4b1ed0220022089cd88ea897fd775d74645a23
 a
 1app/src/main/res/drawable/ic_baseline_edit_24.xml,2\7\2701889fa172b91c3b1e269de92b0b4e7e83564b
 c
@@ -188,8 +184,6 @@ T
 $app/src/main/res/drawable/ic_sad.xml,f\7\f7dd961753f95050b0590889c367e58cf382d4bc
 f
 6app/src/main/res/layout/fragment_credit_debt_page4.xml,c\b\cbf61e1f3f87232c02dd7323d4b44ed86c31468f
-Y
-)app/src/main/res/layout/fragment_home.xml,3\1\31c5880846ef63ff1963efbe141ddfd56680bb19
 R
 "app/src/main/res/values/colors.xml,9\6\969faa2a5d9f5e8390e958d2c07f2cfd54676e6b
 q

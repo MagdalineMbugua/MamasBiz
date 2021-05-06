@@ -1,7 +1,6 @@
 package com.magda.mamasbiz.main.data.entity
 
 import android.os.Parcelable
-import androidx.room.Entity
 import kotlinx.android.parcel.Parcelize
 
 

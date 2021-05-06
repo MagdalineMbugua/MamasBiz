@@ -33,20 +33,18 @@ class SessionManager(context: Context) {
 
 
     }
-    fun getInfo(){
-        sharedPreferences.getString(USER_ID,"")
-        sharedPreferences.getString(FIRST_NAME,"")
-        sharedPreferences.getString(LAST_NAME,"")
-        sharedPreferences.getString(PHONE_NUMBER,"")
-        sharedPreferences.getString(PASSWORD,"")
-
-
-
+    fun getUser(): User{
+        val user =User ()
+        user.userId =sharedPreferences.getString(USER_ID,"")
+        user.firstName = sharedPreferences.getString(FIRST_NAME,"")
+        user. lastName = sharedPreferences.getString(LAST_NAME,"")
+        user. password = sharedPreferences.getString(PASSWORD,"")
+        return user
     }
     fun getUserId():String?{
         return sharedPreferences.getString(USER_ID,"")
     }
-    private fun clearInfo(){
+    fun clearInfo(){
         editor.clear()
         editor.apply()
 
