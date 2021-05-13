@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="100"
+    android:padding="2dp"
+    android:layout_margin="4dp"
+    android:background="@drawable/grey_outline_rounded">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="24"
+        android:id="@+id/tvCattleType"
+        android:text="@string/type_a"
+        android:fontFamily="@font/cormorantsc_medium"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        android:layout_marginTop="4dp"
+        />
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="23"
+        android:id="@+id/etQty"
+        android:textColor="@color/colorIcon"
+        android:inputType="number"
+        android:fontFamily="@font/cormorantsc_medium"
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor" />
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="23"
+        android:id="@+id/etPrice"
+        android:textColor="@color/colorIcon"
+        android:inputType="number"
+        android:fontFamily="@font/cormorantsc_medium"
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor" />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="24"
+        android:id="@+id/tvCattleAmount"
+        android:layout_marginTop="4dp"
+        android:text="@string/_0"
+        android:fontFamily="@font/cormorantsc_medium"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        />
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="6"
+        android:id="@+id/ivCancel"
+        android:src="@drawable/ic_baseline_cancel"
+        android:layout_gravity="center_vertical"
+        tools:ignore="ContentDescription" />
+
+
+
+</LinearLayout>

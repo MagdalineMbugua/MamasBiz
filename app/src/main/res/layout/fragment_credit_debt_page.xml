@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".main.userInterface.fragments.CreditDebtPageFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvInfo"
+        android:text="@string/kindly_add_all_cattle_bought"
+        android:textSize="20sp"
+        android:fontFamily="@font/cormorantsc_bold"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="55dp"/>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/purchasedProductTable"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:stretchColumns="*"
+        android:background="@drawable/orange_rounded_rectangle"
+        android:padding="8dp">
+        <TableRow >
+            <TextView android:text="@string/cattle_type"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvCattleType"/>
+            <TextView android:text="@string/qty"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvqty"/>
+            <TextView android:text="@string/price"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvPrice"/>
+            <TextView android:text="@string/amt"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"
+                android:id="@+id/tvAmt"
+                />
+        </TableRow>
+    </TableLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cattleHolderLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/purchasedProductTable"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:nestedScrollingEnabled="true">
+        <LinearLayout
+            android:id="@+id/cattleLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp">
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvTotalAmt"
+            app:layout_constraintEnd_toStartOf="@id/tvTotalExactAmt"
+            app:layout_constraintTop_toBottomOf="@id/cattleLinearLayout"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/total_amount_kes_4000"
+            android:textColor="@color/colorIcon"
+            android:fontFamily="@font/cormorantsc_semibold"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvTotalExactAmt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cattleLinearLayout"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/_0"
+            android:textColor="@color/colorIcon"
+            android:fontFamily="@font/cormorantsc_semibold"
+            android:textSize="16sp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabAdd"
+            app:layout_constraintTop_toBottomOf="@id/tvTotalAmt"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/very_rounded_orange_button"
+            android:drawableStart="@drawable/ic_outline_add_24"
+            android:drawablePadding="2dp"
+            android:text="@string/add"
+            android:textColor="@color/colorFont"
+            android:fontFamily="@font/cormorantsc_semibold"
+            android:textSize="16sp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <RadioButton
+        android:id="@+id/radioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/nextLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="28dp"
+        android:text="@string/did_you_also_buy_parts_of_a_cow"
+        android:textColor="@color/colorIcon"
+        android:fontFamily="@font/cormorantsc_regular"
+        android:textSize="14sp"
+        android:buttonTint="@color/colorPrimary"/>
+
+    <include
+        layout="@layout/next_layout"
+        android:id="@+id/nextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="587dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

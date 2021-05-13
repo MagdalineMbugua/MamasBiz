@@ -110,6 +110,9 @@ dependencies {
     //Play Core Library
     implementation 'com.google.android.play:core-ktx:1.8.1'
 
+    //Circular Progress bar
+    implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
+
 
 
 

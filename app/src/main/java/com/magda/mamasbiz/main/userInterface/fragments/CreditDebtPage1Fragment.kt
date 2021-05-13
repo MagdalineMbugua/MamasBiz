@@ -120,11 +120,13 @@ class CreditDebtPage1Fragment : Fragment() {
         arg.putString(Constants.DEBTOR_STATUS, status)
         if(credit!=null){
             arg.putString(Constants.CREDIT, credit)
+            navController.navigate(R.id.action_creditPage1Fragment_to_creditDebtPageFragment, arg)
         } else if (debt!=null){
             arg.putString(Constants.DEBT, debt)
+            navController.navigate(R.id.action_creditPage1Fragment_to_creditPage2Fragment, arg)
         }
         Log.d(TAG, "toTheNextPage: $name $phoneNumber $status")
-        navController.navigate(R.id.action_creditPage1Fragment_to_creditPage2Fragment, arg)
+
 
 
     }

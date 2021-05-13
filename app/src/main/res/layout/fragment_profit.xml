@@ -4,17 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:nestedScrollingEnabled="true"
     tools:context=".main.userInterface.fragments.ProfitFragment">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:background="@drawable/activity_background"
         android:id="@+id/btTotalPaid"
         android:layout_weight="50"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -23,12 +25,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvTotalPaid"
-                android:text="@string/total_paid"
+                android:text="@string/gross_profit"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_semibold"
                 android:textColor="@color/colorDarkFont"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -38,13 +41,241 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_semibold"
                 android:textColor="@color/colorDarkFont"
-                android:id="@+id/tvTotalExactPaid"
+                android:id="@+id/tvTotalGrossProfit"
                 app:layout_constraintTop_toBottomOf="@id/tvTotalPaid"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/customer"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/cormorantsc_bold"
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/tvCustomer"
+        app:layout_constraintTop_toBottomOf="@id/btTotalPaid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/total_sold_kes"
+        android:layout_marginTop="4dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/cormorantsc_medium"
+        android:textColor="@color/colorDarkFont"
+        android:id="@+id/tvTotalSold"
+        app:layout_constraintTop_toBottomOf="@id/tvCustomer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/totalMoneyReceived"
+       android:layout_marginTop="16dp"
+       app:layout_constraintTop_toBottomOf="@id/tvTotalSold"
+       app:layout_constraintStart_toStartOf="parent"
+       android:gravity="center_horizontal"
+       android:orientation="horizontal"
+       android:weightSum="100">
+
+       <com.mikhaellopez.circularprogressbar.CircularProgressBar
+           android:layout_width="0dp"
+           android:layout_height="200dp"
+           android:id="@+id/totalMoneyReceivedPaid"
+           android:layout_weight="45"
+           app:cpb_background_progressbar_color="@color/colorIcon"
+           app:cpb_background_progressbar_width="4dp"
+           app:cpb_progress_direction="to_right"
+           app:cpb_progressbar_color_start="@color/splashScreen"
+           app:cpb_progressbar_color_end="@color/colorPrimary"
+           app:cpb_progressbar_width="8dp"/>
+       <com.mikhaellopez.circularprogressbar.CircularProgressBar
+           android:layout_width="0dp"
+           android:layout_height="200dp"
+           android:id="@+id/totalMoneyReceivedBalance"
+           android:layout_marginStart="16dp"
+           android:layout_weight="45"
+           app:cpb_background_progressbar_color="@color/colorIcon"
+           app:cpb_background_progressbar_width="4dp"
+           app:cpb_progress_direction="to_right"
+           app:cpb_progressbar_color_start="@color/colorPrimary"
+           app:cpb_progressbar_color_end="@color/colorProgressbar"
+           app:cpb_progressbar_width="8dp"/>
+   </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginTop="75dp"
+        android:layout_marginStart="28dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/cormorantsc_semibold"
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/tvTotalMoneyReceivedPaidPercentage"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalSold"
+        app:layout_constraintStart_toStartOf="@id/totalMoneySent" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="28dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/cormorantsc_semibold"
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/tvTotalMoneyReceivedBalancePercentage"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalSold"
+        app:layout_constraintEnd_toEndOf="@id/totalMoneyReceived"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_90_paid"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/cormorantsc_regular"
+        android:textColor="@color/colorDarkFont"
+        android:id="@+id/tvTotalMoneyReceivedPaid"
+        app:layout_constraintTop_toBottomOf="@id/totalMoneyReceived"
+        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_90_paid"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/cormorantsc_regular"
+        android:textColor="@color/colorDarkFont"
+        android:id="@+id/tvTotalMoneyReceivedBalance"
+        app:layout_constraintTop_toBottomOf="@id/totalMoneyReceived"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/supplier"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/cormorantsc_bold"
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/tvSupplier"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalMoneyReceivedPaid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/total_bought_kes"
+        android:layout_marginTop="4dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/cormorantsc_medium"
+        android:textColor="@color/colorDarkFont"
+        android:id="@+id/tvTotalBought"
+        app:layout_constraintTop_toBottomOf="@id/tvSupplier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/totalMoneySent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalBought"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:id="@+id/totalMoneySentPaid"
+            android:layout_weight="45"
+            app:cpb_background_progressbar_color="@color/colorIcon"
+            app:cpb_background_progressbar_width="4dp"
+            app:cpb_progress_direction="to_right"
+            app:cpb_progressbar_color_start="@color/splashScreen"
+            app:cpb_progressbar_color_end="@color/colorPrimary"
+            app:cpb_progressbar_width="8dp"/>
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:id="@+id/totalMoneySentBalance"
+            android:layout_marginStart="16dp"
+            android:layout_weight="45"
+            app:cpb_background_progressbar_color="@color/colorIcon"
+            app:cpb_background_progressbar_width="4dp"
+            app:cpb_progress_direction="to_right"
+            app:cpb_progressbar_color_start="@color/splashScreen"
+            app:cpb_progressbar_color_end="@color/colorPrimary"
+            app:cpb_progressbar_width="8dp"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginTop="75dp"
+        android:layout_marginStart="28dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/cormorantsc_semibold"
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/tvTotalMoneySentPaidPercentage"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalBought"
+        app:layout_constraintStart_toStartOf="@id/totalMoneySent"
+        android:gravity="center_horizontal"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="28dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/cormorantsc_semibold"
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/tvTotalMoneySentBalancePercentage"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalBought"
+        app:layout_constraintEnd_toEndOf="@id/totalMoneySent"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_90_paid"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/cormorantsc_regular"
+        android:textColor="@color/colorDarkFont"
+        android:id="@+id/tvTotalMoneySentPaid"
+        app:layout_constraintTop_toBottomOf="@id/totalMoneySent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center_horizontal"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_90_paid"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/cormorantsc_regular"
+        android:textColor="@color/colorDarkFont"
+        android:id="@+id/tvTotalMoneySentBalance"
+        app:layout_constraintTop_toBottomOf="@id/totalMoneySent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

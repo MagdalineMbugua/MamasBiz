@@ -111,4 +111,15 @@
     <string name="rate_this_app">Rate this app</string>
     <string name="report_issue">Report Issue</string>
     <string name="log_out">Log Out</string>
+    <string name="gross_profit">Gross profit</string>
+    <string name="customer_paid_kes">Customer paid: KES</string>
+    <string name="_90_paid">90% paid</string>
+    <string name="total_sold_kes">Total Sold: KES</string>
+    <string name="total_bought_kes">Total Bought: KES</string>
+    <string name="kindly_add_all_cattle_bought">Add all cattle bought</string>
+    <string name="cattle_type">Cattle</string>
+    <string name="type_a">Type A</string>
+    <string name="total_amount_kes_4000">Total Amount: KES </string>
+    <string name="add">Add</string>
+    <string name="did_you_also_buy_parts_of_a_cow">Did you also buy parts of a cow?</string>
 </resources>
