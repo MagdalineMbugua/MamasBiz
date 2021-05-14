@@ -27,7 +27,7 @@ class CattleTableLayout (context: Context, attrs: AttributeSet?): LinearLayout(c
     private val TAG = "CattleTableLayout"
 
     init {
-        val view = inflate(context, R.layout.cattle_layout,this)
+        inflate(context, R.layout.cattle_layout,this)
         mCattleType = findViewById(R.id.tvCattleType)
         mAmount = findViewById(R.id.tvCattleAmount)
         mQty = findViewById(R.id.etQty)
@@ -82,6 +82,11 @@ class CattleTableLayout (context: Context, attrs: AttributeSet?): LinearLayout(c
     }
     fun onRemoveAmountListener (callback:(String)-> Unit){
         this.removeCallback = callback
+
+    }
+    fun setTableTitle (position : Int){
+        val type = "Type $position"
+        mCattleType.text = type
 
     }
 

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.children
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.magda.mamasbiz.R
@@ -17,6 +18,7 @@ import com.magda.mamasbiz.main.utils.Constants
 import kotlinx.android.synthetic.main.cattle_layout.*
 import kotlinx.android.synthetic.main.cattle_layout.view.*
 import kotlinx.android.synthetic.main.fragment_credit_debt_page.*
+import kotlin.math.log
 
 
 class CreditDebtPageFragment : Fragment() {
@@ -71,29 +73,44 @@ class CreditDebtPageFragment : Fragment() {
 
 
     private fun addView() {
-        val previousAmt = binding.tvTotalExactAmt.text.toString()
+
         val cattleTableLayout = CattleTableLayout(requireContext())
         val layout = binding.cattleLinearLayout
         layout.addView(cattleTableLayout)
+        updateTitles()
         cattleTableLayout.onAmountChangeListener {
-            val total = previousAmt.toInt().plus(it.toInt()).toString()
-            binding.tvTotalExactAmt.text = total
+            calculateTotals()
         }
         cattleTableLayout.onRemoveAmountListener {
-            Log.d(TAG, "addView: $it")
-            Log.d(TAG, "addView: $previousAmt")
-            val total = tvTotalExactAmt.text.toString().toInt().minus(it.toInt()).toString()
-            binding.tvTotalExactAmt.text = total
             layout.removeView(cattleTableLayout)
+            updateTitles()
+            calculateTotals()
         }
 
 
-        Log.d(TAG, "addView: $previousAmt")
+    }
+
+    private fun updateTitles(){
+        Log.d(TAG, "updateTitles: ${binding.cattleLinearLayout.childCount}")
+        if (binding.cattleLinearLayout.childCount<1){
+            return
+        }
+        for(i in 0..binding.cattleLinearLayout.childCount){
+            Log.d(TAG, "updateTitles: $i")
+            val table = binding.cattleLinearLayout.getChildAt(i)as? CattleTableLayout
+            table?.setTableTitle(i+1)
+
+        }
+    }
 
 
-
-
-
+    private fun calculateTotals(){
+        var total = 0
+        for(i in 0..binding.cattleLinearLayout.childCount){
+            val table = binding.cattleLinearLayout.getChildAt(i)as? CattleTableLayout
+            total += table?.getAmount()?.toInt()?:0
+            }
+        binding.tvTotalExactAmt.text = total.toString()
 
     }
     private fun addViewViews(cattleTableLayout:CattleTableLayout){
