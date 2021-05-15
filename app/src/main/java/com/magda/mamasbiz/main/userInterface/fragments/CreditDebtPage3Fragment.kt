@@ -9,44 +9,83 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.magda.mamasbiz.R
 import com.magda.mamasbiz.databinding.FragmentCreditDebtPage3Binding
+import com.magda.mamasbiz.main.data.entity.CattleBought
 import com.magda.mamasbiz.main.data.entity.Products
 import com.magda.mamasbiz.main.utils.Constants
+import java.util.ArrayList
 
 
 class CreditPage3Fragment : Fragment() {
     private lateinit var binding: FragmentCreditDebtPage3Binding
-    private  var paymentDate: String = ""
-    private lateinit var products: Products
+    private var paymentDate: String = ""
+    private var products: Products? = null
     private lateinit var name: String
     private lateinit var phoneNumber: String
     private lateinit var status: String
-    private lateinit var totalAmount: String
-    private lateinit var totalPaid: String
-    private lateinit var totalBalance: String
-    private  var credit: String?=""
-    private  var debt: String?=""
+    private  var totalAmount: String?= ""
+    private  var totalPaid: String? =""
+    private var totalBalance: String? =""
+    private var credit: String? = ""
+    private var debt: String? = ""
     private val _binding get() = binding!!
+    private lateinit var cattleBoughtList: ArrayList<CattleBought>
+    private lateinit var totalCattleBoughtAmount: String
+    private lateinit var totalCattleBoughtQty: String
+    private lateinit var totalCattleBoughtPaid: String
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getExtraArguments()
+
+    }
+
+    private fun getExtraArguments() {
         arguments?.getParcelable<Products>(Constants.PRODUCTS_BOUGHT)?.let { productsBought ->
-          this.products = productsBought
+            this.products = productsBought
         }
-        arguments?.getString(Constants.DEBTOR_NAME)?.let{debtorName ->
-            name=debtorName}
-        arguments?.getString(Constants.DEBTOR_STATUS)?.let{status ->
-            this.status= status}
-        arguments?.getString(Constants.DEBTOR_NUMBER)?.let{phoneNumber ->
-            this.phoneNumber= phoneNumber}
-        arguments?.getString(Constants.TOTAL_AMOUNT)?.let{totalAmount ->
-            this.totalAmount= totalAmount}
-        arguments?.getString(Constants.DEBT)?.let{debt ->
-            this.debt= debt}
-        arguments?.getString(Constants.CREDIT)?.let{credit ->
-            this.credit= credit}
-        arguments?.getString(Constants.TOTAL_PAID)?.let{totalPaid ->
-            this.totalPaid= totalPaid}
-        arguments?.getString(Constants.BALANCE)?.let{totalBalance ->
-            this.totalBalance= totalBalance}
+        arguments?.getString(Constants.DEBTOR_NAME)?.let { debtorName ->
+            name = debtorName
+        }
+        arguments?.getString(Constants.DEBTOR_STATUS)?.let { status ->
+            this.status = status
+        }
+        arguments?.getString(Constants.DEBTOR_NUMBER)?.let { phoneNumber ->
+            this.phoneNumber = phoneNumber
+        }
+        arguments?.getString(Constants.TOTAL_AMOUNT)?.let { totalAmount ->
+            this.totalAmount = totalAmount
+        }
+        arguments?.getString(Constants.DEBT)?.let { debt ->
+            this.debt = debt
+        }
+        arguments?.getString(Constants.CREDIT)?.let { credit ->
+            this.credit = credit
+        }
+        arguments?.getString(Constants.TOTAL_PAID)?.let { totalPaid ->
+            this.totalPaid = totalPaid
+        }
+        arguments?.getString(Constants.BALANCE)?.let { totalBalance ->
+            this.totalBalance = totalBalance
+        }
+        requireArguments().getParcelableArrayList<CattleBought>(Constants.CATTLE_BOUGHT_LIST)
+            ?.let { cattleBoughtList ->
+                this.cattleBoughtList = cattleBoughtList
+            }
+        requireArguments().getString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT)?.let { totalCattleBoughtAmount ->
+            this.totalCattleBoughtAmount = totalCattleBoughtAmount
+        }
+
+        requireArguments().getString(Constants.TOTAL_CATTLE_BOUGHT_PAID)?.let { totalCattleBoughtPaid ->
+            this.totalCattleBoughtPaid = totalCattleBoughtPaid
+        }
+
+        requireArguments().getString(Constants.TOTAL_CATTLE_BOUGHT_QTY)?.let { totalCattleBoughtQty ->
+            this.totalCattleBoughtQty = totalCattleBoughtQty
+        }
+
     }
 
     override fun onCreateView(
@@ -61,15 +100,16 @@ class CreditPage3Fragment : Fragment() {
 
 
         binding.apply {
-            if(credit?.isNotEmpty() == true){
-                val creditInfo = resources.getString(R.string.kindly_select_the_date_credit_to_be_paid)
-                tvInfo.text=creditInfo
-            } else if(debt?.isNotEmpty() == true){
+            if (credit?.isNotEmpty() == true) {
+                val creditInfo =
+                    resources.getString(R.string.kindly_select_the_date_credit_to_be_paid)
+                tvInfo.text = creditInfo
+            } else if (debt?.isNotEmpty() == true) {
                 val debtInfo = resources.getString(R.string.kindly_select_the_date_to_be_paid)
-                tvInfo.text= debtInfo
+                tvInfo.text = debtInfo
             }
-            nextLayout.tvBack.setOnClickListener{toPreviousPage()}
-            nextLayout.tvNext.setOnClickListener{toNextPage()}
+            nextLayout.tvBack.setOnClickListener { toPreviousPage() }
+            nextLayout.tvNext.setOnClickListener { toNextPage() }
         }
 
 
@@ -79,25 +119,26 @@ class CreditPage3Fragment : Fragment() {
     private fun toNextPage() {
         val args = Bundle()
         val navController = Navigation.findNavController(binding.root)
-        if(paymentDate.isNotEmpty()){
-            args.putParcelable(Constants.PRODUCTS_BOUGHT,products)
+        if (paymentDate.isNotEmpty()) {
+            if (products != null) args.putParcelable(Constants.PRODUCTS_BOUGHT, products)
             args.putString(Constants.DEBTOR_NAME, name)
             args.putString(Constants.DEBTOR_NUMBER, phoneNumber)
             args.putString(Constants.DEBTOR_STATUS, status)
             args.putString(Constants.PAYMENT_DATE, paymentDate)
-            args.putString(Constants.TOTAL_AMOUNT, totalAmount)
-            args.putString(Constants.BALANCE, totalBalance)
-            args.putString(Constants.TOTAL_PAID, totalPaid)
-            if(credit!=null){
+           if(totalAmount?.isNotEmpty()==true) args.putString(Constants.TOTAL_AMOUNT, totalAmount)
+            if(totalBalance?.isNotEmpty()==true) args.putString(Constants.BALANCE, totalBalance)
+            if(totalPaid?.isNotEmpty()== true) args.putString(Constants.TOTAL_PAID, totalPaid)
+            if (credit != null) {
                 args.putString(Constants.CREDIT, credit)
-            } else if (debt!=null){
+            } else if (debt != null) {
                 args.putString(Constants.DEBT, debt)
             }
+            if (cattleBoughtList.size < 0) {
+                args.putParcelableArrayList(Constants.CATTLE_BOUGHT_LIST, cattleBoughtList)
+            }
             navController.navigate(R.id.action_creditPage3Fragment_to_creditPage4Fragment, args)
-        } else Toast.makeText(requireActivity(), "Select the payment date", Toast.LENGTH_SHORT).show()
-
-
-
+        } else Toast.makeText(requireActivity(), "Select the payment date", Toast.LENGTH_SHORT)
+            .show()
 
 
     }
@@ -112,8 +153,10 @@ class CreditPage3Fragment : Fragment() {
     private fun initViews() {
         binding.apply {
             calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
-                paymentDate = StringBuilder(dayOfMonth).append(dayOfMonth).append("/").append(month+1).append("/")
-                    .append(year).toString()
+                paymentDate =
+                    StringBuilder(dayOfMonth).append(dayOfMonth).append("/").append(month + 1)
+                        .append("/")
+                        .append(year).toString()
                 tvDate.text = paymentDate
 
             }

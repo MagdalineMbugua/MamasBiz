@@ -117,6 +117,7 @@ class OtpActivity : AppCompatActivity() {
     }
 
     private fun manualVerification(otp: String) {
+        if(!::verificationId.isInitialized)return
         val credential = PhoneAuthProvider.getCredential(verificationId, otp)
         signInWithPhoneAuthCredential(credential)
     }

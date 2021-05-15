@@ -17,6 +17,7 @@ import com.magda.mamasbiz.R
 import com.magda.mamasbiz.databinding.FragmentCreditDebtPage4Binding
 import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
 import com.magda.mamasbiz.main.businessLogic.viewModels.ProductViewModel
+import com.magda.mamasbiz.main.data.entity.CattleBought
 import com.magda.mamasbiz.main.data.entity.CreditDebt
 import com.magda.mamasbiz.main.data.entity.Metadata
 import com.magda.mamasbiz.main.data.entity.Products
@@ -26,6 +27,7 @@ import com.magda.mamasbiz.main.utils.DateCreated
 import com.magda.mamasbiz.main.utils.SessionManager
 import com.magda.mamasbiz.main.utils.Status
 import kotlinx.android.synthetic.main.fragment_credit_debt_page4.*
+import java.util.ArrayList
 
 
 class CreditPage4Fragment : Fragment() {
@@ -39,16 +41,28 @@ class CreditPage4Fragment : Fragment() {
     private lateinit var totalAmount: String
     private lateinit var creditDebtViewModel: CreditDebtViewModel
     private lateinit var productViewModel: ProductViewModel
+    private lateinit var cattleBoughtList: ArrayList<CattleBought>
     private lateinit var type: String
     private var credit: String? = ""
     private var debt: String? = ""
     private lateinit var totalPaid: String
     private lateinit var totalBalance: String
-    private  lateinit var  metadata: Metadata
+    private lateinit var metadata: Metadata
+    private lateinit var creditDebt: CreditDebt
+    private lateinit var creditDebtId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Getting the argument extras
+        getExtraArgument()
+
+
+        //instantiate view model for creditdebt and product
+        creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+    }
+
+    private fun getExtraArgument() {
         arguments?.getParcelable<Products>(Constants.PRODUCTS_BOUGHT)?.let { productsBought ->
             this.products = productsBought
         }
@@ -67,7 +81,7 @@ class CreditPage4Fragment : Fragment() {
         arguments?.getString(Constants.PAYMENT_DATE)?.let { paymentDate ->
             this.paymentDate = paymentDate
         }
-        debt =arguments?.getString(Constants.DEBT)
+        debt = arguments?.getString(Constants.DEBT)
         credit = arguments?.getString(Constants.CREDIT)
 
         arguments?.getString(Constants.TOTAL_PAID)?.let { totalPaid ->
@@ -76,11 +90,10 @@ class CreditPage4Fragment : Fragment() {
         arguments?.getString(Constants.BALANCE)?.let { totalBalance ->
             this.totalBalance = totalBalance
         }
-
-
-        //instantiate view model for creditdebt and product
-        creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        requireArguments().getParcelableArrayList<CattleBought>(Constants.CATTLE_BOUGHT_LIST)
+            ?.let { cattleBoughtList ->
+                this.cattleBoughtList = cattleBoughtList
+            }
     }
 
     override fun onCreateView(
@@ -101,39 +114,90 @@ class CreditPage4Fragment : Fragment() {
                 tvNumber.text = creditNumber
                 type = Constants.CREDIT
 
-            }else type = Constants.DEBT
+            } else type = Constants.DEBT
 
             tvBack.setOnClickListener { toPreviousPage() }
             tvNext.setOnClickListener { toUploadCreditDebtData() }
         }
-        creditDebtViewModel._loadCDLiveData.observe(viewLifecycleOwner, {
-            Log.d(TAG, "toSubmitData: Called viewmodel")
+        loadCdLiveData()
+        liveDataAddProduct()
+        addMetadataLiveData()
+        fetchMetadataLiveData()
+        addCattleBoughtLiveData()
+
+
+
+
+
+
+
+        return _binding.root
+    }
+
+    private fun addCattleBoughtLiveData() {
+        creditDebtViewModel._addCattleBoughtLiveData.observe(viewLifecycleOwner){
             when (it.status) {
                 Status.LOADING -> {
-                    Toast.makeText(requireActivity(), "Uploading...", Toast.LENGTH_SHORT).show()
-
+                    // to check on
                 }
                 Status.SUCCESS -> {
-                    toUpdateProductData()
+                    Toast.makeText(requireContext(), "data has been added", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                Status.ERROR -> {
                     Toast.makeText(
                         requireActivity(),
-                        "Uploading was successful",
+                        it.error,
                         Toast.LENGTH_SHORT
                     )
                         .show()
-                    startActivity(Intent(requireActivity(), DashboardActivity::class.java))
-
-
-
-
-                }
-                Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.error, Toast.LENGTH_SHORT).show()
-
                 }
             }
 
-        })
+        }
+    }
+
+    private fun fetchMetadataLiveData() {
+        creditDebtViewModel._fetchMetadataLiveData.observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.LOADING -> {
+                    //Tocheck on
+                }
+                Status.SUCCESS -> {
+                    metadata = it.data!!
+                    addMetadata()
+
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun addMetadataLiveData() {
+        creditDebtViewModel._addMetadataLiveData.observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.LOADING -> {
+                    // to check on
+                }
+                Status.SUCCESS -> {
+                    Toast.makeText(requireContext(), "data has been added", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(
+                        requireActivity(),
+                        it.error,
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            }
+        }
+    }
+
+    private fun liveDataAddProduct() {
         productViewModel._liveDataAddProduct.observe(viewLifecycleOwner, {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -148,7 +212,7 @@ class CreditPage4Fragment : Fragment() {
                 Status.ERROR -> {
                     Toast.makeText(
                         requireActivity(),
-                        "Uploading product not successful",
+                        it.error,
                         Toast.LENGTH_SHORT
                     )
                         .show()
@@ -163,81 +227,96 @@ class CreditPage4Fragment : Fragment() {
                 }
             }
         })
+    }
 
-        creditDebtViewModel._addMetadataLiveData.observe(viewLifecycleOwner){
-            when (it.status){
+    private fun loadCdLiveData() {
+        creditDebtViewModel._loadCDLiveData.observe(viewLifecycleOwner, {
+            Log.d(TAG, "toSubmitData: Called viewmodel")
+            when (it.status) {
                 Status.LOADING -> {
-                    // to check on
+                    Toast.makeText(requireActivity(), "Uploading...", Toast.LENGTH_SHORT).show()
+
                 }
                 Status.SUCCESS -> {
-                    Toast.makeText(requireContext(),"data has been added", Toast.LENGTH_SHORT).show()
-                }
-                Status.ERROR -> {
+                    toUpdateProductData()
+                    toAddCattleBought()
                     Toast.makeText(
                         requireActivity(),
-                        it.error,
+                        "Uploading was successful",
                         Toast.LENGTH_SHORT
                     )
                         .show()
-                }
-            }
-        }
-        creditDebtViewModel._fetchMetadataLiveData.observe(viewLifecycleOwner){
-            when(it.status){
-                Status.LOADING ->{
-                   //Tocheck on
-                }
-                Status.SUCCESS ->{
-                    metadata = it.data!!
-                    addMetadata()
+                    startActivity(Intent(requireActivity(), DashboardActivity::class.java))
+
 
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireContext(),it.error,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), it.error, Toast.LENGTH_SHORT).show()
+
                 }
             }
+
+        })
+
+    }
+
+    private fun toAddCattleBought() {
+        if (cattleBoughtList.size > 0) {
+            for (cattleBought: CattleBought in cattleBoughtList) {
+                val updatedCattleBought = CattleBought(
+                    creditDebtId,
+                    creditDebtViewModel.getCattleBoughtId(creditDebtId),
+                    cattleBought.cattleBoughtType,
+                    cattleBought.cattlePrice,
+                    cattleBought.cattleQty,
+                    cattleBought.cattleAmt
+                )
+                creditDebtViewModel.addCattleBought(creditDebtId,updatedCattleBought)
+            }
+
+
+
         }
 
-
-        return _binding.root
     }
 
     private fun toUpdateProductData() {
         productViewModel.addProducts(products)
     }
 
-    private fun fetchMetadata (){
+    private fun fetchMetadata() {
         creditDebtViewModel.fetchMetadata(getUserId())
     }
 
-    private fun addMetadata (){
-        if(type == Constants.DEBT){
-               val totalMoneyReceivedPaid = totalPaid.toInt().plus(metadata.totalMoneyReceivedPaid)
-               val totalMoneyReceivedAmt = totalAmount.toInt().plus(metadata.totalMoneyReceivedAmt)
-               val totalMoneyReceivedBalance = totalBalance.toInt().plus(metadata.totalMoneyReceivedBalance)
-               val totalMoneySentPaid = 0+metadata.totalMoneySentPaid
-               val totalMoneySentAmt = 0+metadata.totalMoneySentAmt
-               val totalMoneySentBalance = 0+metadata.totalMoneySentBalance
-            val metadata = Metadata(totalMoneySentPaid, totalMoneySentAmt,totalMoneySentBalance,
-                totalMoneyReceivedPaid, totalMoneyReceivedAmt,totalMoneyReceivedBalance)
-            creditDebtViewModel.addMetadata(metadata,getUserId())
+    private fun addMetadata() {
+        if (type == Constants.DEBT) {
+            val totalMoneyReceivedPaid = totalPaid.toInt().plus(metadata.totalMoneyReceivedPaid)
+            val totalMoneyReceivedAmt = totalAmount.toInt().plus(metadata.totalMoneyReceivedAmt)
+            val totalMoneyReceivedBalance =
+                totalBalance.toInt().plus(metadata.totalMoneyReceivedBalance)
+            val totalMoneySentPaid = 0 + metadata.totalMoneySentPaid
+            val totalMoneySentAmt = 0 + metadata.totalMoneySentAmt
+            val totalMoneySentBalance = 0 + metadata.totalMoneySentBalance
+            val metadata = Metadata(
+                totalMoneySentPaid, totalMoneySentAmt, totalMoneySentBalance,
+                totalMoneyReceivedPaid, totalMoneyReceivedAmt, totalMoneyReceivedBalance
+            )
+            creditDebtViewModel.addMetadata(metadata, getUserId())
 
-           } else if (type == Constants.CREDIT){
+        } else if (type == Constants.CREDIT) {
 
             val totalMoneyReceivedPaid = 0 + metadata.totalMoneyReceivedPaid
-            val totalMoneyReceivedAmt = 0+ metadata.totalMoneyReceivedAmt
-            val totalMoneyReceivedBalance = 0+ metadata.totalMoneyReceivedBalance
+            val totalMoneyReceivedAmt = 0 + metadata.totalMoneyReceivedAmt
+            val totalMoneyReceivedBalance = 0 + metadata.totalMoneyReceivedBalance
             val totalMoneySentPaid = totalPaid.toInt().plus(metadata.totalMoneySentPaid)
-            val totalMoneySentAmt =  totalAmount.toInt().plus(metadata.totalMoneySentAmt)
-            val totalMoneySentBalance =  totalBalance.toInt().plus(metadata.totalMoneySentBalance)
-            val metadata = Metadata(totalMoneySentPaid, totalMoneySentAmt,totalMoneySentBalance,
-                totalMoneyReceivedPaid,totalMoneyReceivedAmt,totalMoneyReceivedBalance)
-            creditDebtViewModel.addMetadata(metadata,getUserId())
-           }
-
-
-
-
+            val totalMoneySentAmt = totalAmount.toInt().plus(metadata.totalMoneySentAmt)
+            val totalMoneySentBalance = totalBalance.toInt().plus(metadata.totalMoneySentBalance)
+            val metadata = Metadata(
+                totalMoneySentPaid, totalMoneySentAmt, totalMoneySentBalance,
+                totalMoneyReceivedPaid, totalMoneyReceivedAmt, totalMoneyReceivedBalance
+            )
+            creditDebtViewModel.addMetadata(metadata, getUserId())
+        }
 
 
     }
@@ -247,9 +326,9 @@ class CreditPage4Fragment : Fragment() {
     private fun toUploadCreditDebtData() {
         Log.d(TAG, "toSubmitData: data")
         val dateCreated = DateCreated.getDateCreated()
-        val creditDebtId = creditDebtViewModel.getCreditDebtId()
+        creditDebtId = creditDebtViewModel.getCreditDebtId()
         val userId = getUserId()
-        val creditDebt =
+        creditDebt =
             CreditDebt(
                 creditDebtId,
                 userId,
@@ -271,9 +350,10 @@ class CreditPage4Fragment : Fragment() {
 
 
     }
-    private fun getUserId():String{
+
+    private fun getUserId(): String {
         val sessionManager = SessionManager(requireContext())
-        val userId =sessionManager.getUserId()
+        val userId = sessionManager.getUserId()
         return userId!!
 
 

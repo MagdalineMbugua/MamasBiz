@@ -178,8 +178,6 @@ b
 2app/src/main/res/drawable/ic_outline_search_24.xml,f\1\f16c30849a9e3c13fec33e945b60c0abc75ccb3e
 T
 $app/src/main/res/drawable/ic_sad.xml,f\7\f7dd961753f95050b0590889c367e58cf382d4bc
-f
-6app/src/main/res/layout/fragment_credit_debt_page4.xml,c\b\cbf61e1f3f87232c02dd7323d4b44ed86c31468f
 q
 Aapp/src/main/java/com/magda/mamasbiz/main/utils/UpdateFragment.kt,b\a\ba627b9639e30d1f1b1a0c34fdca668ed7a73d97
 Å

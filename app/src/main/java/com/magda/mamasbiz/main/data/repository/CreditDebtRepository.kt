@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObject
+import com.magda.mamasbiz.main.data.entity.CattleBought
 import com.magda.mamasbiz.main.data.entity.CreditDebt
 import com.magda.mamasbiz.main.data.entity.Metadata
 import com.magda.mamasbiz.main.data.entity.UpdatePayments
@@ -19,11 +20,11 @@ class CreditDebtRepository {
     private var metadataReference: CollectionReference
     private var updatedCreditDebtList: MutableList<CreditDebt> = mutableListOf()
     private var updatedPaymentsList: MutableList<UpdatePayments> = mutableListOf()
-    private val database: FirebaseFirestore
+    private var updatedCattleBoughtList: MutableList<CattleBought> = mutableListOf()
+    private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
 
 
     init {
-        database = FirebaseFirestore.getInstance()
         creditDebtReference = database.collection(Constants.CREDIT_DEBT_REFERENCE)
         metadataReference = database.collection(Constants.METADATA_REFERENCE)
     }
@@ -116,6 +117,25 @@ class CreditDebtRepository {
             callback(Error("Updating Payments Failed ${e.message}"))
         }
     }
+    fun addCattleBought(
+        cattleBought: CattleBought,
+        creditDebtId: String,
+        callback: (Results<Boolean>) -> Unit
+    ) {
+        try {
+            val cattleBoughtReference = database.collection(Constants.CREDIT_DEBT_REFERENCE)
+                .document(creditDebtId)
+                .collection(Constants.CATTLE_BOUGHT_REFERENCE)
+            cattleBoughtReference.document(cattleBought.cattleBoughtId!!).set(cattleBought)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        callback(Success(true))
+                    } else callback(Error("Cattle bought update Failed"))
+                }
+        } catch (e: Exception) {
+            callback(Error("Cattle bought update Failed ${e.message}"))
+        }
+    }
 
     fun updateTotalMoney(
         creditDebtId: String,
@@ -144,6 +164,10 @@ class CreditDebtRepository {
         return creditDebtReference.document(creditDebt.creditDebtId!!)
             .collection(Constants.UPDATE_REFERENCE).document().id
     }
+    fun getCattleBoughtId(creditDebtId: String): String {
+        return creditDebtReference.document(creditDebtId)
+            .collection(Constants.CATTLE_BOUGHT_REFERENCE).document().id
+    }
 
     fun getUpdateList(
         creditDebtId: String,
@@ -159,6 +183,25 @@ class CreditDebtRepository {
                         updatedPaymentsList.add(updatePayments!!)
                     }
                     callback(Success(updatedPaymentsList))
+                }
+        } catch (e: Exception) {
+            callback(Error("fetching updated payments was not successful ${e.message}"))
+        }
+
+    }
+    fun getCattleBoughtList(
+        creditDebtId: String,
+        callback: (Results<MutableList<CattleBought>>) -> Unit
+    ) {
+        try {
+            creditDebtReference.document(creditDebtId).collection(Constants.CATTLE_BOUGHT_REFERENCE).get()
+                .addOnSuccessListener { queryDocumentSnapshots ->
+                    for (snapshot: DocumentSnapshot in queryDocumentSnapshots) {
+                        val cattleBought = snapshot.toObject(CattleBought::class.java)
+                        Log.d(TAG, "getUpdateList: $cattleBought")
+                        updatedCattleBoughtList.add(cattleBought!!)
+                    }
+                    callback(Success(updatedCattleBoughtList))
                 }
         } catch (e: Exception) {
             callback(Error("fetching updated payments was not successful ${e.message}"))

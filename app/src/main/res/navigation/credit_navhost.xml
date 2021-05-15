@@ -59,13 +59,13 @@
         android:label="fragment_credit_debt_page"
         tools:layout="@layout/fragment_credit_debt_page" >
         <action
+            android:id="@+id/action_creditDebtPageFragment_to_creditPage1Fragment"
+            app:destination="@id/creditPage1Fragment" />
+        <action
             android:id="@+id/action_creditDebtPageFragment_to_creditPage2Fragment"
             app:destination="@id/creditPage2Fragment" />
         <action
             android:id="@+id/action_creditDebtPageFragment_to_creditPage3Fragment"
             app:destination="@id/creditPage3Fragment" />
-        <action
-            android:id="@+id/action_creditDebtPageFragment_to_creditPage1Fragment"
-            app:destination="@id/creditPage1Fragment" />
     </fragment>
 </navigation>

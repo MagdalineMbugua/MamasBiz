@@ -103,6 +103,33 @@
             android:textColor="@color/colorIcon"
             android:fontFamily="@font/cormorantsc_semibold"
             android:textSize="16sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvTotalAmt"
+            android:text="@string/total_amount_paid"
+            android:fontFamily="@font/cormorantsc_bold"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toStartOf="@id/etAmountPaid"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/tvAmountPaid"/>
+        <EditText
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvTotalExactAmt"
+            android:text="@string/_0"
+            android:inputType="number"
+            android:fontFamily="@font/cormorantsc_bold"
+            android:textSize="16sp"
+            android:textColor="@color/colorDarkFont"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="0dp"
+            android:id="@+id/etAmountPaid"
+            android:autofillHints="null"
+            tools:ignore="LabelFor" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -32,7 +32,12 @@ class Constants {
         const val CREDIT_DEBT_ID : String ="updateId"
         const val USER_REFERENCE : String ="user_reference"
         const val METADATA_REFERENCE : String ="metadata_reference"
+        const val CATTLE_BOUGHT_REFERENCE : String ="cattle_bought_reference"
         const val UPDATE_DATE : String = "updateDate"
+        const val CATTLE_BOUGHT_LIST :String = "cattleBoughtList"
+        const val TOTAL_CATTLE_BOUGHT_AMOUNT :String = "totalCattleBoughtAmount"
+        const val TOTAL_CATTLE_BOUGHT_PAID :String = "totalCattleBoughtPaid"
+        const val TOTAL_CATTLE_BOUGHT_QTY :String = "totalCattleBoughtQty"
 
 
 

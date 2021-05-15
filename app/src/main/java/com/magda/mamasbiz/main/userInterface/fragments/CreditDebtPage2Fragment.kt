@@ -14,11 +14,13 @@ import androidx.navigation.Navigation
 import com.magda.mamasbiz.R
 import com.magda.mamasbiz.databinding.FragmentCreditDebtPage2Binding
 import com.magda.mamasbiz.main.businessLogic.viewModels.ProductViewModel
+import com.magda.mamasbiz.main.data.entity.CattleBought
 import com.magda.mamasbiz.main.data.entity.CreditDebt
 import com.magda.mamasbiz.main.data.entity.Products
 import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.Status
 import kotlinx.android.synthetic.main.fragment_credit_debt_page2.*
+import java.util.ArrayList
 
 class CreditDebtPage2Fragment : Fragment() {
     private lateinit var binding: FragmentCreditDebtPage2Binding
@@ -43,8 +45,11 @@ class CreditDebtPage2Fragment : Fragment() {
     private var creditDebt: CreditDebt? = null
     private var credit: String? = ""
     private var debt: String? = ""
-    private var hasCreditDebt: String? = ""
+    private lateinit var cattleBoughtList: ArrayList<CattleBought>
     private lateinit var status: String
+    private lateinit var totalCattleBoughtAmount: String
+    private lateinit var totalCattleBoughtQty: String
+    private lateinit var totalCattleBoughtPaid: String
     private val _binding get() = binding!!
     private lateinit var productViewModel: ProductViewModel
 
@@ -61,7 +66,14 @@ class CreditDebtPage2Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //Getting arguments from the previous fragment: CreditPage1fragment
+        //Getting arguments from the previous fragment: CreditPage1fragment or CreditDebtPageFragment
+        getExtraArguments()
+
+
+
+    }
+
+    private fun getExtraArguments() {
         requireArguments().getString(Constants.DEBTOR_NAME)?.let { debtorName ->
             name = debtorName
         }
@@ -77,6 +89,20 @@ class CreditDebtPage2Fragment : Fragment() {
         }
         requireArguments().getString(Constants.CREDIT)?.let { credit ->
             this.credit = credit
+        }
+        requireArguments().getParcelableArrayList<CattleBought>(Constants.CATTLE_BOUGHT_LIST)?.let { cattleBoughtList ->
+            this.cattleBoughtList = cattleBoughtList
+        }
+        requireArguments().getString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT)?.let { totalCattleBoughtAmount ->
+            this.totalCattleBoughtAmount = totalCattleBoughtAmount
+        }
+
+        requireArguments().getString(Constants.TOTAL_CATTLE_BOUGHT_PAID)?.let { totalCattleBoughtPaid ->
+            this.totalCattleBoughtPaid = totalCattleBoughtPaid
+        }
+
+        requireArguments().getString(Constants.TOTAL_CATTLE_BOUGHT_QTY)?.let { totalCattleBoughtQty ->
+            this.totalCattleBoughtQty = totalCattleBoughtQty
         }
 
     }
@@ -313,6 +339,13 @@ class CreditDebtPage2Fragment : Fragment() {
                     arg.putString(Constants.CREDIT, credit)
                 } else if (debt != null) {
                     arg.putString(Constants.DEBT, debt)
+                }
+                Log.d(TAG, "toNextPage: ${cattleBoughtList.size}")
+                if(cattleBoughtList.size<0){
+                   arg.putParcelableArrayList(Constants.CATTLE_BOUGHT_LIST,cattleBoughtList)
+                    arg.putString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT, totalCattleBoughtAmount)
+                    arg.putString(Constants.TOTAL_CATTLE_BOUGHT_PAID,totalCattleBoughtPaid)
+                    arg.putString(Constants.TOTAL_CATTLE_BOUGHT_QTY, totalCattleBoughtQty)
                 }
                 navController.navigate(R.id.action_creditPage2Fragment_to_creditPage3Fragment, arg)
             }

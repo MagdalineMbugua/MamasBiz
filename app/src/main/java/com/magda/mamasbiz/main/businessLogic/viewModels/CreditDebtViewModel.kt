@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.magda.mamasbiz.main.data.entity.CattleBought
 import com.magda.mamasbiz.main.data.entity.CreditDebt
 import com.magda.mamasbiz.main.data.entity.Metadata
 import com.magda.mamasbiz.main.data.entity.UpdatePayments
@@ -52,12 +53,23 @@ class CreditDebtViewModel : ViewModel() {
     val _fetchUpdatePaymentsLiveData: MutableLiveData<NetworkResponse<MutableList<UpdatePayments>>> get() = fetchUpdatePaymentsLiveData
 
 
-    private val fetchMetadataLiveData : MutableLiveData<NetworkResponse<Metadata>> = MutableLiveData<NetworkResponse<Metadata>> ()
-    val _fetchMetadataLiveData : MutableLiveData<NetworkResponse<Metadata>> get() =fetchMetadataLiveData
+    private val fetchMetadataLiveData: MutableLiveData<NetworkResponse<Metadata>> =
+        MutableLiveData<NetworkResponse<Metadata>>()
+    val _fetchMetadataLiveData: MutableLiveData<NetworkResponse<Metadata>> get() = fetchMetadataLiveData
+
+    private val fetchCattleBoughtLiveData: MutableLiveData<NetworkResponse<MutableList<CattleBought>>> =
+        MutableLiveData<NetworkResponse<MutableList<CattleBought>>>()
+    val _fetchCattleBoughtLiveData: MutableLiveData<NetworkResponse<MutableList<CattleBought>>> get() = fetchCattleBoughtLiveData
 
 
-    private val addMetadataLiveData : MutableLiveData<NetworkResponse<Boolean>> = MutableLiveData<NetworkResponse<Boolean>> ()
-    val _addMetadataLiveData : MutableLiveData<NetworkResponse<Boolean>> get() = addMetadataLiveData
+    private val addMetadataLiveData: MutableLiveData<NetworkResponse<Boolean>> =
+        MutableLiveData<NetworkResponse<Boolean>>()
+    val _addMetadataLiveData: MutableLiveData<NetworkResponse<Boolean>> get() = addMetadataLiveData
+
+    private val addCattleBoughtLiveData: MutableLiveData<NetworkResponse<Boolean>> =
+        MutableLiveData<NetworkResponse<Boolean>>()
+    val _addCattleBoughtLiveData: MutableLiveData<NetworkResponse<Boolean>> get() = addCattleBoughtLiveData
+
 
     fun addCreditDebt(creditDebt: CreditDebt) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -108,6 +120,9 @@ class CreditDebtViewModel : ViewModel() {
     fun getUpdatePaymentId(creditDebt: CreditDebt): String {
         return creditDebtRepository.getUpdatePaymentId(creditDebt)
     }
+    fun getCattleBoughtId (creditDebtId: String):String {
+        return creditDebtRepository.getCattleBoughtId(creditDebtId)
+    }
 
     fun deleteCreditDebt(creditDebt: CreditDebt) {
         deleteCDLiveData.value = NetworkResponse.loading()
@@ -139,6 +154,22 @@ class CreditDebtViewModel : ViewModel() {
         }
 
 
+    }
+
+    fun addCattleBought(creditDebtId: String, cattleBought: CattleBought) {
+        viewModelScope.launch(Dispatchers.IO) {
+            addCattleBoughtLiveData.postValue(NetworkResponse.loading())
+            creditDebtRepository.addCattleBought(cattleBought, creditDebtId) {
+                when (it) {
+                    is Results.Success -> {
+                        addCattleBoughtLiveData.postValue(NetworkResponse.success(true, null))
+                    }
+                    is Results.Error -> {
+                        addCattleBoughtLiveData.postValue(NetworkResponse.error(it.error))
+                    }
+                }
+            }
+        }
     }
 
     fun updateTotalMoney(
@@ -182,30 +213,51 @@ class CreditDebtViewModel : ViewModel() {
         }
     }
 
-    fun fetchMetadata(userId: String) {
+    fun fetchCattleBought(creditDebtId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-          fetchMetadataLiveData.postValue(NetworkResponse.loading())
-          creditDebtRepository.getMetadata(userId){
-              when(it){
-                  is Results.Success -> {
-                     fetchMetadataLiveData.postValue(NetworkResponse.success(true, it.data))
-                  }
-                  is Results.Error -> {
-                      fetchMetadataLiveData.postValue(NetworkResponse.error(it.error))
-                  }
-              }
-          }
+            fetchCattleBoughtLiveData.postValue(NetworkResponse.loading())
+            creditDebtRepository.getCattleBoughtList(creditDebtId) {
+                when (it) {
+                    is Results.Success -> {
+                        fetchCattleBoughtLiveData.postValue(
+                            NetworkResponse.success(
+                                true,
+                                it.data
+                            )
+                        )
+                    }
+                    is Results.Error -> {
+                        fetchCattleBoughtLiveData.postValue(NetworkResponse.error(it.error))
+                    }
+                }
+            }
         }
     }
 
-    fun addMetadata (metadata: Metadata, userId: String){
+    fun fetchMetadata(userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchMetadataLiveData.postValue(NetworkResponse.loading())
+            creditDebtRepository.getMetadata(userId) {
+                when (it) {
+                    is Results.Success -> {
+                        fetchMetadataLiveData.postValue(NetworkResponse.success(true, it.data))
+                    }
+                    is Results.Error -> {
+                        fetchMetadataLiveData.postValue(NetworkResponse.error(it.error))
+                    }
+                }
+            }
+        }
+    }
+
+    fun addMetadata(metadata: Metadata, userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             addMetadataLiveData.postValue(NetworkResponse.loading())
-            creditDebtRepository.addMetadata(metadata, userId){
-                when(it){
+            creditDebtRepository.addMetadata(metadata, userId) {
+                when (it) {
                     is Results.Success -> {
                         addMetadataLiveData.postValue(NetworkResponse.success(true, null))
-                        }
+                    }
                     is Results.Error -> {
                         addMetadataLiveData.postValue(NetworkResponse.error(it.error))
                     }
