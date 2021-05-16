@@ -170,8 +170,6 @@ a
 1app/src/main/res/drawable/grey_rounded_corner.xml,8\1\814e08170b78ea85609139fd923949d80a41e985
 `
 0app/src/main/res/drawable/ic_baseline_add_24.xml,f\1\f1823586c3bcf535e6f3a00196b394cdbe435019
-a
-1app/src/main/res/drawable/ic_baseline_edit_24.xml,2\7\2701889fa172b91c3b1e269de92b0b4e7e83564b
 c
 3app/src/main/res/drawable/ic_baseline_update_24.xml,b\4\b4c706ad34a58eaecbb2ccac09e2ff75a827c52a
 b

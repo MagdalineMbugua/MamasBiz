@@ -1,7 +1,6 @@
 package com.magda.mamasbiz.main.userInterface.activities
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -21,23 +20,20 @@ import com.magda.mamasbiz.R
 import com.magda.mamasbiz.databinding.ActivityDetailsBinding
 import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
 import com.magda.mamasbiz.main.businessLogic.viewModels.ProductViewModel
-import com.magda.mamasbiz.main.data.entity.CreditDebt
-import com.magda.mamasbiz.main.data.entity.Metadata
-import com.magda.mamasbiz.main.data.entity.Products
-import com.magda.mamasbiz.main.data.entity.UpdatePayments
+import com.magda.mamasbiz.main.data.entity.*
 import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.DateCreated
 import com.magda.mamasbiz.main.utils.Status
 
 class DetailsActivity : AppCompatActivity() {
-    private val TAG = "Derails Activity"
+    private val TAG = "Details Activity"
     private lateinit var binding: ActivityDetailsBinding
-    private val _binding get() = binding!!
     private lateinit var creditDebt: CreditDebt
     private lateinit var productViewModel: ProductViewModel
     private lateinit var creditDebtViewModel: CreditDebtViewModel
-    private lateinit var products: Products
-    private lateinit var updatePayments: UpdatePayments
+    private var products: Products? = null
+    private var cattleBoughtList : ArrayList<CattleBought>? = null
+    private var updatePayments: UpdatePayments? = null
     private var credit: String? = ""
     private var debt: String? = ""
     private lateinit var metadata: Metadata
@@ -47,123 +43,49 @@ class DetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailsBinding.inflate(layoutInflater)
-        setContentView(_binding.root)
+        setContentView(binding.root)
 
         //Get extras from the previous activity
+        getExtraIntents()
 
-        creditDebt = intent.getParcelableExtra(Constants.CREDIT_DEBT)!!
-        debt = intent.getStringExtra(Constants.DEBT)
-        credit = intent.getStringExtra(Constants.CREDIT)
-        if (credit != null) {
-            val creditName = resources.getString(R.string.creditor_name)
-            val creditNumber = resources.getString(R.string.creditor_number)
-            binding.tvName.text = creditName
-            binding.tvNumber.text = creditNumber
-        }
 
         //initiate view model
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
+
+
         //Get products
         productViewModel.getProducts(creditDebt.productId!!)
         Log.d(TAG, "onCreate: ${creditDebt.productId}")
+        // fetch metadata
         creditDebtViewModel.fetchMetadata(creditDebt.userId!!)
 
+        //fetchCattleBought
+        creditDebtViewModel.fetchCattleBought(creditDebt.creditDebtId!!)
+
         //observe the product data fetched
-        productViewModel._liveDataFetchProduct.observe(this) {
-            when (it.status) {
-                Status.ERROR -> {
-                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
-                }
-                Status.SUCCESS -> {
-                    products = it.data!!
-                    toFillTable()
-                }
-                Status.LOADING -> {
-                    // Loaded
-                }
-            }
-        }
+        fetchProductsLiveData()
+
 
         // observe the credit debt deleted
-        creditDebtViewModel._deleteCDLiveData.observe(this) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    deleteMetadata()
-                }
-                Status.LOADING -> {
-                    //to check on it later
-                }
-                Status.ERROR -> {
-                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+        deleteCreditDebtLiveData()
+
 
         // observe the credit debt updated
-        creditDebtViewModel._updateTotalAmountLiveData.observe(this) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    Toast.makeText(this, "Successfully updated", Toast.LENGTH_SHORT).show()
-                    creditDebtViewModel.addUpdatePayments(creditDebt, updatePayments)
-                }
-                Status.LOADING -> {
-                    //to check on it later
-                }
-                Status.ERROR -> {
-                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
-                }
-            }
+        updateCreditDebtLiveData()
 
-        }
 
         //observe the update Payments
-        creditDebtViewModel._updatePaymentLiveData.observe(this) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    toUpdateMetadata()
+        updatePaymentsLiveData()
 
-                }
-                Status.LOADING -> {
-                    //to check on it later
-                }
-                Status.ERROR -> {
-                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, "onCreate: ${it.error}")
-                }
-            }
 
-        }
+        //observe metadata fetched
+        fetchMetadataLiveData()
 
-        creditDebtViewModel._fetchMetadataLiveData.observe(this) {
-            when (it.status) {
-                Status.LOADING -> {
-                    //method sub
-                }
-                Status.SUCCESS -> {
-                    metadata = it.data!!
-                }
-                Status.ERROR -> {
-                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
 
-        creditDebtViewModel._addMetadataLiveData.observe(this){
-            when (it.status){
-                Status.LOADING -> {
-                    //to figure out
-                }
-                Status.SUCCESS -> {
-                    Toast.makeText(this, "Successfully updated.", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                Status.ERROR ->{
-                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+        //Observe metadata added
+        addMetadataLiveData()
 
-                }
-            }
-        }
 
         //set text on views
         initViews()
@@ -182,17 +104,144 @@ class DetailsActivity : AppCompatActivity() {
 
     }
 
-    private fun deleteMetadata() {
-        if (credit!=null){
-            val metadata = Metadata(metadata.totalMoneySentPaid.minus(creditDebt.totalAllPaid!!.toInt()),metadata.totalMoneySentAmt.minus(creditDebt.totalAllAmount!!.toInt()),
-            metadata.totalMoneySentBalance.minus(creditDebt.totalAllBalance!!.toInt()), metadata.totalMoneyReceivedPaid,metadata.totalMoneyReceivedAmt,metadata.totalMoneyReceivedBalance)
-            creditDebtViewModel.addMetadata(metadata,creditDebt.userId!!)
+    private fun addMetadataLiveData() {
+        creditDebtViewModel._addMetadataLiveData.observe(this) {
+            when (it.status) {
+                Status.LOADING -> {
+                    //to figure out
+                }
+                Status.SUCCESS -> {
+                    Toast.makeText(this, "Successfully updated.", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
 
-        }else if (debt!=null){
-            val metadata = Metadata(metadata.totalMoneySentPaid,metadata.totalMoneySentAmt,metadata.totalMoneySentBalance,
-            metadata.totalMoneyReceivedPaid.minus(creditDebt.totalAllPaid!!.toInt()), metadata.totalMoneyReceivedAmt.minus(creditDebt.totalAllAmount!!.toInt()),
-            metadata.totalMoneyReceivedBalance.minus(creditDebt.totalAllBalance!!.toInt()))
-            creditDebtViewModel.addMetadata(metadata,creditDebt.userId!!)
+                }
+            }
+        }
+    }
+
+    private fun fetchMetadataLiveData() {
+        creditDebtViewModel._fetchMetadataLiveData.observe(this) {
+            when (it.status) {
+                Status.LOADING -> {
+                    //method sub
+                }
+                Status.SUCCESS -> {
+                    metadata = it.data!!
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun updatePaymentsLiveData() {
+        creditDebtViewModel._updatePaymentLiveData.observe(this) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    toUpdateMetadata()
+
+                }
+                Status.LOADING -> {
+                    //to check on it later
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "onCreate: ${it.error}")
+                }
+            }
+
+        }
+    }
+
+    private fun updateCreditDebtLiveData() {
+        creditDebtViewModel._updateTotalAmountLiveData.observe(this) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    Toast.makeText(this, "Successfully updated", Toast.LENGTH_SHORT).show()
+                    creditDebtViewModel.addUpdatePayments(creditDebt, updatePayments!!)
+                }
+                Status.LOADING -> {
+                    //to check on it later
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
+    }
+
+    private fun deleteCreditDebtLiveData() {
+        creditDebtViewModel._deleteCDLiveData.observe(this) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    deleteMetadata()
+                }
+                Status.LOADING -> {
+                    //to check on it later
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun fetchProductsLiveData() {
+        productViewModel._liveDataFetchProduct.observe(this) {
+            when (it.status) {
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+                Status.SUCCESS -> {
+                    products = it.data!!
+                    toFillTable()
+                }
+                Status.LOADING -> {
+                    // Loaded
+                }
+            }
+        }
+    }
+
+    private fun getExtraIntents() {
+        creditDebt = intent.getParcelableExtra(Constants.CREDIT_DEBT)!!
+        debt = intent.getStringExtra(Constants.DEBT)
+        credit = intent.getStringExtra(Constants.CREDIT)
+        if (credit != null) {
+            val creditName = resources.getString(R.string.creditor_name)
+            val creditNumber = resources.getString(R.string.creditor_number)
+            binding.tvName.text = creditName
+            binding.tvNumber.text = creditNumber
+        }
+    }
+
+    private fun deleteMetadata() {
+        if (credit != null) {
+            val metadata = Metadata(
+                metadata.totalMoneySentPaid.minus(creditDebt.totalAllPaid!!.toInt()),
+                metadata.totalMoneySentAmt.minus(creditDebt.totalAllAmount!!.toInt()),
+                metadata.totalMoneySentBalance.minus(creditDebt.totalAllBalance!!.toInt()),
+                metadata.totalMoneyReceivedPaid,
+                metadata.totalMoneyReceivedAmt,
+                metadata.totalMoneyReceivedBalance
+            )
+            creditDebtViewModel.addMetadata(metadata, creditDebt.userId!!)
+
+        } else if (debt != null) {
+            val metadata = Metadata(
+                metadata.totalMoneySentPaid,
+                metadata.totalMoneySentAmt,
+                metadata.totalMoneySentBalance,
+                metadata.totalMoneyReceivedPaid.minus(creditDebt.totalAllPaid!!.toInt()),
+                metadata.totalMoneyReceivedAmt.minus(creditDebt.totalAllAmount!!.toInt()),
+                metadata.totalMoneyReceivedBalance.minus(creditDebt.totalAllBalance!!.toInt())
+            )
+            creditDebtViewModel.addMetadata(metadata, creditDebt.userId!!)
 
         }
     }
@@ -307,7 +356,7 @@ class DetailsActivity : AppCompatActivity() {
             .setTitle("Delete details")
             .setMessage("Are you sure you want to delete this document?")
             .setCancelable(true)
-            .setPositiveButton("Ok", { _, _ -> toDeleteData() })
+            .setPositiveButton("Ok") { _, _ -> toDeleteData() }
         deleteDialog.show()
 
     }
@@ -333,50 +382,58 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun toFillTable() {
-
         binding.apply {
-            if (products.meatAmt != "0") {
-                tvMeatPrice.text = products.meatPrice
-                tvMeatQty.text = products.meatQty
-                tvMeatAmt.text = products.meatAmt
+            if (products?.meatAmt != "0") {
+                tvMeatPrice.text = products?.meatPrice
+                tvMeatQty.text = products?.meatQty
+                tvMeatAmt.text = products?.meatAmt
                 meatRow.visibility = View.VISIBLE
             } else meatRow.visibility = View.GONE
-            if (products.intestineAmt != "0") {
-                tvIntestinesPrice.text = products.intestinePrice
-                tvIntestinesQty.text = products.intestineQty
-                tvIntestinesAmt.text = products.intestineAmt
+            if (products?.intestineAmt != "0") {
+                tvIntestinesPrice.text = products?.intestinePrice
+                tvIntestinesQty.text = products?.intestineQty
+                tvIntestinesAmt.text = products?.intestineAmt
                 intestinesRow.visibility = View.VISIBLE
             } else intestinesRow.visibility = View.GONE
-            if (products.africanSausageAmt != "0") {
-                tvAfricanSausageQty.text = products.africanSausageQty
-                tvAfricanSausagePrice.text = products.africanSausagePrice
-                tvAfricanSausageAmt.text = products.africanSausageAmt
+            if (products?.africanSausageAmt != "0") {
+                tvAfricanSausageQty.text = products?.africanSausageQty
+                tvAfricanSausagePrice.text = products?.africanSausagePrice
+                tvAfricanSausageAmt.text = products?.africanSausageAmt
                 africanSausageRow.visibility = View.VISIBLE
             } else africanSausageRow.visibility = View.GONE
-            if (products.headAndLegsAmt != "0") {
-                tvHeadAndLegsPrice.text = products.headAndLegsPrice
-                tvHeadAndLegsQty.text = products.headAndLegsQty
-                tvHeadAndLegsAmt.text = products.headAndLegsAmt
+            if (products?.headAndLegsAmt != "0") {
+                tvHeadAndLegsPrice.text = products?.headAndLegsPrice
+                tvHeadAndLegsQty.text = products?.headAndLegsQty
+                tvHeadAndLegsAmt.text = products?.headAndLegsAmt
                 headAndToeRow.visibility = View.VISIBLE
             } else headAndToeRow.visibility = View.GONE
-            if (products.liverAmt != "0") {
-                tvLiverQty.text = products.liverQty
-                tvLiverPrice.text = products.liverPrice
-                tvLiverAmt.text = products.liverAmt
+            toFillMoreTable()
+
+        }
+
+    }
+
+    private fun toFillMoreTable() {
+        binding.apply {
+            if (products?.liverAmt != "0") {
+                tvLiverQty.text = products?.liverQty
+                tvLiverPrice.text = products?.liverPrice
+                tvLiverAmt.text = products?.liverAmt
                 liverRow.visibility = View.VISIBLE
             } else liverRow.visibility = View.GONE
-            if (products.skinAmt != "0") {
-                tvSkinQty.text = products.skinQty
-                tvSkinPrice.text = products.skinPrice
-                tvSkinAmt.text = products.skinAmt
+            if (products?.skinAmt != "0") {
+                tvSkinQty.text = products?.skinQty
+                tvSkinPrice.text = products?.skinPrice
+                tvSkinAmt.text = products?.skinAmt
                 skinRow.visibility = View.VISIBLE
             } else skinRow.visibility = View.GONE
-            if (products.filletAmt != "0") {
-                tvFilletQty.text = products.filletQty
-                tvFilletPrice.text = products.filletPrice
-                tvFilletAmt.text = products.filletAmt
+            if (products?.filletAmt != "0") {
+                tvFilletQty.text = products?.filletQty
+                tvFilletPrice.text = products?.filletPrice
+                tvFilletAmt.text = products?.filletAmt
                 filletRow.visibility = View.VISIBLE
             } else filletRow.visibility = View.GONE
+
         }
 
     }

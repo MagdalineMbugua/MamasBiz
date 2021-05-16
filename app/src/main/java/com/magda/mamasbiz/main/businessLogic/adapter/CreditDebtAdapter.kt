@@ -86,6 +86,7 @@ class CreditDebtAdapter (private val context: Context, private val itemClickList
                 mImage.setImageResource(R.drawable.chop)
 
             }
+
             val kes = "KES: ${creditDebt.totalAllAmount}"
             mCustomerName.text = creditDebt.name
             mAmount.text = kes

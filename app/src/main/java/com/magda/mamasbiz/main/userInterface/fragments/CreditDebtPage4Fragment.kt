@@ -149,7 +149,7 @@ class CreditPage4Fragment : Fragment() {
             } else type = Constants.DEBT
 
             tvBack.setOnClickListener { toPreviousPage() }
-            tvNext.setOnClickListener { toUploadCreditDebtData() }
+            tvNext.setOnClickListener { addMetadata() }
         }
         loadCdLiveData()
         liveDataAddProduct()
@@ -215,6 +215,7 @@ class CreditPage4Fragment : Fragment() {
                 Status.SUCCESS -> {
                     Toast.makeText(requireContext(), "data has been added", Toast.LENGTH_SHORT)
                         .show()
+                    toUploadCreditDebtData()
                 }
                 Status.ERROR -> {
                     Toast.makeText(
@@ -271,7 +272,6 @@ class CreditPage4Fragment : Fragment() {
                 Status.SUCCESS -> {
                     toUpdateProductData()
                     toAddCattleBought()
-                    addMetadata()
                     Toast.makeText(
                         requireActivity(),
                         "Uploading was successful",
@@ -318,16 +318,17 @@ class CreditPage4Fragment : Fragment() {
 
     private fun addMetadata() {
         if (type == Constants.DEBT) {
-            val totalMoneyReceivedPaid = totalPaid?.toInt()?.plus(metadata.totalMoneyReceivedPaid)
-            val totalMoneyReceivedAmt = totalAmount?.toInt()?.plus(metadata.totalMoneyReceivedAmt)
+            confirmTheAmount()
+            val totalMoneyReceivedPaid = totalAllPaid.plus(metadata.totalMoneyReceivedPaid)
+            val totalMoneyReceivedAmt = totalAllAmount.plus(metadata.totalMoneyReceivedAmt)
             val totalMoneyReceivedBalance =
-                totalBalance?.toInt()?.plus(metadata.totalMoneyReceivedBalance)
+                totalAllBalance.plus(metadata.totalMoneyReceivedBalance)
             val totalMoneySentPaid = 0 + metadata.totalMoneySentPaid
             val totalMoneySentAmt = 0 + metadata.totalMoneySentAmt
             val totalMoneySentBalance = 0 + metadata.totalMoneySentBalance
             val metadata = Metadata(
                 totalMoneySentPaid, totalMoneySentAmt, totalMoneySentBalance,
-                totalMoneyReceivedPaid!!, totalMoneyReceivedAmt!!, totalMoneyReceivedBalance!!
+                totalMoneyReceivedPaid, totalMoneyReceivedAmt, totalMoneyReceivedBalance
             )
             creditDebtViewModel.addMetadata(metadata, getUserId())
 
@@ -372,6 +373,7 @@ class CreditPage4Fragment : Fragment() {
                     .minus(totalCattleBoughtAmount!!.toInt())).plus(this.totalBalance!!.toInt())
             }
         }
+        Log.d(TAG, "confirmTheAmount: $totalAllBalance , $totalAllAmount, $totalAllPaid")
     }
 
 
@@ -407,6 +409,7 @@ class CreditPage4Fragment : Fragment() {
                 totalCattleBoughtQty
 
             )
+
         Log.d(TAG, "toSubmitData: $creditDebt")
         creditDebtViewModel.addCreditDebt(creditDebt)
 
