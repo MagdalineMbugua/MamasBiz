@@ -76,6 +76,11 @@ class CattleTableLayout (context: Context, attrs: AttributeSet?): LinearLayout(c
         Log.d(TAG, "getAmount: $string")
         return string
     }
+    fun getQty(): String{
+        val string = mQty.text.toString()
+        Log.d(TAG, "getAmount: $string")
+        return string
+    }
     fun onAmountChangeListener (callback:(String)-> Unit){
         this.callback = callback
 

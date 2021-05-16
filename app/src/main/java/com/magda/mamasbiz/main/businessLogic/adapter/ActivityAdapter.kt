@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.magda.mamasbiz.R
@@ -12,7 +13,7 @@ import com.magda.mamasbiz.main.data.entity.UpdatePayments
 import com.magda.mamasbiz.main.utils.Constants
 import kotlinx.android.synthetic.main.update_payment.view.*
 
-class ActivityAdapter() :  PagedListAdapter<UpdatePayments, ActivityAdapter.ViewHolder>(DIFF_CALLBACK) {
+class ActivityAdapter() :  PagingDataAdapter<UpdatePayments, ActivityAdapter.ViewHolder>(DIFF_CALLBACK) {
     private val updatePaymentList = mutableListOf<UpdatePayments>()
     private lateinit var creditDebt: CreditDebt
     private lateinit var updatePayments: UpdatePayments

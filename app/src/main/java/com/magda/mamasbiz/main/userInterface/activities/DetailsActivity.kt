@@ -184,14 +184,14 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun deleteMetadata() {
         if (credit!=null){
-            val metadata = Metadata(metadata.totalMoneySentPaid.minus(creditDebt.totalPaid!!.toInt()),metadata.totalMoneySentAmt.minus(creditDebt.totalAmount!!.toInt()),
-            metadata.totalMoneySentBalance.minus(creditDebt.totalBalance!!.toInt()), metadata.totalMoneyReceivedPaid,metadata.totalMoneyReceivedAmt,metadata.totalMoneyReceivedBalance)
+            val metadata = Metadata(metadata.totalMoneySentPaid.minus(creditDebt.totalAllPaid!!.toInt()),metadata.totalMoneySentAmt.minus(creditDebt.totalAllAmount!!.toInt()),
+            metadata.totalMoneySentBalance.minus(creditDebt.totalAllBalance!!.toInt()), metadata.totalMoneyReceivedPaid,metadata.totalMoneyReceivedAmt,metadata.totalMoneyReceivedBalance)
             creditDebtViewModel.addMetadata(metadata,creditDebt.userId!!)
 
         }else if (debt!=null){
             val metadata = Metadata(metadata.totalMoneySentPaid,metadata.totalMoneySentAmt,metadata.totalMoneySentBalance,
-            metadata.totalMoneyReceivedPaid.minus(creditDebt.totalPaid!!.toInt()), metadata.totalMoneyReceivedAmt.minus(creditDebt.totalAmount!!.toInt()),
-            metadata.totalMoneyReceivedBalance.minus(creditDebt.totalBalance!!.toInt()))
+            metadata.totalMoneyReceivedPaid.minus(creditDebt.totalAllPaid!!.toInt()), metadata.totalMoneyReceivedAmt.minus(creditDebt.totalAllAmount!!.toInt()),
+            metadata.totalMoneyReceivedBalance.minus(creditDebt.totalAllBalance!!.toInt()))
             creditDebtViewModel.addMetadata(metadata,creditDebt.userId!!)
 
         }
@@ -221,8 +221,8 @@ class DetailsActivity : AppCompatActivity() {
         val mTotalBalance = bottomSheetView.findViewById<TextView>(R.id.tvExactTotalBal)
         val mTotalAmt = bottomSheetView.findViewById<TextView>(R.id.tvTotalAmt)
         val mUpdatePayment = bottomSheetView.findViewById<Button>(R.id.btUpdate)
-        val totalBalance = creditDebt.totalBalance
-        val totalAmount = "Total Amount: Kes ${creditDebt.totalAmount}"
+        val totalBalance = creditDebt.totalAllBalance
+        val totalAmount = "Total Amount: Kes ${creditDebt.totalAllAmount}"
         mTotalAmt.text = totalAmount
         mTotalBalance.text = totalBalance
         mTotalAmtPaid.addTextChangedListener(object : TextWatcher {
@@ -237,7 +237,7 @@ class DetailsActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 val text = s.toString()
                 if (text.isNotEmpty()) {
-                    val totalBal = creditDebt.totalAmount?.toInt()?.minus(text.toInt())
+                    val totalBal = creditDebt.totalAllAmount?.toInt()?.minus(text.toInt())
                     mTotalBalance.text = totalBal.toString()
 
                 }
@@ -248,7 +248,7 @@ class DetailsActivity : AppCompatActivity() {
             val newTotalBalance = mTotalBalance.text.toString()
             newTotalAmountPaid = mTotalAmtPaid.text.toString()
             val updatedTotalAmtPaid =
-                newTotalAmountPaid.toInt().plus(creditDebt.totalPaid!!.toInt())
+                newTotalAmountPaid.toInt().plus(creditDebt.totalAllPaid!!.toInt())
             val status = if (newTotalBalance == "0") {
                 "paid"
             } else "not paid"
@@ -307,7 +307,7 @@ class DetailsActivity : AppCompatActivity() {
             .setTitle("Delete details")
             .setMessage("Are you sure you want to delete this document?")
             .setCancelable(true)
-            .setPositiveButton("Ok", DialogInterface.OnClickListener { _, _ -> toDeleteData() })
+            .setPositiveButton("Ok", { _, _ -> toDeleteData() })
         deleteDialog.show()
 
     }
@@ -325,9 +325,9 @@ class DetailsActivity : AppCompatActivity() {
             tvDebtorNumber.text = creditDebt.phoneNumber
             tvDebtorStatus.text = creditDebt.status
             tvDebtorPaymentDate.text = creditDebt.paymentDate
-            tvDebtorTotalDebt.text = "KES: ${creditDebt.totalPaid}"
-            tvDebtorTotalBalance.text = "KES: ${creditDebt.totalBalance}"
-            tvTotalAmt.text = "KES ${creditDebt.totalAmount}"
+            tvDebtorTotalDebt.text = "KES: ${creditDebt.totalAllPaid}"
+            tvDebtorTotalBalance.text = "KES: ${creditDebt.totalAllBalance}"
+            tvTotalAmt.text = "KES ${creditDebt.totalAllAmount}"
 
         }
     }

@@ -1,15 +1,14 @@
 package com.magda.mamasbiz.main.userInterface.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.magda.mamasbiz.R
 import com.magda.mamasbiz.databinding.ActivityPaymentBinding
 import com.magda.mamasbiz.main.businessLogic.adapter.ActivityAdapter
 import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
@@ -91,9 +90,9 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun setUpCardView() {
-        val totalPaid = "Kes: ${creditDebt.totalPaid}"
-        val totalBalance = "Kes: ${creditDebt.totalBalance}"
-        val totalAmt = "Kes: ${creditDebt.totalAmount}"
+        val totalPaid = "Kes: ${creditDebt.totalAllPaid}"
+        val totalBalance = "Kes: ${creditDebt.totalAllBalance}"
+        val totalAmt = "Kes: ${creditDebt.totalAllAmount}"
         binding.apply {
             tvTotalExactAmount.text = totalAmt
             tvTotalExactPaid.text = totalPaid

@@ -79,7 +79,6 @@ class CreditDebtPageFragment : Fragment() {
 
 
     private fun addView() {
-
         val cattleTableLayout = CattleTableLayout(requireContext())
         val layout = binding.cattleLinearLayout
         layout.addView(cattleTableLayout)
@@ -89,7 +88,8 @@ class CreditDebtPageFragment : Fragment() {
         val cattleBoughtQty = cattleTableLayout.etQty.text.toString()
         val cattleBoughtAmt = cattleTableLayout.tvCattleAmount.text.toString()
         val cattleBought = CattleBought("","",cattleBoughtType,cattleBoughtPrice,cattleBoughtQty,cattleBoughtAmt)
-        cattleList.add(cattleBought)
+        Log.d(TAG, "addView: $cattleList")
+        Log.d(TAG, "addView: ${cattleList.size}")
         cattleTableLayout.onAmountChangeListener {
             calculateTotals()
         }
@@ -126,39 +126,59 @@ class CreditDebtPageFragment : Fragment() {
         binding.tvTotalExactAmt.text = total.toString()
 
     }
+    private fun calculateQty(): Int{
+        var totalQty = 0
+        for(i in 0..binding.cattleLinearLayout.childCount){
+            val table = binding.cattleLinearLayout.getChildAt(i)as? CattleTableLayout
+             totalQty += table?.getQty()?.toInt()?:0
+        }
+
+        return totalQty
+    }
 
     private fun getTexts(){
-        for(i in 0..binding.cattleLinearLayout.childCount){
-            val cattleTableLayout = binding.cattleLinearLayout.getChildAt(i)as? CattleTableLayout
-            val cattleBoughtPrice = cattleTableLayout?.etPrice?.text.toString()
-            val cattleBoughtQty = cattleTableLayout?.etQty?.text.toString()
-            val cattleBoughtAmt = cattleTableLayout?.tvCattleAmount?.text.toString()
-            val cattleBoughtAmtPaid = binding.etAmountPaid.text.toString()
-            validateInfo(cattleBoughtPrice,cattleBoughtQty,cattleBoughtAmt,cattleBoughtAmtPaid)
+        Log.d(TAG, "getTexts Counts: ${binding.cattleLinearLayout.childCount}")
+        if(binding.cattleLinearLayout.childCount>0){
+            for(i in 0 until binding.cattleLinearLayout.childCount){
+                val cattleTableLayout = binding.cattleLinearLayout.getChildAt(i)as? CattleTableLayout
+                val cattleBoughtType = cattleTableLayout?.tvCattleType?.text.toString()
+                val cattleBoughtPrice = cattleTableLayout?.etPrice?.text.toString()
+                val cattleBoughtQty = cattleTableLayout?.etQty?.text.toString()
+                val cattleBoughtAmt = cattleTableLayout?.tvCattleAmount?.text.toString()
 
+                Log.d(TAG, "getTexts: $cattleTableLayout")
+                validateInfo(cattleBoughtType,cattleBoughtPrice,cattleBoughtQty,cattleBoughtAmt)
+
+            }
         }
+
     }
 
     private fun validateInfo(
+        cattleBoughtType: String,
         cattleBoughtPrice: String,
         cattleBoughtQty: String,
-        cattleBoughtAmt: String,
-        cattleBoughtAmtPaid: String
+        cattleBoughtAmt: String
     ) {
-        var totalUnitsBought = 0
+        val cattleBoughtAmtPaid = binding.etAmountPaid.text.toString()
+
         if(cattleBoughtPrice=="0"||cattleBoughtQty=="0"|| cattleBoughtAmt =="0"){
             Toast.makeText(requireContext(), "Fill in the cattle bought", Toast.LENGTH_SHORT).show()
         }else {
             if(cattleBoughtAmtPaid.isEmpty()){
                 Toast.makeText(requireContext(), "Fill in the Amount paid for the cattle", Toast.LENGTH_SHORT).show()
             }
-            totalUnitsBought += cattleBoughtQty.toInt()
-            val totalCattleBoughtQty = totalUnitsBought.toString()
+            Log.d(TAG, "validateInfo: and $cattleBoughtQty")
+            val totalCattleBoughtQty = calculateQty().toString()
+
             val totalCattleBoughtAmt = binding.tvTotalExactAmt.text.toString()
             Log.d(
                 TAG,
                 "validateInfo: $cattleBoughtAmtPaid $totalCattleBoughtAmt $totalCattleBoughtQty"
             )
+            val cattleBought = CattleBought("","",cattleBoughtType,cattleBoughtPrice,cattleBoughtQty,cattleBoughtAmt)
+            Log.d(TAG, "validateInfo: $cattleBought")
+            cattleList.add(cattleBought)
             val arg = setArguments()
             arg.putParcelableArrayList(Constants.CATTLE_BOUGHT_LIST, cattleList)
             arg.putString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT, totalCattleBoughtAmt)

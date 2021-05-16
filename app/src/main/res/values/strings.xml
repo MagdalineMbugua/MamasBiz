@@ -122,4 +122,10 @@
     <string name="total_amount_kes_4000">Total Amount: KES </string>
     <string name="add">Add</string>
     <string name="did_you_also_buy_parts_of_a_cow">Did you also buy parts of a cow?</string>
+    <string name="cattle_bought">Cattle Bought</string>
+    <string name="total_cattle_amount">Cattle Amount</string>
+    <string name="cattle_paid">Cattle paid</string>
+    <string name="cattle_balance">Cattle Balance</string>
+    <string name="products_paid">Products Paid</string>
+    <string name="products_balance">Products Balance</string>
 </resources>

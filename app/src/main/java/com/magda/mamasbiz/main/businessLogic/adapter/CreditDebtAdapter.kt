@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.magda.mamasbiz.R
 import com.magda.mamasbiz.main.data.entity.CreditDebt
@@ -13,7 +14,8 @@ import com.magda.mamasbiz.main.utils.MyDiffUtil
 import kotlinx.android.synthetic.main.customer_cardview.view.*
 import androidx.recyclerview.widget.DiffUtil as DiffUtil1
 
-class CreditDebtAdapter (private val context: Context, private val itemClickListener: ItemClickListener) :PagedListAdapter<CreditDebt, CreditDebtAdapter.ViewHolder>(DIFF_CALLBACK)
+class CreditDebtAdapter (private val context: Context, private val itemClickListener: ItemClickListener) :
+    PagingDataAdapter<CreditDebt, CreditDebtAdapter.ViewHolder>(DIFF_CALLBACK)
 {
     private  var creditDebtList:MutableList<CreditDebt> = mutableListOf()
     companion object{
@@ -84,7 +86,7 @@ class CreditDebtAdapter (private val context: Context, private val itemClickList
                 mImage.setImageResource(R.drawable.chop)
 
             }
-            val kes = "KES: ${creditDebt.totalAmount}"
+            val kes = "KES: ${creditDebt.totalAllAmount}"
             mCustomerName.text = creditDebt.name
             mAmount.text = kes
             mDateCreated.text = creditDebt.dateCreated

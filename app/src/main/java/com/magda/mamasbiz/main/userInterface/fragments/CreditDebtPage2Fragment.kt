@@ -45,7 +45,7 @@ class CreditDebtPage2Fragment : Fragment() {
     private var creditDebt: CreditDebt? = null
     private var credit: String? = ""
     private var debt: String? = ""
-    private lateinit var cattleBoughtList: ArrayList<CattleBought>
+    private var cattleBoughtList: ArrayList<CattleBought>? = null
     private lateinit var status: String
     private lateinit var totalCattleBoughtAmount: String
     private lateinit var totalCattleBoughtQty: String
@@ -147,7 +147,7 @@ class CreditDebtPage2Fragment : Fragment() {
                 nextLayout.tvNext.visibility = View.GONE
                 nextLayout.tvBack.visibility = View.GONE
                 btUpdate.visibility = View.VISIBLE
-                etAmountPaid.setText(creditDebt!!.totalPaid)
+                etAmountPaid.setText(creditDebt!!.totalAllPaid)
                 btUpdate.setOnClickListener { checkIfFilled() }
             }}
 
@@ -340,8 +340,8 @@ class CreditDebtPage2Fragment : Fragment() {
                 } else if (debt != null) {
                     arg.putString(Constants.DEBT, debt)
                 }
-                Log.d(TAG, "toNextPage: ${cattleBoughtList.size}")
-                if(cattleBoughtList.size<0){
+                Log.d(TAG, "toNextPage: ${cattleBoughtList?.size}")
+                if(cattleBoughtList!=null){
                    arg.putParcelableArrayList(Constants.CATTLE_BOUGHT_LIST,cattleBoughtList)
                     arg.putString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT, totalCattleBoughtAmount)
                     arg.putString(Constants.TOTAL_CATTLE_BOUGHT_PAID,totalCattleBoughtPaid)

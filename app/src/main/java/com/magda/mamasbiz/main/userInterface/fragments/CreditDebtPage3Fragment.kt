@@ -1,6 +1,7 @@
 package com.magda.mamasbiz.main.userInterface.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,8 @@ class CreditPage3Fragment : Fragment() {
     private var credit: String? = ""
     private var debt: String? = ""
     private val _binding get() = binding!!
-    private lateinit var cattleBoughtList: ArrayList<CattleBought>
+    private val TAG = "CreditDebtPage3Fragment"
+    private var cattleBoughtList: ArrayList<CattleBought>? = null
     private lateinit var totalCattleBoughtAmount: String
     private lateinit var totalCattleBoughtQty: String
     private lateinit var totalCattleBoughtPaid: String
@@ -117,6 +119,7 @@ class CreditPage3Fragment : Fragment() {
     }
 
     private fun toNextPage() {
+        Log.d(TAG, "toNextPage: ${cattleBoughtList?.size}")
         val args = Bundle()
         val navController = Navigation.findNavController(binding.root)
         if (paymentDate.isNotEmpty()) {
@@ -133,8 +136,11 @@ class CreditPage3Fragment : Fragment() {
             } else if (debt != null) {
                 args.putString(Constants.DEBT, debt)
             }
-            if (cattleBoughtList.size < 0) {
+            if (cattleBoughtList!=null) {
                 args.putParcelableArrayList(Constants.CATTLE_BOUGHT_LIST, cattleBoughtList)
+                args.putString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT, totalCattleBoughtAmount)
+                args.putString(Constants.TOTAL_CATTLE_BOUGHT_PAID,totalCattleBoughtPaid)
+                args.putString(Constants.TOTAL_CATTLE_BOUGHT_QTY, totalCattleBoughtQty)
             }
             navController.navigate(R.id.action_creditPage3Fragment_to_creditPage4Fragment, args)
         } else Toast.makeText(requireActivity(), "Select the payment date", Toast.LENGTH_SHORT)
