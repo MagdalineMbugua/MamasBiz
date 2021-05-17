@@ -61,6 +61,7 @@ class CreditPage4Fragment : Fragment() {
     private  var totalAllAmount: Int = 0
     private var totalAllBalance: Int =0
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Getting the argument extras

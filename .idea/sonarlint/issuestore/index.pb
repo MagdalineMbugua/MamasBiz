@@ -81,8 +81,6 @@ N
 app/src/main/res/font/font.xml,b\6\b6f6bdc101d406059b11d13134e008cb1069f317
 R
 "app/src/main/res/font-v26/font.xml,2\c\2c6f48359293851bc71e329320aea9b90cc79412
-[
-+app/src/main/res/layout/activity_credit.xml,8\f\8fcbd0383d740c4f55755bd8452e81c10b525997
 b
 2app/src/main/res/layout/activity_splash_screen.xml,f\7\f7df685f78aceccfe92840b30dd70c70674d7944
 h
@@ -208,3 +206,5 @@ u
 Eapp/src/main/java/com/magda/mamasbiz/main/data/entity/CattleBought.kt,3\3\3346ccc7738688cef9973d9bd3b7ac3c3ce76e55
 †
 Vapp/src/main/java/com/magda/mamasbiz/main/businessLogic/adapter/CattleBoughtAdapter.kt,c\f\cfee8f6ba9400d678560582c94fd8bc3d5a04128
+ˆ
+Xapp/src/main/java/com/magda/mamasbiz/main/userInterface/activities/EditCattleActivity.kt,b\3\b347c74ddea0eebb033a46ff84b0dffb113d3fff

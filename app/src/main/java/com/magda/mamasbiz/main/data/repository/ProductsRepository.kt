@@ -2,7 +2,6 @@ package com.magda.mamasbiz.main.data.repository
 
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.magda.mamasbiz.main.data.entity.CreditDebt
 import com.magda.mamasbiz.main.data.entity.Products
 import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.Results

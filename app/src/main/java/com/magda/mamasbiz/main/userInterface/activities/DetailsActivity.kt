@@ -15,15 +15,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.magda.mamasbiz.R
 import com.magda.mamasbiz.databinding.ActivityDetailsBinding
+import com.magda.mamasbiz.main.businessLogic.adapter.CattleBoughtAdapter
 import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
 import com.magda.mamasbiz.main.businessLogic.viewModels.ProductViewModel
 import com.magda.mamasbiz.main.data.entity.*
 import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.DateCreated
 import com.magda.mamasbiz.main.utils.Status
+import kotlinx.android.synthetic.main.activity_details.*
 
 class DetailsActivity : AppCompatActivity() {
     private val TAG = "Details Activity"
@@ -38,6 +42,7 @@ class DetailsActivity : AppCompatActivity() {
     private var debt: String? = ""
     private lateinit var metadata: Metadata
     private lateinit var newTotalAmountPaid: String
+    private lateinit var cattleBoughtAdapter: CattleBoughtAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,8 +59,10 @@ class DetailsActivity : AppCompatActivity() {
         creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
 
 
+
+
         //Get products
-        productViewModel.getProducts(creditDebt.productId!!)
+        creditDebt.productId?.let { productViewModel.getProducts(it) }
         Log.d(TAG, "onCreate: ${creditDebt.productId}")
         // fetch metadata
         creditDebtViewModel.fetchMetadata(creditDebt.userId!!)
@@ -86,9 +93,11 @@ class DetailsActivity : AppCompatActivity() {
         //Observe metadata added
         addMetadataLiveData()
 
+        //Observe cattle bought fetched
+        fetchCattleBoughtLiveData()
 
-        //set text on views
-        initViews()
+
+
 
         //Setting click listeners on the fabs
         settingFabClickListener()
@@ -101,6 +110,25 @@ class DetailsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+    }
+
+    private fun fetchCattleBoughtLiveData() {
+        creditDebtViewModel._fetchCattleBoughtLiveData.observe(this){
+            when (it.status){
+                Status.SUCCESS -> {
+                    cattleBoughtList = it.data
+                    if(cattleBoughtList?.size!!<1) cattleBoughtList = null
+                    initViews()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+                Status.LOADING -> {
+                    // Method sub
+                }
+            }
+        }
 
     }
 
@@ -199,7 +227,7 @@ class DetailsActivity : AppCompatActivity() {
                 }
                 Status.SUCCESS -> {
                     products = it.data!!
-                    toFillTable()
+                    initViews()
                 }
                 Status.LOADING -> {
                     // Loaded
@@ -217,7 +245,8 @@ class DetailsActivity : AppCompatActivity() {
             val creditNumber = resources.getString(R.string.creditor_number)
             binding.tvName.text = creditName
             binding.tvNumber.text = creditNumber
-        }
+            fabEditCattle.visibility = View.VISIBLE
+        } else fabEditCattle.visibility = View.GONE
     }
 
     private fun deleteMetadata() {
@@ -250,8 +279,15 @@ class DetailsActivity : AppCompatActivity() {
         binding.apply {
             fabDelete.setOnClickListener { toDelete() }
             fabEdit.setOnClickListener { toEdit() }
+            fabEditCattle.setOnClickListener{toEditCattle()}
             fabUpdate.setOnClickListener { toUpdatePayment() }
         }
+    }
+
+    private fun toEditCattle() {
+        val intent = Intent(this@DetailsActivity, EditCattleActivity::class.java)
+        intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
+        startActivity(intent)
     }
 
     private fun toEdit() {
@@ -374,9 +410,71 @@ class DetailsActivity : AppCompatActivity() {
             tvDebtorNumber.text = creditDebt.phoneNumber
             tvDebtorStatus.text = creditDebt.status
             tvDebtorPaymentDate.text = creditDebt.paymentDate
-            tvDebtorTotalDebt.text = "KES: ${creditDebt.totalAllPaid}"
-            tvDebtorTotalBalance.text = "KES: ${creditDebt.totalAllBalance}"
-            tvTotalAmt.text = "KES ${creditDebt.totalAllAmount}"
+            Log.d(TAG, "initViews: $cattleBoughtList, $products")
+            when {
+                (cattleBoughtList!=null && products == null) -> {
+                    setRecyclerViewAndViews()
+                }
+                (cattleBoughtList==null && products != null) -> {
+                    setProductViews()
+                }
+                (cattleBoughtList!=null && products != null) -> {
+                    setRecyclerViewAndViews()
+                    setProductViews()
+                }
+
+            }
+
+        }
+    }
+    @SuppressLint("SetTextI18n")
+    private fun setRecyclerViewAndViews() {
+        binding.apply {
+            tvTotalExactCattleBalance.visibility = View.VISIBLE
+            tvTotalCattleBalance.visibility = View.VISIBLE
+            tvTotalExactCattleBalance.text = "Kes: ${creditDebt.cattleBoughtBalance}"
+            tvTotalCattleAmount.visibility = View.VISIBLE
+            tvTotalCattleExactAmount.visibility =View.VISIBLE
+            tvTotalCattleExactAmount.text = "Kes: ${creditDebt.cattleBoughtAmount}"
+            tvTotalCattleDebt.visibility = View.VISIBLE
+            tvTotalExactCattleDebt.visibility = View.VISIBLE
+            tvTotalExactCattleDebt.text = "Kes: ${creditDebt.cattleBoughtPaid}"
+            tvTotalCattleQty.visibility = View.VISIBLE
+            tvTotalExactCattleQty.visibility = View.VISIBLE
+            tvTotalExactCattleQty.text = "${creditDebt.cattleBoughtQty}"
+            cattleBoughtRecyclerView.visibility = View.VISIBLE
+            setUpRecyclerView()
+
+        }
+
+    }
+
+    private fun setUpRecyclerView() {
+        cattleBoughtAdapter = CattleBoughtAdapter(this)
+        cattleBoughtAdapter.addList(cattleBoughtList!!)
+        val manager = LinearLayoutManager(this)
+        manager.orientation = RecyclerView.VERTICAL
+        binding.cattleBoughtRecyclerView.apply {
+            layoutManager = manager
+            adapter = cattleBoughtAdapter
+            hasFixedSize()
+        }
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setProductViews() {
+        binding.apply {
+            purchasedProductTable.visibility = View.VISIBLE
+            tvDebtorTotalDebt.visibility = View.VISIBLE
+            tvTotalDebt.visibility = View.VISIBLE
+            tvTotalBalance.visibility = View.VISIBLE
+            tvDebtorTotalBalance.visibility = View.VISIBLE
+            tvTotalAmt.visibility = View.VISIBLE
+            tvDebtorTotalDebt.text = "KES: ${creditDebt.productPaid}"
+            tvDebtorTotalBalance.text = "KES: ${creditDebt.productBalance}"
+            tvTotalAmt.text = "KES: ${creditDebt.productAmount}"
+            toFillTable()
 
         }
     }

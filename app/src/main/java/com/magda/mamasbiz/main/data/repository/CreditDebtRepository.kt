@@ -3,7 +3,6 @@ package com.magda.mamasbiz.main.data.repository
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.firestore.*
-import com.google.firebase.firestore.ktx.toObject
 import com.magda.mamasbiz.main.data.entity.CattleBought
 import com.magda.mamasbiz.main.data.entity.CreditDebt
 import com.magda.mamasbiz.main.data.entity.Metadata
@@ -13,14 +12,13 @@ import com.magda.mamasbiz.main.utils.Results
 import com.magda.mamasbiz.main.utils.Results.Error
 import com.magda.mamasbiz.main.utils.Results.Success
 import java.lang.Exception
-import java.nio.channels.CancelledKeyException
 
 class CreditDebtRepository {
     private var creditDebtReference: CollectionReference
     private var metadataReference: CollectionReference
     private var updatedCreditDebtList: MutableList<CreditDebt> = mutableListOf()
     private var updatedPaymentsList: MutableList<UpdatePayments> = mutableListOf()
-    private var updatedCattleBoughtList: MutableList<CattleBought> = mutableListOf()
+    private var updatedCattleBoughtList: ArrayList<CattleBought> = arrayListOf()
     private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
 
 
@@ -96,6 +94,22 @@ class CreditDebtRepository {
             callback(Error("Deleting was not successful ${e.message}"))
         }
     }
+    fun deleteCattleBoughtList (creditDebtId: String,cattleBought: CattleBought ,callback: (Results<Boolean>) -> Unit) {
+        try {
+            val cattleBoughtReference = database.collection(Constants.CREDIT_DEBT_REFERENCE)
+                .document(creditDebtId)
+                .collection(Constants.CATTLE_BOUGHT_REFERENCE).document(cattleBought.cattleBoughtId!!)
+            cattleBoughtReference.delete()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        callback(Success(true))
+                    } else callback(Error("Deleting was not successful"))
+
+                }
+        } catch (e: Exception) {
+            callback(Error("Deleting was not successful ${e.message}"))
+        }
+    }
 
 
     fun addUpdatePayments(
@@ -125,8 +139,9 @@ class CreditDebtRepository {
         try {
             val cattleBoughtReference = database.collection(Constants.CREDIT_DEBT_REFERENCE)
                 .document(creditDebtId)
-                .collection(Constants.CATTLE_BOUGHT_REFERENCE)
-            cattleBoughtReference.document(cattleBought.cattleBoughtId!!).set(cattleBought)
+                .collection(Constants.CATTLE_BOUGHT_REFERENCE).document(cattleBought.cattleBoughtId!!)
+
+            cattleBoughtReference.set(cattleBought)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         callback(Success(true))
@@ -191,7 +206,7 @@ class CreditDebtRepository {
     }
     fun getCattleBoughtList(
         creditDebtId: String,
-        callback: (Results<MutableList<CattleBought>>) -> Unit
+        callback: (Results<ArrayList<CattleBought>>) -> Unit
     ) {
         try {
             creditDebtReference.document(creditDebtId).collection(Constants.CATTLE_BOUGHT_REFERENCE).get()
@@ -208,6 +223,7 @@ class CreditDebtRepository {
         }
 
     }
+
 
     fun addMetadata(metadata: Metadata, userId: String, callback: (Results<Boolean>) -> Unit) {
         try {

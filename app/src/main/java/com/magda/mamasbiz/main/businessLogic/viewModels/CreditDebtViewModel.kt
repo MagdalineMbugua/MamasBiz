@@ -57,9 +57,9 @@ class CreditDebtViewModel : ViewModel() {
         MutableLiveData<NetworkResponse<Metadata>>()
     val _fetchMetadataLiveData: MutableLiveData<NetworkResponse<Metadata>> get() = fetchMetadataLiveData
 
-    private val fetchCattleBoughtLiveData: MutableLiveData<NetworkResponse<MutableList<CattleBought>>> =
-        MutableLiveData<NetworkResponse<MutableList<CattleBought>>>()
-    val _fetchCattleBoughtLiveData: MutableLiveData<NetworkResponse<MutableList<CattleBought>>> get() = fetchCattleBoughtLiveData
+    private val fetchCattleBoughtLiveData: MutableLiveData<NetworkResponse<ArrayList<CattleBought>>> =
+        MutableLiveData<NetworkResponse<ArrayList<CattleBought>>>()
+    val _fetchCattleBoughtLiveData: MutableLiveData<NetworkResponse<ArrayList<CattleBought>>> get() = fetchCattleBoughtLiveData
 
 
     private val addMetadataLiveData: MutableLiveData<NetworkResponse<Boolean>> =
@@ -69,6 +69,10 @@ class CreditDebtViewModel : ViewModel() {
     private val addCattleBoughtLiveData: MutableLiveData<NetworkResponse<Boolean>> =
         MutableLiveData<NetworkResponse<Boolean>>()
     val _addCattleBoughtLiveData: MutableLiveData<NetworkResponse<Boolean>> get() = addCattleBoughtLiveData
+
+    private val deleteCattleBoughtLiveData: MutableLiveData<NetworkResponse<Boolean>> =
+        MutableLiveData<NetworkResponse<Boolean>>()
+    val _deleteCattleBoughtLiveData: MutableLiveData<NetworkResponse<Boolean>> get() = deleteCattleBoughtLiveData
 
 
     fun addCreditDebt(creditDebt: CreditDebt) {
@@ -120,7 +124,8 @@ class CreditDebtViewModel : ViewModel() {
     fun getUpdatePaymentId(creditDebt: CreditDebt): String {
         return creditDebtRepository.getUpdatePaymentId(creditDebt)
     }
-    fun getCattleBoughtId (creditDebtId: String):String {
+
+    fun getCattleBoughtId(creditDebtId: String): String {
         return creditDebtRepository.getCattleBoughtId(creditDebtId)
     }
 
@@ -219,12 +224,8 @@ class CreditDebtViewModel : ViewModel() {
             creditDebtRepository.getCattleBoughtList(creditDebtId) {
                 when (it) {
                     is Results.Success -> {
-                        fetchCattleBoughtLiveData.postValue(
-                            NetworkResponse.success(
-                                true,
-                                it.data
-                            )
-                        )
+                        fetchCattleBoughtLiveData.postValue(NetworkResponse.success(true,
+                            it.data))
                     }
                     is Results.Error -> {
                         fetchCattleBoughtLiveData.postValue(NetworkResponse.error(it.error))
@@ -232,6 +233,23 @@ class CreditDebtViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun deleteCattleBought(creditDebtId: String, cattleBought: CattleBought){
+    viewModelScope.launch (Dispatchers.IO) {
+        deleteCattleBoughtLiveData.postValue(NetworkResponse.loading())
+        creditDebtRepository.deleteCattleBoughtList(creditDebtId, cattleBought){
+            when (it) {
+                is Results.Success -> {
+                    deleteCattleBoughtLiveData.postValue(NetworkResponse.success(true, it.data))
+                }
+                is Results.Error -> {
+                    deleteCattleBoughtLiveData.postValue(NetworkResponse.error(it.error))
+                }
+            }
+        }
+    }
+
     }
 
     fun fetchMetadata(userId: String) {

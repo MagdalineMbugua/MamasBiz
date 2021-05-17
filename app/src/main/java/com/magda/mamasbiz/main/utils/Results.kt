@@ -1,5 +1,6 @@
 package com.magda.mamasbiz.main.utils
 
+import com.magda.mamasbiz.main.data.entity.CattleBought
 import com.magda.mamasbiz.main.data.entity.Products
 
 sealed class Results <out T :Any> {

@@ -329,6 +329,7 @@
         android:id="@+id/cattleBoughtRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/purchasedProductTable"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -799,6 +800,15 @@
             app:fab_colorNormal="@color/colorPrimary"
             fab:fab_label="Delete"
             fab:fab_size="mini" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabEditCattle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_cattle_edit"
+            app:fab_colorNormal="@color/colorPrimary"
+            fab:fab_label="Edit Cattle"
+            fab:fab_size="mini"
+            android:visibility="gone"/>
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabEdit"
