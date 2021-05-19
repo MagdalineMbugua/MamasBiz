@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.userInterface.activities.EditCattleActivity"></activity>
+        <activity android:name=".main.userInterface.activities.BlaActivity"></activity>
+        <activity android:name=".main.userInterface.activities.EditCattleActivity" />
         <activity android:name=".main.userInterface.activities.PaymentActivity" />
         <activity android:name=".main.userInterface.activities.EditProductActivity" />
         <activity android:name=".main.userInterface.activities.DetailsActivity" />

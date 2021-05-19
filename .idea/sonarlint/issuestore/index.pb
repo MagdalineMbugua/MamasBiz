@@ -208,3 +208,5 @@ Eapp/src/main/java/com/magda/mamasbiz/main/data/entity/CattleBought.kt,3\3\3346
 Vapp/src/main/java/com/magda/mamasbiz/main/businessLogic/adapter/CattleBoughtAdapter.kt,c\f\cfee8f6ba9400d678560582c94fd8bc3d5a04128
 ˆ
 Xapp/src/main/java/com/magda/mamasbiz/main/userInterface/activities/EditCattleActivity.kt,b\3\b347c74ddea0eebb033a46ff84b0dffb113d3fff
+v
+Fapp/src/main/java/com/magda/mamasbiz/main/utils/ConnectivityManager.kt,b\c\bcd070e0b192d10977a48d5b8655112a354eac00

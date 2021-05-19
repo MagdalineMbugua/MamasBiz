@@ -6,19 +6,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".main.userInterface.activities.OtpActivity">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="55dp"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:orientation="vertical"
         android:weightSum="100">
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <androidx.appcompat.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="55dp"/>
-        </com.google.android.material.appbar.AppBarLayout>
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -37,17 +45,18 @@
             android:transitionName="textLogoTransition"/>
 
         <TextView
+            android:id="@+id/tvInfo"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="@string/an_otp_has_been_sent_to_this_number"
             android:fontFamily="@font/cormorantsc_medium"
             android:textColor="@color/colorDarkFont"
+            android:textAlignment="center"
             android:textSize="16sp"
             android:layout_marginTop="20dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_weight="5"
-            android:gravity="center_horizontal" />
+            android:layout_weight="15"
+            android:layout_gravity="center_horizontal" />
         <com.mukesh.OtpView
             android:id="@+id/otp_view"
             android:layout_width="wrap_content"
@@ -62,17 +71,30 @@
             android:layout_weight="10"
             android:layout_gravity="center_horizontal" />
         <TextView
+            android:id="@+id/tvRetry"
             android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fontFamily="@font/cormorantsc_medium"
+            android:textColor="@color/colorDarkFont"
+            android:textSize="16sp"
+            android:layout_marginTop="40dp"
+            android:layout_weight="5"
+            android:gravity="center_horizontal"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/tvTimer"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@string/no_otp_sent_retry"
             android:fontFamily="@font/cormorantsc_medium"
             android:textColor="@color/colorDarkFont"
             android:textSize="16sp"
-            android:layout_marginTop="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="4dp"
             android:layout_weight="5"
-            android:gravity="center_horizontal"/>
+            android:layout_gravity="center"
+            app:drawableStartCompat="@drawable/ic_baseline_timer_"
+            android:drawablePadding="4dp"
+            android:visibility="gone"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -100,6 +122,21 @@
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/progressbar"
         android:indeterminateTint="@color/colorPrimary"
+        android:visibility="gone"/>
+    <Button
+        android:id="@+id/btConnectivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/no_internet_connection"
+        android:textColor="@color/colorFont"
+        android:fontFamily="@font/cormorantsc_medium"
+        android:textSize="16sp"
         android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

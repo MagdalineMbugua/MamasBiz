@@ -3,16 +3,24 @@ package com.magda.mamasbiz.main.userInterface.activities
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.magda.mamasbiz.databinding.ActivityOtpBinding
 import com.magda.mamasbiz.main.utils.Constants
+import java.util.*
 import java.util.concurrent.TimeUnit
+import com.magda.mamasbiz.R
+import com.magda.mamasbiz.main.utils.ConnectionLiveData
 
 
 class OtpActivity : AppCompatActivity() {
@@ -26,17 +34,31 @@ class OtpActivity : AppCompatActivity() {
     private var password: String? = ""
     private var isLoggedIn: Boolean? = false
     private var dateCreated: String? = ""
+    private lateinit var connectionLiveData: ConnectionLiveData
+    private var hasInternet:Boolean = false
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOtpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        connectionLiveData= ConnectionLiveData(this)
+        connectionLiveData.observe(this){ isConnected ->
+            hasInternet = isConnected
+
+        }
+        Log.d(TAG, "onCreate: $hasInternet")
+        if(!hasInternet) binding.btConnectivity.visibility = View.VISIBLE
+
+
+
+
+
 
 
         //get Extra intent from the signUp Activity
-
-        val intent = intent
         firstName = intent.getStringExtra(Constants.FIRST_NAME)
         lastName = intent.getStringExtra(Constants.LAST_NAME)
         phoneNumber = intent.getStringExtra(Constants.PHONE_NUMBER)
@@ -45,8 +67,26 @@ class OtpActivity : AppCompatActivity() {
         dateCreated = intent.getStringExtra(Constants.DATE_CREATED)
         Log.d(TAG, "onCreate: $phoneNumber")
 
+        val infoText = "One time pin will be sent to +254$phoneNumber within 60 seconds. Standard SMS rates apply."
+        binding.tvInfo.text = infoText
+
+
+
+
+
+
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        //setTimer
+        setTimer()
+
         // Send verification code
         toSendVerificationCode()
+
 
 
         //SetClickListener on Signup button
@@ -55,8 +95,50 @@ class OtpActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        connectionLiveData.removeObservers(this)
+    }
+
+
+
+    private fun setTimer() {
+        var duration = 60000
+        val countDownTimer = object: CountDownTimer(duration.toLong(),1000){
+            override fun onTick(millisUntilFinished: Long) {
+                duration = millisUntilFinished.toInt()
+                val minutes = duration.div(60000)
+                val seconds= duration.div(1000)
+                val actualSeconds = if(seconds<10){
+                    "0$seconds"
+                } else seconds
+
+                val period ="0$minutes : $actualSeconds"
+                binding.tvTimer.text = period
+                binding.tvTimer.visibility = View.VISIBLE
+
+            }
+
+            override fun onFinish() {
+                binding.tvTimer.visibility = View.GONE
+                val retryText = "Otp not sent? Retry."
+                val highlightedText = SpannableString(retryText)
+                val color = ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.colorPrimary))
+                highlightedText.setSpan(color,15, 21, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                binding.tvRetry.text =highlightedText
+                binding.tvRetry.visibility = View.VISIBLE
+
+
+            }
+
+        }
+        countDownTimer.start()
+    }
+
 
     private fun toSendVerificationCode() {
+        binding.progressbar.visibility = View.VISIBLE
+
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber("+254$phoneNumber")       // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
@@ -70,25 +152,25 @@ class OtpActivity : AppCompatActivity() {
         override fun onCodeSent(
             mVerificationId: String,
             resendingToken: PhoneAuthProvider.ForceResendingToken
-        ) {
+        ) { binding.progressbar.visibility = View.GONE
             verificationId = mVerificationId
             super.onCodeSent(mVerificationId, resendingToken)
         }
 
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             val code = credential.smsCode
-            if (code.isNotEmpty()) {
+            if (code!=null) {
                 Toast.makeText(this@OtpActivity, "Verification completed", Toast.LENGTH_SHORT)
                     .show()
-                binding.progressbar.visibility = View.VISIBLE
                 Log.d(TAG, "onVerificationCompleted: $code")
                 signInWithPhoneAuthCredential(credential)
 
-            } else Log.d(TAG, "onVerificationCompleted: code is empty")
+            } else Log.d(TAG, "onVerificationCompleted: code is null")
 
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
+            binding.progressbar.visibility = View.GONE
             if (e is FirebaseAuthInvalidCredentialsException) {
                 Toast.makeText(
                     this@OtpActivity,
@@ -117,7 +199,6 @@ class OtpActivity : AppCompatActivity() {
     }
 
     private fun manualVerification(otp: String) {
-        if(!::verificationId.isInitialized)return
         val credential = PhoneAuthProvider.getCredential(verificationId, otp)
         signInWithPhoneAuthCredential(credential)
     }
@@ -151,7 +232,7 @@ class OtpActivity : AppCompatActivity() {
             intent.putExtra(Constants.IS_LOGGED_IN,true)
         } else intent.putExtra(Constants.IS_LOGGED_IN,false)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
 
     }
