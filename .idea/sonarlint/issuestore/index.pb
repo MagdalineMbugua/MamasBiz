@@ -55,8 +55,6 @@ Uapp/src/main/java/com/magda/mamasbiz/main/userInterface/fragments/CustomerFragm
 Sapp/src/main/java/com/magda/mamasbiz/main/userInterface/fragments/ProfitFragment.kt,5\d\5ddbac67d25ab657ac6139b79fb01808ac3a780a
 …
 Uapp/src/main/java/com/magda/mamasbiz/main/userInterface/fragments/SupplierFragment.kt,3\d\3da3aa3e8b9aa07ee122da998c5cf78812e3c536
-Z
-*app/src/main/res/anim/splash_animation.xml,0\0\000ba7e52ce839b4bb1e1c792d308e93d94b29f5
 [
 +app/src/main/res/drawable/customer_icon.xml,5\e\5e743f70c26156a95ab80559a7793ecaca522250
 [
@@ -81,8 +79,6 @@ N
 app/src/main/res/font/font.xml,b\6\b6f6bdc101d406059b11d13134e008cb1069f317
 R
 "app/src/main/res/font-v26/font.xml,2\c\2c6f48359293851bc71e329320aea9b90cc79412
-b
-2app/src/main/res/layout/activity_splash_screen.xml,f\7\f7df685f78aceccfe92840b30dd70c70674d7944
 h
 8app/src/main/res/layout/current_calendar_view_layout.xml,2\1\21fba5e5fbcdf26e728f5e71cef0731f20944253
 X
@@ -140,8 +136,6 @@ i
 9app/src/main/java/com/magda/mamasbiz/main/utils/Status.kt,c\d\cdaea2eaf8ee6d080870e4f7023f39e5f5db3852
 d
 4app/src/main/res/layout/activity_forgot_password.xml,e\3\e346422b367cb5b302d7197938b3058b31eacb87
-Z
-*app/src/main/res/layout/activity_login.xml,1\f\1f7e901185d74bf05f9fcb38f9ed35ea78cd4c6e
 „
 Tapp/src/main/java/com/magda/mamasbiz/main/businessLogic/adapter/CreditDebtAdapter.kt,b\4\b40dcc679fdb552dfeb5c8bc692fced9d54d59ea
 n

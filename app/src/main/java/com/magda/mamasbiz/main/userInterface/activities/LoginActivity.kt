@@ -1,11 +1,10 @@
 package com.magda.mamasbiz.main.userInterface.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.magda.mamasbiz.databinding.ActivityLoginBinding
 import com.magda.mamasbiz.main.businessLogic.viewModels.UserViewModel
@@ -43,6 +42,8 @@ class LoginActivity : AppCompatActivity() {
                 }
                 Status.ERROR -> {
                     Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, SignUpActivity::class.java))
+                    finish()
                 }
             }
         }
@@ -65,7 +66,10 @@ class LoginActivity : AppCompatActivity() {
         val userPassword = user.password
         val userDateCreated = user.dateCreated
         toOtpActivity(userFirstName!!, userLastName!!, userPassword!!, userDateCreated!!)
-    } else  Toast.makeText(this@LoginActivity,"$phoneNumber does not exist", Toast.LENGTH_SHORT).show()
+    } else  {
+        Toast.makeText(this@LoginActivity,"$phoneNumber does not exist", Toast.LENGTH_SHORT).show()
+
+    }
 
     }
 
@@ -100,7 +104,6 @@ class LoginActivity : AppCompatActivity() {
         intent.putExtra(Constants.PHONE_NUMBER,phoneNumber)
         intent.putExtra(Constants.PASSWORD,userPassword)
         intent.putExtra(Constants.DATE_CREATED,userDateCreated)
-
         intent.putExtra(Constants.IS_LOGGED_IN,true)
         startActivity(intent)
     }

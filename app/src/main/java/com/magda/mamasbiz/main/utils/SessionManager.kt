@@ -49,7 +49,7 @@ class SessionManager(context: Context) {
         editor.apply()
 
     }
-    private fun isLoggedIn():Boolean{
+    fun isLoggedIn():Boolean{
         return sharedPreferences.getBoolean(IS_LOGGED_IN,false)
     }
 }
