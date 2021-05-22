@@ -45,21 +45,22 @@ class CreditDebtRepository {
     fun getCreditDebt(userId: String, callback: (Results<MutableList<CreditDebt>>) -> Unit) {
 
         try {
-
-
-                creditDebtReference.whereEqualTo(Constants.USER_ID, userId).get()
+            creditDebtReference.whereEqualTo(Constants.USER_ID, userId).get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "getCreditDebt: is Successful ${task.result?.size()}")
                         task.result?.let {
-                            for (snapshot: DocumentSnapshot in task.result!!) {
-                                val creditDebt = snapshot.toObject(CreditDebt::class.java)
-                                updatedCreditDebtList.add(creditDebt!!)
+                            val updateList = it.documents
+                                .map { snapshot -> snapshot.toObject(CreditDebt::class.java) }
+                                .sortedByDescending {creditDebt -> creditDebt?.dateCreated  }
+                                .filterNotNull()
+
+                            callback(Success(updateList.toMutableList()))
+
+                          }
 
 
-                            }
-                            callback(Success(updatedCreditDebtList))
-                        }
+
                     } else {
                         callback(Error("error occurred while fetching data"))
                         Log.d(TAG, "getCreditDebt: taskFailed")
