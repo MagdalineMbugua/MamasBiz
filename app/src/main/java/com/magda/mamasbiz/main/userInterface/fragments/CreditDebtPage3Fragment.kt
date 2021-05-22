@@ -76,6 +76,7 @@ class CreditPage3Fragment : Fragment() {
             ?.let { cattleBoughtList ->
                 this.cattleBoughtList = cattleBoughtList
             }
+        Log.d(TAG, "getExtraArguments: ${cattleBoughtList?.size}")
         requireArguments().getString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT)?.let { totalCattleBoughtAmount ->
             this.totalCattleBoughtAmount = totalCattleBoughtAmount
         }

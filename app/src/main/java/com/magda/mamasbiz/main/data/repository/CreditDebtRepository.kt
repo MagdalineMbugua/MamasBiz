@@ -139,9 +139,11 @@ class CreditDebtRepository {
         try {
             val cattleBoughtReference = database.collection(Constants.CREDIT_DEBT_REFERENCE)
                 .document(creditDebtId)
-                .collection(Constants.CATTLE_BOUGHT_REFERENCE).document(cattleBought.cattleBoughtId!!)
-
-            cattleBoughtReference.set(cattleBought)
+                .collection(Constants.CATTLE_BOUGHT_REFERENCE)
+            val cattleBoughtId = cattleBoughtReference.document().id
+            cattleBought.cattleBoughtId = cattleBoughtId
+            Log.d(TAG, "addCattleBought: $creditDebtId, $cattleBoughtId")
+            cattleBoughtReference.document(cattleBoughtId).set(cattleBought)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         callback(Success(true))

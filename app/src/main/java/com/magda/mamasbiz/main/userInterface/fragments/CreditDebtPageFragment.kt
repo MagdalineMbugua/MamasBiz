@@ -413,6 +413,7 @@ class CreditDebtPageFragment : Fragment() {
     ) {
         val arg = setArguments()
         arg.putParcelableArrayList(Constants.CATTLE_BOUGHT_LIST, cattleList)
+        Log.d(TAG, "toTheNextPage: ${cattleList.size}")
         arg.putString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT, totalCattleBoughtAmt)
         arg.putString(Constants.TOTAL_CATTLE_BOUGHT_PAID, cattleBoughtAmtPaid)
         arg.putString(Constants.TOTAL_CATTLE_BOUGHT_QTY, totalCattleBoughtQty)

@@ -490,6 +490,7 @@ class CreditDebtPage2Fragment : Fragment() {
         Log.d(TAG, "toNextPage: ${cattleBoughtList?.size}")
         if (cattleBoughtList != null) {
             arg.putParcelableArrayList(Constants.CATTLE_BOUGHT_LIST, cattleBoughtList)
+            Log.d(TAG, "toNextPage: ${cattleBoughtList?.size}")
             arg.putString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT, totalCattleBoughtAmount)
             arg.putString(Constants.TOTAL_CATTLE_BOUGHT_PAID, totalCattleBoughtPaid)
             arg.putString(Constants.TOTAL_CATTLE_BOUGHT_QTY, totalCattleBoughtQty)

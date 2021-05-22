@@ -60,6 +60,7 @@ class CreditPage4Fragment : Fragment() {
     private var totalAllPaid: Int = 0
     private  var totalAllAmount: Int = 0
     private var totalAllBalance: Int =0
+    private  val TAG ="CreditDebtPage4Fragment"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -299,7 +300,7 @@ class CreditPage4Fragment : Fragment() {
             for (cattleBought: CattleBought in cattleBoughtList!!) {
                 val updatedCattleBought = CattleBought(
                     creditDebtId,
-                    cattleBoughtId,
+                    cattleBoughtId = null,
                     cattleBought.cattleBoughtType,
                     cattleBought.cattlePrice,
                     cattleBought.cattleQty,
