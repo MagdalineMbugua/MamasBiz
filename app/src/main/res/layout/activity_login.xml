@@ -76,10 +76,10 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:text="@string/sign_up"
+        android:text="@string/don_t_have_an_account_sign_up"
         android:textColor="@color/colorPrimary"
         android:fontFamily="@font/cormorantsc_semibold"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:id="@+id/tvSignUp"
         android:layout_weight="10"
         android:layout_marginTop="40dp"/>

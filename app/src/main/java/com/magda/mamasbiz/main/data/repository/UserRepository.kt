@@ -59,7 +59,7 @@ class UserRepository{
             val user = documentSnapshot.toObject(User::class.java)
             if (user!= null){
                 callback(Results.Success(user))
-            } else  callback(Results.Error("User does not exist"))
+            } else  callback(Results.Error("$userId don't have an account. Create one?"))
 
         }
         } catch (e: Exception){
