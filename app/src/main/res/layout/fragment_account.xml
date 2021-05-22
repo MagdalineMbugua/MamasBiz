@@ -4,28 +4,22 @@
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".main.userInterface.fragments.AccountFragment"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="100"
         android:orientation="vertical"
         android:id="@+id/foreground">
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="40"
+            android:layout_height="200dp"
             android:id="@+id/ivLogoHolder"
             android:contentDescription="@string/app_name"
             android:src="@drawable/foreground"
-            android:scaleType="fitXY"/>
+            android:scaleType="centerCrop"/>
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/foreground"
-            android:layout_weight="25"
             android:layout_marginTop="-50dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
@@ -89,64 +83,74 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvTellAFriend"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/tell_a_friend"
+                android:textSize="16sp"
+                android:fontFamily="@font/cormorantsc_regular"
+                android:textColor="@color/colorDarkFont"
+                app:drawableStartCompat="@drawable/ic_tell_a_friend"
+                android:drawablePadding="4dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvTellAFriend"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvUserPhoneNumber"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="32dp"
-            android:text="@string/tell_a_friend"
-            android:textSize="16sp"
-            android:fontFamily="@font/cormorantsc_regular"
-            android:textColor="@color/colorDarkFont"
-            app:drawableStartCompat="@drawable/ic_tell_a_friend"
-            android:drawablePadding="4dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvRateApp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTellAFriend"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="28dp"
+                android:text="@string/rate_this_app"
+                android:textSize="16sp"
+                android:fontFamily="@font/cormorantsc_regular"
+                android:textColor="@color/colorDarkFont"
+                app:drawableStartCompat="@drawable/ic_baseline_rate_review_24"
+                android:drawablePadding="4dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvReportIssue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvRateApp"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="28dp"
+                android:text="@string/report_issue"
+                android:textSize="16sp"
+                android:fontFamily="@font/cormorantsc_regular"
+                android:textColor="@color/colorDarkFont"
+                app:drawableStartCompat="@drawable/ic_baseline_bug_report_24"
+                android:drawablePadding="4dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvLogOut"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvReportIssue"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/log_out"
+                android:textSize="16sp"
+                android:fontFamily="@font/cormorantsc_regular"
+                android:textColor="@color/colorDarkFont"
+                app:drawableStartCompat="@drawable/ic_baseline_log_out"
+                android:drawablePadding="4dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvRateApp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTellAFriend"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/rate_this_app"
-            android:textSize="16sp"
-            android:fontFamily="@font/cormorantsc_regular"
-            android:textColor="@color/colorDarkFont"
-            app:drawableStartCompat="@drawable/ic_baseline_rate_review_24"
-            android:drawablePadding="4dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvReportIssue"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvRateApp"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/report_issue"
-            android:textSize="16sp"
-            android:fontFamily="@font/cormorantsc_regular"
-            android:textColor="@color/colorDarkFont"
-            app:drawableStartCompat="@drawable/ic_baseline_bug_report_24"
-            android:drawablePadding="4dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvLogOut"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvReportIssue"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="40dp"
-            android:text="@string/log_out"
-            android:textSize="16sp"
-            android:fontFamily="@font/cormorantsc_regular"
-            android:textColor="@color/colorDarkFont"
-            app:drawableStartCompat="@drawable/ic_baseline_log_out"
-            android:drawablePadding="4dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
 
 
     </LinearLayout>

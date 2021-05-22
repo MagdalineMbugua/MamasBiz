@@ -430,6 +430,7 @@ class DetailsActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun setRecyclerViewAndViews() {
         binding.apply {
+            cattleBoughtTitle.visibility = View.VISIBLE
             tvTotalExactCattleBalance.visibility = View.VISIBLE
             tvTotalCattleBalance.visibility = View.VISIBLE
             tvTotalExactCattleBalance.text = "Kes: ${creditDebt.cattleBoughtBalance}"

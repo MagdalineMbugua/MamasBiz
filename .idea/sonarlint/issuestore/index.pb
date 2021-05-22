@@ -85,8 +85,6 @@ X
 (app/src/main/res/layout/day_resource.xml,8\0\80421196230fe53424815c86554fe1f6ed3ba18b
 g
 7app/src/main/res/layout/default_calender_view_ayout.xml,7\6\7642f3b472197cf07dd427731a4a6d0cc9b6a3a6
-f
-6app/src/main/res/layout/fragment_credit_debt_page1.xml,8\5\8506fe4884585131bce700f274e622e628c1630e
 Z
 *app/src/main/res/layout/month_resource.xml,0\d\0d28c8b4f8c41795ad1a0c61918f4c7d1ce6ad26
 W

@@ -83,6 +83,7 @@ class CreditPage4Fragment : Fragment() {
         requireArguments().getParcelableArrayList<CattleBought>(Constants.CATTLE_BOUGHT_LIST)
             ?.let { cattleBoughtList ->
                 this.cattleBoughtList = cattleBoughtList}
+        Log.d(TAG, "getExtraArgument: ${cattleBoughtList?.size}")
         arguments?.getString(Constants.DEBTOR_STATUS)?.let { status ->
             this.status = status
         }
@@ -340,6 +341,7 @@ class CreditPage4Fragment : Fragment() {
             val totalMoneyReceivedBalance = 0 + metadata.totalMoneyReceivedBalance
 
             confirmTheAmount()
+            Log.d(TAG, "addMetadata: $totalAllAmount, $totalAllPaid, $totalAllBalance")
 
 
             val totalMoneySentPaid = totalAllPaid.plus(metadata.totalMoneySentPaid)
@@ -360,7 +362,7 @@ class CreditPage4Fragment : Fragment() {
             (cattleBoughtList!=null && products==null) -> {
                 totalAllPaid = totalCattleBoughtPaid!!.toInt()
                 totalAllAmount = totalCattleBoughtAmount!!.toInt()
-                totalAllBalance = totalCattleBoughtPaid!!.toInt().minus(totalCattleBoughtAmount!!.toInt())
+                totalAllBalance = totalCattleBoughtAmount!!.toInt().minus(totalCattleBoughtPaid!!.toInt())
             }
             (products != null && cattleBoughtList==null) -> {
                 totalAllPaid = this.totalPaid!!.toInt()
@@ -370,8 +372,9 @@ class CreditPage4Fragment : Fragment() {
             ((cattleBoughtList!=null) && (products != null)) -> {
                 totalAllPaid = totalCattleBoughtPaid!!.toInt().plus(this.totalPaid!!.toInt())
                 totalAllAmount = totalCattleBoughtAmount!!.toInt().plus(this.totalAmount!!.toInt())
-                totalAllBalance = (totalCattleBoughtAmount!!.toInt()
-                    .minus(totalCattleBoughtAmount!!.toInt())).plus(this.totalBalance!!.toInt())
+                val totalPartBalance =(totalCattleBoughtAmount!!.toInt()
+                    .minus(totalCattleBoughtPaid!!.toInt()))
+                totalAllBalance = totalPartBalance.plus(this.totalBalance!!.toInt())
             }
         }
         Log.d(TAG, "confirmTheAmount: $totalAllBalance , $totalAllAmount, $totalAllPaid")
@@ -484,6 +487,7 @@ class CreditPage4Fragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun setRecyclerViewAndViews() {
         binding.apply {
+            cattleBoughtTitle.visibility = View.VISIBLE
             tvTotalExactCattleBalance.visibility = View.VISIBLE
             tvTotalCattleBalance.visibility = View.VISIBLE
             val totalCattleExactBalance = "Kes: ${

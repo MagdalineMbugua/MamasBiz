@@ -55,98 +55,105 @@
                 />
         </TableRow>
     </TableLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cattleHolderLayout"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/purchasedProductTable"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:nestedScrollingEnabled="true">
-        <LinearLayout
-            android:id="@+id/cattleLinearLayout"
+        app:layout_constraintBottom_toTopOf="@id/nextLayout"
+        app:layout_constraintVertical_bias="0">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cattleHolderLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp">
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/cattleLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp">
 
 
-        </LinearLayout>
+            </LinearLayout>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvTotalAmt"
-            app:layout_constraintEnd_toStartOf="@id/tvTotalExactAmt"
-            app:layout_constraintTop_toBottomOf="@id/cattleLinearLayout"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/total_amount_kes_4000"
-            android:textColor="@color/colorIcon"
-            android:fontFamily="@font/cormorantsc_semibold"
-            android:textSize="16sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvTotalExactAmt"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cattleLinearLayout"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/_0"
-            android:textColor="@color/colorIcon"
-            android:fontFamily="@font/cormorantsc_semibold"
-            android:textSize="16sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tvTotalAmt"
-            android:text="@string/total_amount_paid"
-            android:fontFamily="@font/cormorantsc_bold"
-            android:textSize="16sp"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintEnd_toStartOf="@id/etAmountPaid"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:id="@+id/tvAmountPaid"/>
-        <EditText
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tvTotalExactAmt"
-            android:text="@string/_0"
-            android:inputType="number"
-            android:fontFamily="@font/cormorantsc_bold"
-            android:textSize="16sp"
-            android:textColor="@color/colorDarkFont"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="0dp"
-            android:id="@+id/etAmountPaid"
-            android:autofillHints="null"
-            tools:ignore="LabelFor" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabAdd"
-            app:layout_constraintTop_toBottomOf="@id/tvTotalAmt"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/very_rounded_orange_button"
-            android:drawableStart="@drawable/ic_outline_add_24"
-            android:drawablePadding="2dp"
-            android:text="@string/add"
-            android:textColor="@color/colorFont"
-            android:fontFamily="@font/cormorantsc_semibold"
-            android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvTotalAmt"
+                app:layout_constraintEnd_toStartOf="@id/tvTotalExactAmt"
+                app:layout_constraintTop_toBottomOf="@id/cattleLinearLayout"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/total_amount_kes_4000"
+                android:textColor="@color/colorIcon"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvTotalExactAmt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cattleLinearLayout"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/_0"
+                android:textColor="@color/colorIcon"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalAmt"
+                android:text="@string/total_amount_paid"
+                android:fontFamily="@font/cormorantsc_bold"
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintEnd_toStartOf="@id/etAmountPaid"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/tvAmountPaid"/>
+            <EditText
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalExactAmt"
+                android:text="@string/_0"
+                android:inputType="number"
+                android:fontFamily="@font/cormorantsc_bold"
+                android:textSize="16sp"
+                android:textColor="@color/colorDarkFont"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="0dp"
+                android:id="@+id/etAmountPaid"
+                android:autofillHints="null"
+                tools:ignore="LabelFor" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fabAdd"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalAmt"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/very_rounded_orange_button"
+                android:drawableStart="@drawable/ic_outline_add_24"
+                android:drawablePadding="2dp"
+                android:text="@string/add"
+                android:textColor="@color/colorFont"
+                android:fontFamily="@font/cormorantsc_semibold"
+                android:textSize="16sp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
 
 
     <RadioButton
