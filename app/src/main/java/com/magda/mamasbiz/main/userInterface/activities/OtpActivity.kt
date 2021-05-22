@@ -35,7 +35,7 @@ class OtpActivity : AppCompatActivity() {
     private var isLoggedIn: Boolean? = false
     private var dateCreated: String? = ""
     private lateinit var connectionLiveData: ConnectionLiveData
-    private var hasInternet:Boolean = false
+    private  var hasInternet:Boolean = false
 
 
 
@@ -45,12 +45,18 @@ class OtpActivity : AppCompatActivity() {
         binding = ActivityOtpBinding.inflate(layoutInflater)
         setContentView(binding.root)
         connectionLiveData= ConnectionLiveData(this)
-        connectionLiveData.observe(this){ isConnected ->
-            hasInternet = isConnected
+        Log.d(TAG, "onCreate: $connectionLiveData")
+        connectionLiveData.observe(this){
+            hasInternet = it
+            Log.d(TAG, "onCreate: $hasInternet")
+            if(!hasInternet){
+                binding.btConnectivity.visibility = View.VISIBLE
 
+            } else {
+                binding.btConnectivity.visibility = View.GONE
+            }
         }
-        Log.d(TAG, "onCreate: $hasInternet")
-        if(!hasInternet) binding.btConnectivity.visibility = View.VISIBLE
+
 
 
 
@@ -81,11 +87,13 @@ class OtpActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        //setTimer
-        setTimer()
+
 
         // Send verification code
         toSendVerificationCode()
+
+        //when Retrying it takes you to the whole process
+        binding.tvRetry.setOnClickListener { toSendVerificationCode() }
 
 
 
@@ -124,7 +132,7 @@ class OtpActivity : AppCompatActivity() {
                 val retryText = "Otp not sent? Retry."
                 val highlightedText = SpannableString(retryText)
                 val color = ForegroundColorSpan(ContextCompat.getColor(applicationContext, R.color.colorPrimary))
-                highlightedText.setSpan(color,15, 21, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                highlightedText.setSpan(color,14, 20, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 binding.tvRetry.text =highlightedText
                 binding.tvRetry.visibility = View.VISIBLE
 
@@ -138,6 +146,8 @@ class OtpActivity : AppCompatActivity() {
 
     private fun toSendVerificationCode() {
         binding.progressbar.visibility = View.VISIBLE
+        //setTimer
+        setTimer()
 
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber("+254$phoneNumber")       // Phone number to verify
