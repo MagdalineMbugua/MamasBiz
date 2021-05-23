@@ -1,5 +1,6 @@
 package com.magda.mamasbiz.main.userInterface.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -196,7 +197,20 @@ class CustomerFragment : Fragment(), ItemClickListener {
         val intent =Intent(requireActivity(), DetailsActivity::class.java)
         intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
         intent.putExtra(Constants.DEBT, "Debt")
-        startActivity(intent)
+        startActivityForResult(intent, 2000)
+
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==2000) {
+            if(resultCode == Activity.RESULT_OK){
+                debtList.clear()
+                fetchDebtData()
+            }
+
+            } else Toast.makeText(requireContext(), "Error occurred sending data to this screen", Toast.LENGTH_SHORT).show()
+
+
 
     }
 

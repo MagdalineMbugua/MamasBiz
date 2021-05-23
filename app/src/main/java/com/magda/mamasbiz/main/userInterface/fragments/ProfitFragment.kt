@@ -24,9 +24,7 @@ class ProfitFragment : Fragment() {
     private val TAG = "ProfitFragment"
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,23 +46,36 @@ class ProfitFragment : Fragment() {
     private fun initViews() {
         val totalBought = "Total bought: Kes ${metadata.totalMoneySentAmt}"
         val totalSold = "Total bought: Kes ${metadata.totalMoneyReceivedAmt}"
-        val receivedPaidPercentage = "${
-            metadata.totalMoneyReceivedPaid.times(100).toFloat().div(metadata.totalMoneyReceivedAmt)
-                .toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
-        }% Paid"
-        val receivedBalancePercentage = "${
-            (metadata.totalMoneyReceivedBalance.times(100).toFloat()
-                .div(metadata.totalMoneyReceivedAmt)).toBigDecimal()
-                .setScale(2, RoundingMode.HALF_EVEN)
-        }% Bal"
-        val sentBalancePercentage = "${
-            (metadata.totalMoneySentBalance.times(100).toFloat()
-                .div(metadata.totalMoneySentAmt)).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
-        }% Bal"
-        val sentPaidPercentage = "${
-            (metadata.totalMoneySentPaid.times(100).toFloat()
-                .div(metadata.totalMoneySentAmt)).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
-        }% Paid"
+        val receivedPaidPercentage: String
+        val receivedBalancePercentage : String
+        if (metadata.totalMoneyReceivedAmt==0 || metadata.totalMoneyReceivedPaid==0 ||metadata.totalMoneyReceivedBalance==0){
+            receivedPaidPercentage = "0"
+            receivedBalancePercentage ="0"
+        }else {
+            receivedPaidPercentage = "${
+                metadata.totalMoneyReceivedPaid.times(100).toFloat().div(metadata.totalMoneyReceivedAmt)
+                    .toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+            }% Paid"
+            receivedBalancePercentage = "${
+                (metadata.totalMoneyReceivedBalance.times(100).toFloat()
+                    .div(metadata.totalMoneyReceivedAmt)).toBigDecimal()
+                    .setScale(2, RoundingMode.HALF_EVEN)
+            }% Bal"
+        }
+        val sentBalancePercentage: String
+        val sentPaidPercentage : String
+            if (metadata.totalMoneySentAmt==0 || metadata.totalMoneySentPaid==0 ||metadata.totalMoneySentBalance==0){
+            sentPaidPercentage= "0"
+            sentBalancePercentage ="0"
+        }else {sentBalancePercentage = "${
+                    (metadata.totalMoneySentBalance.times(100).toFloat()
+                        .div(metadata.totalMoneySentAmt)).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                }% Bal"
+                sentPaidPercentage = "${
+                    (metadata.totalMoneySentPaid.times(100).toFloat()
+                        .div(metadata.totalMoneySentAmt)).toBigDecimal().setScale(2, RoundingMode.HALF_EVEN)
+                }% Paid"
+        }
         val receivedPaid = "Kes ${metadata.totalMoneyReceivedPaid} Paid"
         val receivedBal = "Kes ${metadata.totalMoneyReceivedBalance} Bal"
         val sentPaid = "Kes ${metadata.totalMoneySentPaid} Paid"
@@ -108,8 +119,11 @@ class ProfitFragment : Fragment() {
 
     private fun initTotalSentBalanceView() {
         binding.totalMoneySentBalance.apply {
-            setProgressWithAnimation(metadata.totalMoneySentBalance.toFloat(), 1000)
-            progressMax = metadata.totalMoneySentAmt.toFloat()
+            if (metadata.totalMoneySentAmt!=0 || metadata.totalMoneySentBalance!=0){
+                setProgressWithAnimation(metadata.totalMoneySentBalance.toFloat(), 1000)
+                progressMax = metadata.totalMoneySentAmt.toFloat()
+            }
+
 
 
         }
@@ -117,8 +131,11 @@ class ProfitFragment : Fragment() {
 
     private fun initTotalSentPaidView() {
         binding.totalMoneySentPaid.apply {
-            setProgressWithAnimation(metadata.totalMoneySentPaid.toFloat(), 1000)
-            progressMax = metadata.totalMoneySentAmt.toFloat()
+            if (metadata.totalMoneySentAmt!=0 || metadata.totalMoneySentPaid!=0){
+                setProgressWithAnimation(metadata.totalMoneySentPaid.toFloat(), 1000)
+                progressMax = metadata.totalMoneySentAmt.toFloat()
+            }
+
 
 
         }
@@ -126,8 +143,11 @@ class ProfitFragment : Fragment() {
 
     private fun initTotalReceivedBalView() {
         binding.totalMoneyReceivedPaid.apply {
-            setProgressWithAnimation(metadata.totalMoneyReceivedBalance.toFloat(), 1000)
-            progressMax = metadata.totalMoneyReceivedAmt.toFloat()
+            if(metadata.totalMoneyReceivedBalance!=0 || metadata.totalMoneySentAmt!=0){
+                setProgressWithAnimation(metadata.totalMoneyReceivedBalance.toFloat(), 1000)
+                progressMax = metadata.totalMoneyReceivedAmt.toFloat()
+            }
+
 
 
 
@@ -136,8 +156,11 @@ class ProfitFragment : Fragment() {
 
     private fun initTotalReceivedPaidView() {
         binding.totalMoneyReceivedBalance.apply {
-            setProgressWithAnimation(metadata.totalMoneyReceivedPaid.toFloat(), 1000)
-            progressMax = metadata.totalMoneyReceivedAmt.toFloat()
+            if(metadata.totalMoneyReceivedPaid!=0 || metadata.totalMoneySentAmt!=0){
+                setProgressWithAnimation(metadata.totalMoneyReceivedPaid.toFloat(), 1000)
+                progressMax = metadata.totalMoneyReceivedAmt.toFloat()
+            }
+
 
 
         }
