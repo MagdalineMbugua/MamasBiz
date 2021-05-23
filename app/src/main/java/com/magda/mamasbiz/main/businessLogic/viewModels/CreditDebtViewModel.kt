@@ -66,9 +66,9 @@ class CreditDebtViewModel : ViewModel() {
         MutableLiveData<NetworkResponse<Boolean>>()
     val _addMetadataLiveData: MutableLiveData<NetworkResponse<Boolean>> get() = addMetadataLiveData
 
-    private val deleteMetadataLiveData: MutableLiveData<NetworkResponse<Boolean>> =
+    private val updateMetadataLiveData: MutableLiveData<NetworkResponse<Boolean>> =
         MutableLiveData<NetworkResponse<Boolean>>()
-    val _deleteMetadataLiveData: MutableLiveData<NetworkResponse<Boolean>> get() = deleteMetadataLiveData
+    val _updateMetadataLiveData: MutableLiveData<NetworkResponse<Boolean>> get() = updateMetadataLiveData
 
     private val addCattleBoughtLiveData: MutableLiveData<NetworkResponse<Boolean>> =
         MutableLiveData<NetworkResponse<Boolean>>()
@@ -288,16 +288,16 @@ class CreditDebtViewModel : ViewModel() {
         }
     }
 
-    fun deleteMetadata(metadata: Metadata, userId: String) {
+    fun updateMetadata( userId: String, amountPaid: Int, balance: Int, amount:Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            deleteMetadataLiveData.postValue(NetworkResponse.loading())
-            creditDebtRepository.addMetadata(metadata, userId) {
+            updateMetadataLiveData.postValue(NetworkResponse.loading())
+            creditDebtRepository.updateCattleBoughtMetadata( userId, amountPaid,balance,amount) {
                 when (it) {
                     is Results.Success -> {
-                        deleteMetadataLiveData.postValue(NetworkResponse.success(true, null))
+                        updateMetadataLiveData.postValue(NetworkResponse.success(true, null))
                     }
                     is Results.Error -> {
-                        deleteMetadataLiveData.postValue(NetworkResponse.error(it.error))
+                        updateMetadataLiveData.postValue(NetworkResponse.error(it.error))
                     }
                 }
             }

@@ -179,6 +179,28 @@ class CreditDebtRepository {
             callback(Error("Updating Payment Failed ${e.message}"))
         }
     }
+    fun updateCattleBoughtMetadata(
+       userId: String,
+        amountPaid: Int,
+        balance: Int,
+        amount:Int,
+        callback: (Results<Boolean>) -> Unit
+    ) {
+        val map: MutableMap<String, Int> = mutableMapOf(
+            Constants.TOTAL_MONEY_SENT_PAID to amountPaid, Constants.TOTAL_MONEY_SENT_BAL to balance,
+            Constants.TOTAL_MONEY_SENT_AMOUNT to amount
+        )
+        try {
+            metadataReference.document(userId).update(map as Map<String, Any>)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        callback(Success(true))
+                    } else callback(Error("Updating Metadata Failed"))
+                }
+        } catch (e: Exception) {
+            callback(Error("Updating Metadata Failed ${e.message}"))
+        }
+    }
 
     fun getUpdatePaymentId(creditDebt: CreditDebt): String {
         return creditDebtReference.document(creditDebt.creditDebtId!!)
