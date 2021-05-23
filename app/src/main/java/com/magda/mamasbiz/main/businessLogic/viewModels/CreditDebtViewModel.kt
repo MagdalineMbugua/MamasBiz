@@ -318,10 +318,10 @@ class CreditDebtViewModel : ViewModel() {
         }
     }
 
-    fun updateMetadata( userId: String, amountPaid: Int, balance: Int, amount:Int) {
+    fun updateMetadata( creditDebtType:String,userId: String, amountPaid: Int, balance: Int, amount:Int) {
         viewModelScope.launch(Dispatchers.IO) {
             updateMetadataLiveData.postValue(NetworkResponse.loading())
-            creditDebtRepository.updateCattleBoughtMetadata( userId, amountPaid,balance,amount) {
+            creditDebtRepository.updateMetadata( creditDebtType,userId, amountPaid,balance,amount) {
                 when (it) {
                     is Results.Success -> {
                         updateMetadataLiveData.postValue(NetworkResponse.success(true, null))

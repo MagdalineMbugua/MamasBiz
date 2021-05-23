@@ -45,6 +45,12 @@ class Constants {
         const val PRODUCT_PAID :String = "productPaid"
         const val CATTLE_BOUGHT_BALANCE :String = "cattleBoughtBalance"
         const val CATTLE_BOUGHT_PAID:String = "cattleBoughtPaid"
+        const val TOTAL_MONEY_RECEIVED_AMOUNT :String = "totalMoneyReceivedAmt"
+        const val TOTAL_MONEY_RECEIVED_PAID :String = "totalMoneyReceivedPaid"
+        const val TOTAL_MONEY_RECEIVED_BAL :String = "totalMoneyReceivedBalance"
+        const val TOTAL_ALL_AMOUNT :String = "totalAllAmount"
+        const val TOTAL_ALL_BALANCE:String = "totalAllBalance"
+        const val TOTAL_ALL_PAID :String = "totalAllPaid"
 
 
 

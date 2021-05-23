@@ -235,7 +235,7 @@ class CreditDebtPageFragment : Fragment() {
                 metadata.totalMoneyReceivedAmt,
                 metadata.totalMoneyReceivedBalance
             )
-            creditDebtViewModel.updateMetadata( creditDebt!!.userId!!, metadata.totalMoneySentPaid,metadata.totalMoneySentBalance, metadata.totalMoneySentAmt)
+            creditDebtViewModel.updateMetadata(creditDebt!!.type!! ,creditDebt!!.userId!!, metadata.totalMoneySentPaid,metadata.totalMoneySentBalance, metadata.totalMoneySentAmt)
             Log.d(
                 TAG,
                 "addMetadata: ${updatedTotalMoneySentPaid.plus(cattleBoughtAmtPaid.toInt())}paid, ${
@@ -399,7 +399,7 @@ class CreditDebtPageFragment : Fragment() {
                 validateInfo(cattleBoughtType, cattleBoughtPrice, cattleBoughtQty, cattleBoughtAmt)
 
             }
-            updateCattleBought()
+            if(creditDebt!=null)  updateCattleBought()
         }
 
     }

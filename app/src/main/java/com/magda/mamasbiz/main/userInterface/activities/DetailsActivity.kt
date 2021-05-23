@@ -154,6 +154,7 @@ class DetailsActivity : AppCompatActivity() {
                 Status.SUCCESS -> {
                     creditDebt = it.data!!
                     initCreditDebtView()
+                    productViewModel.getProducts(creditDebt.productId!!)
 
                 }
 
@@ -349,13 +350,21 @@ class DetailsActivity : AppCompatActivity() {
                 creditDebtViewModel.getCreditDebtDocument(creditDebt.creditDebtId!!)
             }
 
+        }else if (requestCode==2000){
+            if(resultCode == Activity.RESULT_OK){
+                creditDebtViewModel.fetchMetadata(creditDebt.userId!!)
+                creditDebtViewModel.getCreditDebtDocument(creditDebt.creditDebtId!!)
+            }
+
         }else Toast.makeText(this, "Error occurred sending data to this activity", Toast.LENGTH_SHORT).show()
     }
+
+
 
     private fun toEdit() {
         val intent = Intent(this@DetailsActivity, EditProductActivity::class.java)
         intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
-        startActivity(intent)
+        startActivityForResult(intent,2000)
     }
 
     private fun toUpdatePayment() {
@@ -410,6 +419,7 @@ class DetailsActivity : AppCompatActivity() {
                 newTotalBalance,
                 creditDebt.userId
             )
+            Log.d(TAG, "toUpdatePayment: $updatePayments")
             checkIndividualBal(newTotalAmountPaid,updatedTotalAmtPaid.toString(), newTotalBalance, status)
 
 
@@ -430,6 +440,8 @@ class DetailsActivity : AppCompatActivity() {
         val cattleBoughtBal = creditDebt.cattleBoughtBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
         val productPaid = creditDebt.productPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
         val productBal = creditDebt.productBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
+        Log.d(TAG, "checkIndividualBal: ${cattleBoughtList?.size}, $products")
+        Log.d(TAG, "checkIndividualBal: ${cattleBoughtList!=null}, ${products!=null}")
         if(cattleBoughtList!=null && products==null){
             creditDebtViewModel.updateTotalMoney(
                 creditDebt.creditDebtId!!,
@@ -453,17 +465,18 @@ class DetailsActivity : AppCompatActivity() {
                 creditDebt.cattleBoughtPaid!!,
                 creditDebt.cattleBoughtBalance!!
             )
-        }else if (cattleBoughtList==null&& products==null){
+        }else if (cattleBoughtList!=null&& products!=null){
             creditDebtViewModel.updateTotalMoney(
                 creditDebt.creditDebtId!!,
                 newTotalAmountPaid,
                 newTotalBalance,
                 status,
-                productPaid.toString(),
-                productBal.toString(),
-                cattleBoughtPaid.toString(),
-                cattleBoughtBal.toString())
+                creditDebt.productPaid!!,
+                creditDebt.productBalance!!,
+                creditDebt.cattleBoughtPaid!!,
+                creditDebt.cattleBoughtBalance!!)
         }
+        Log.d(TAG, "checkIndividualBal: $newTotalAmountPaid, $newTotalBalance")
 
     }
 

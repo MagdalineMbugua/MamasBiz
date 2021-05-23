@@ -56,7 +56,7 @@ class PaymentActivity : AppCompatActivity() {
 
 
         binding.tvUpdatePayment.setOnClickListener {
-            startActivity(Intent(this@PaymentActivity, DetailsActivity::class.java))
+            finish()
         }
         setContentView(binding.root)
     }

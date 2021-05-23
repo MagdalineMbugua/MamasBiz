@@ -218,7 +218,7 @@ class SupplierFragment : Fragment(), ItemClickListener {
                 creditList.clear()
                 fetchDebtData()
 
-            }else Toast.makeText(requireContext(), "Results cancelled", Toast.LENGTH_SHORT).show()
+            }
 
         }else Toast.makeText(requireContext(), "Error occurred sending data to this screen", Toast.LENGTH_SHORT).show()
 

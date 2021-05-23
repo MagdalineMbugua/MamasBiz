@@ -185,7 +185,7 @@ class CreditDebtRepository {
         callback: (Results<Boolean>) -> Unit
     ) {
         val map: MutableMap<String, String> = mutableMapOf(
-            Constants.TOTAL_AMT_PAID to amountPaid, Constants.TOTAL_BALANCE to balance,
+            Constants.TOTAL_ALL_PAID to amountPaid, Constants.TOTAL_ALL_BALANCE to balance,
             Constants.STATUS to status, Constants.PRODUCT_PAID to productPaid,
             Constants.PRODUCT_BALANCE to productBal, Constants.CATTLE_BOUGHT_BALANCE to cattleBoughtBal,
             Constants.CATTLE_BOUGHT_PAID to cattleBoughtPaid
@@ -201,17 +201,26 @@ class CreditDebtRepository {
             callback(Error("Updating Payment Failed ${e.message}"))
         }
     }
-    fun updateCattleBoughtMetadata(
+    fun updateMetadata(
+        creditDebtType: String,
        userId: String,
         amountPaid: Int,
         balance: Int,
         amount:Int,
         callback: (Results<Boolean>) -> Unit
     ) {
-        val map: MutableMap<String, Int> = mutableMapOf(
-            Constants.TOTAL_MONEY_SENT_PAID to amountPaid, Constants.TOTAL_MONEY_SENT_BAL to balance,
-            Constants.TOTAL_MONEY_SENT_AMOUNT to amount
-        )
+        val map: MutableMap<String, Int> = if(creditDebtType == Constants.CREDIT){
+            mutableMapOf(
+                Constants.TOTAL_MONEY_SENT_PAID to amountPaid, Constants.TOTAL_MONEY_SENT_BAL to balance,
+                Constants.TOTAL_MONEY_SENT_AMOUNT to amount
+            )
+        } else{
+            mutableMapOf(
+                Constants.TOTAL_MONEY_RECEIVED_PAID to amountPaid, Constants.TOTAL_MONEY_RECEIVED_BAL to balance,
+                Constants.TOTAL_MONEY_RECEIVED_AMOUNT to amount
+            )
+        }
+
         try {
             metadataReference.document(userId).update(map as Map<String, Any>)
                 .addOnCompleteListener { task ->

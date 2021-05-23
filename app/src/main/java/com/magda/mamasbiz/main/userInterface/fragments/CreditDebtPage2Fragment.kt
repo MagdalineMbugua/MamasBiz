@@ -1,5 +1,6 @@
 package com.magda.mamasbiz.main.userInterface.fragments
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
@@ -55,6 +56,13 @@ class CreditDebtPage2Fragment : Fragment() {
     private lateinit var productViewModel: ProductViewModel
     private lateinit var creditDebtViewModel: CreditDebtViewModel
     private var metadata: Metadata? = null
+    private  var updatedAmount: Int = 0
+    private  var updatedBal = 0
+    private  var updatedPaid = 0
+    private  var isMetadataUpdated = false
+    private lateinit var balance :String
+    private lateinit var amountPaid :String
+    private lateinit var total :String
 
 
     companion object {
@@ -127,6 +135,7 @@ class CreditDebtPage2Fragment : Fragment() {
         fetchMetadataLiveData()
         addMetadataLiveData()
         updateCreditDebtLiveData()
+        updateMetadataLiveData()
 
 
 // Calculate the total amount of products bought using the text listener
@@ -147,17 +156,42 @@ class CreditDebtPage2Fragment : Fragment() {
         return _binding.root
     }
 
+    private fun updateMetadataLiveData() {
+       creditDebtViewModel._updateMetadataLiveData.observe(viewLifecycleOwner){
+           when (it.status) {
+               Status.LOADING -> {
+                   binding.progressbar.visibility = View.VISIBLE
+                   binding.btUpdate.visibility = View.GONE
+               }
+               Status.SUCCESS -> {
+                   Toast.makeText(requireContext(), "Successful update product", Toast.LENGTH_SHORT).show()
+                   requireActivity().setResult(Activity.RESULT_OK)
+                   requireActivity().finish()
+
+               }
+               Status.ERROR -> {
+                   binding.progressbar.visibility = View.GONE
+                   binding.btUpdate.visibility = View.VISIBLE
+                   Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
+               }
+           }
+       }
+    }
+
     private fun updateCreditDebtLiveData() {
         creditDebtViewModel._loadCDLiveData.observe(viewLifecycleOwner){
             when (it.status) {
                 Status.LOADING -> {
-                    //Method sub
+                    binding.progressbar.visibility = View.VISIBLE
+                    binding.btUpdate.visibility = View.GONE
                 }
                 Status.SUCCESS -> {
-                    Toast.makeText(requireContext(), "Successfully added", Toast.LENGTH_SHORT).show()
+                    productViewModel.addProducts(getProduct())
 
                 }
                 Status.ERROR -> {
+                    binding.progressbar.visibility = View.GONE
+                    binding.btUpdate.visibility = View.VISIBLE
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -169,13 +203,16 @@ class CreditDebtPage2Fragment : Fragment() {
         creditDebtViewModel._addMetadataLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.LOADING -> {
-                    //Method sub
+                    binding.progressbar.visibility = View.VISIBLE
+                    binding.btUpdate.visibility = View.GONE
                 }
                 Status.SUCCESS -> {
-                    Toast.makeText(requireContext(), "Successfully added", Toast.LENGTH_SHORT).show()
+                    isMetadataUpdated = true
 
                 }
                 Status.ERROR -> {
+                    binding.progressbar.visibility = View.GONE
+                    binding.btUpdate.visibility = View.VISIBLE
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -207,7 +244,6 @@ class CreditDebtPage2Fragment : Fragment() {
                 nextLayout.tvNext.visibility = View.GONE
                 nextLayout.tvBack.visibility = View.GONE
                 btUpdate.visibility = View.VISIBLE
-                etAmountPaid.setText(creditDebt!!.totalAllPaid)
                 btUpdate.setOnClickListener { checkIfFilled() }
             }
         }
@@ -218,19 +254,21 @@ class CreditDebtPage2Fragment : Fragment() {
             when (it.status) {
                 Status.ERROR -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
+                    binding.progressbar.visibility = View.GONE
+                    binding.btUpdate.visibility = View.VISIBLE
 
                 }
                 Status.SUCCESS -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "product update was successful",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    requireActivity().finish()
+                    if (isMetadataUpdated){
+                        updateMetadata()
+                    } else Toast.makeText(requireContext(), "Error occurred while updating metadata", Toast.LENGTH_SHORT).show()
+
+
 
                 }
                 Status.LOADING -> {
-                    //Will figure this out
+                    binding.progressbar.visibility = View.VISIBLE
+                    binding.btUpdate.visibility = View.GONE
                 }
             }
 
@@ -244,22 +282,15 @@ class CreditDebtPage2Fragment : Fragment() {
             africanSausagePrice.isNotEmpty() || africanSausageQty.isNotEmpty() || headAndLegsPrice.isNotEmpty() ||
             headAndLegsPrice.isNotEmpty() || liverPrice.isNotEmpty() || liverQty.isNotEmpty() || skinPrice.isNotEmpty() ||
             skinQty.isNotEmpty() || filletPrice.isNotEmpty() || filletQty.isNotEmpty()
-        ) {
-            val total = binding.tvSum.text.toString()
+        ) { total = binding.tvSum.text.toString()
             if (total.isNotEmpty()) {
-                val amountPaid = binding.etAmountPaid.text.toString().trim()
+                amountPaid = binding.etAmountPaid.text.toString().trim()
                 if (amountPaid.isNotEmpty()) {
-                    val balance = total.toInt().minus(amountPaid.toInt()).toString()
+                    balance = total.toInt().minus(amountPaid.toInt()).toString()
                     //To either update the product on firebase or proceed to the next page
                     if (creditDebt != null) {
-                        addMetadata(amountPaid, balance,total)
-                        updateCreditDebt(amountPaid,balance,total)
-                        val product = getProduct()
-                        Log.d(TAG, "checkIfFilled: $product")
-                        productViewModel.addProducts(product)
-
-
-                    } else toNextPage(amountPaid, balance)
+                        updateCreditDebt()
+                    } else toNextPage()
 
                 } else Toast.makeText(
                     requireContext(),
@@ -291,52 +322,40 @@ class CreditDebtPage2Fragment : Fragment() {
             creditDebt?.productAmount!!
         } else "0"
         if (creditDebt!!.type == "Credit") {
+            updatedPaid =metadata?.totalMoneySentPaid!!.minus(productPaid.toInt())
+            updatedBal =metadata?.totalMoneySentBalance!!.minus(productBalance.toInt())
+            updatedAmount =metadata?.totalMoneySentAmt!!.minus(productAmt.toInt())
 
             val metadata = Metadata(
-                metadata?.totalMoneySentPaid!!.minus(productPaid.toInt()),
-                metadata?.totalMoneySentAmt!!.minus(productAmt.toInt()),
-                metadata?.totalMoneySentBalance!!.minus(productBalance.toInt()),
+               updatedPaid,
+                updatedAmount,
+                updatedBal,
                 metadata?.totalMoneyReceivedPaid!!,
                 metadata?.totalMoneyReceivedAmt!!,
                 metadata?.totalMoneyReceivedBalance!!
             )
             creditDebtViewModel.addMetadata(metadata, creditDebt!!.userId!!)
         } else if (creditDebt!!.type == "Debt") {
+            updatedAmount = metadata?.totalMoneyReceivedAmt!!.minus(productAmt.toInt())
+            updatedBal = metadata?.totalMoneyReceivedBalance!!.minus(productBalance.toInt())
+            updatedPaid =metadata?.totalMoneyReceivedPaid!!.minus(productPaid.toInt())
             val metadata = Metadata(
                 metadata?.totalMoneySentPaid!!,
                 metadata?.totalMoneySentAmt!!,
                 metadata?.totalMoneySentBalance!!,
-                metadata?.totalMoneyReceivedPaid!!.minus(productPaid.toInt()),
-                metadata?.totalMoneyReceivedAmt!!.minus(productAmt.toInt()),
-                metadata?.totalMoneyReceivedBalance!!.minus(productBalance.toInt())
+                updatedPaid,
+                updatedAmount,
+                updatedBal
             )
             creditDebtViewModel.addMetadata(metadata, creditDebt!!.userId!!)
         }
 
     }
 
-    private fun addMetadata(paid: String, balance: String, total: String) {
-        if (creditDebt!!.type == "Credit") {
-            val metadata = Metadata(
-                metadata?.totalMoneySentPaid!!.plus(paid.toInt()),
-                metadata?.totalMoneySentAmt!!.plus(total.toInt()),
-                metadata?.totalMoneySentBalance!!.plus(balance.toInt()),
-                metadata?.totalMoneyReceivedPaid!!,
-                metadata?.totalMoneyReceivedAmt!!,
-                metadata?.totalMoneyReceivedBalance!!
-            )
-            creditDebtViewModel.addMetadata(metadata, creditDebt!!.userId!!)
-        } else if (creditDebt!!.type == "Debt") {
-            val metadata = Metadata(
-                metadata?.totalMoneySentPaid!!,
-                metadata?.totalMoneySentAmt!!,
-                metadata?.totalMoneySentBalance!!,
-                metadata?.totalMoneyReceivedPaid!!.plus(paid.toInt()),
-                metadata?.totalMoneyReceivedAmt!!.plus(total.toInt()),
-                metadata?.totalMoneyReceivedBalance!!.plus(balance.toInt())
-            )
-            creditDebtViewModel.addMetadata(metadata, creditDebt!!.userId!!)
-        }
+    private fun updateMetadata() {
+        creditDebtViewModel.updateMetadata(creditDebt?.type!!, creditDebt?.userId!!,
+                updatedPaid.plus(amountPaid.toInt()),updatedBal.plus(balance.toInt()),updatedAmount.plus(total.toInt()) )
+
 
     }
 
@@ -470,7 +489,7 @@ class CreditDebtPage2Fragment : Fragment() {
     }
 
 
-    private fun toNextPage(amountPaid: String, balance: String) {
+    private fun toNextPage() {
 
         val navController = Navigation.findNavController(binding.root)
         val productsBought = getProduct()
@@ -497,7 +516,7 @@ class CreditDebtPage2Fragment : Fragment() {
         }
         navController.navigate(R.id.action_creditPage2Fragment_to_creditPage3Fragment, arg)
     }
-    private fun updateCreditDebt(amountPaid: String, balance: String, total: String) {
+    private fun updateCreditDebt() {
         val productPaid = if(creditDebt?.productPaid!!.isNotEmpty()){
             creditDebt?.productPaid!!
         } else "0"
@@ -578,6 +597,7 @@ class CreditDebtPage2Fragment : Fragment() {
         navController.navigate(R.id.action_creditPage2Fragment_to_creditPage1Fragment)
 
     }
+
 
 
 }
