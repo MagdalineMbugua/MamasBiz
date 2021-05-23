@@ -178,11 +178,7 @@ class CreditDebtPageFragment : Fragment() {
     }
 
     private fun deleteCattleBought() {
-        for(cattleBought: CattleBought in toUpdateCattleList!!){
-            // TODO: 5/23/2021  check on deleting it once
-            Log.d(TAG, "deleteCattleBought: $cattleBought")
-            creditDebtViewModel.deleteCattleBought(creditDebt!!.creditDebtId!!,cattleBought)
-        }
+        creditDebtViewModel.deleteCattleBought(creditDebt!!.creditDebtId!!)
         deleteFromMetadata()
     }
 

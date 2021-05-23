@@ -264,10 +264,10 @@ class CreditDebtViewModel : ViewModel() {
         }
     }
 
-    fun deleteCattleBought(creditDebtId: String, cattleBought: CattleBought){
+    fun deleteCattleBought(creditDebtId: String){
     viewModelScope.launch (Dispatchers.IO) {
         deleteCattleBoughtLiveData.postValue(NetworkResponse.loading())
-        creditDebtRepository.deleteCattleBoughtList(creditDebtId, cattleBought){
+        creditDebtRepository.deleteCattleBoughtList(creditDebtId){
             when (it) {
                 is Results.Success -> {
                     deleteCattleBoughtLiveData.postValue(NetworkResponse.success(true, it.data))

@@ -43,6 +43,7 @@ class CreditDebtRepository {
 
 
 
+
     fun addCreditDebt(creditDebt: CreditDebt, callback: (Results<Boolean>) -> Unit) {
         creditDebtReference.document(creditDebt.creditDebtId.toString()).set(creditDebt)
             .addOnCompleteListener { task ->
@@ -110,11 +111,11 @@ class CreditDebtRepository {
             callback(Error("Deleting was not successful ${e.message}"))
         }
     }
-    fun deleteCattleBoughtList (creditDebtId: String,cattleBought: CattleBought ,callback: (Results<Boolean>) -> Unit) {
+    fun deleteCattleBoughtList (creditDebtId: String,callback: (Results<Boolean>) -> Unit) {
         try {
             val cattleBoughtReference = database.collection(Constants.CREDIT_DEBT_REFERENCE)
                 .document(creditDebtId)
-                .collection(Constants.CATTLE_BOUGHT_REFERENCE).document(cattleBought.cattleBoughtId!!)
+                .collection(Constants.CATTLE_BOUGHT_REFERENCE).document()
             cattleBoughtReference.delete()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {

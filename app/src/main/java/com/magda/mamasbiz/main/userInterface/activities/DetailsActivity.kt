@@ -102,6 +102,9 @@ class DetailsActivity : AppCompatActivity() {
        fetchCreditDebtDocumentLiveData()
 
 
+        deleteCattleBoughtLiveData()
+
+
 
 
         //Setting click listeners on the fabs
@@ -116,6 +119,27 @@ class DetailsActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun deleteCattleBoughtLiveData() {
+        creditDebtViewModel._deleteCattleBoughtLiveData.observe(this){
+            when(it.status){
+                Status.LOADING -> {
+                    //To observe
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+                Status.SUCCESS -> {
+                   creditDebtViewModel.deleteCreditDebt(creditDebt)
+
+                }
+        }
+    }}
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        setResult(RESULT_OK)
     }
 
     private fun fetchCreditDebtDocumentLiveData() {
@@ -439,7 +463,7 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun toDeleteData() {
-        creditDebtViewModel.deleteCreditDebt(creditDebt)
+        creditDebtViewModel.deleteCattleBought(creditDebt.creditDebtId!!)
 
     }
     private fun initCreditDebtView(){
