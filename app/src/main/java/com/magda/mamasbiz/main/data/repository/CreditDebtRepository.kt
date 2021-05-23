@@ -27,6 +27,21 @@ class CreditDebtRepository {
         metadataReference = database.collection(Constants.METADATA_REFERENCE)
     }
 
+    fun getCreditDebtDocument(creditDebtId: String, callback: (Results<CreditDebt>) -> Unit){
+        try {creditDebtReference.document(creditDebtId).get().addOnCompleteListener{ task ->
+            if (task.isComplete){
+                val creditDebt = task.result?.toObject(CreditDebt::class.java)
+                callback(Success(creditDebt!!))
+            }else callback(Error("Fetching this data was unsuccessful"))
+        }
+
+        } catch (e:Exception){
+            callback(Error("Fetching this data was unsuccessful ${e.message}"))
+        }
+
+    }
+
+
 
     fun addCreditDebt(creditDebt: CreditDebt, callback: (Results<Boolean>) -> Unit) {
         creditDebtReference.document(creditDebt.creditDebtId.toString()).set(creditDebt)

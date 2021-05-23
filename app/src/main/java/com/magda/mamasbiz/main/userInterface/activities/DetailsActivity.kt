@@ -1,6 +1,7 @@
 package com.magda.mamasbiz.main.userInterface.activities
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -52,6 +53,7 @@ class DetailsActivity : AppCompatActivity() {
 
         //Get extras from the previous activity
         getExtraIntents()
+        initCreditDebtView()
 
 
         //initiate view model
@@ -97,6 +99,9 @@ class DetailsActivity : AppCompatActivity() {
         fetchCattleBoughtLiveData()
 
 
+       fetchCreditDebtDocumentLiveData()
+
+
 
 
         //Setting click listeners on the fabs
@@ -111,6 +116,25 @@ class DetailsActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun fetchCreditDebtDocumentLiveData() {
+        creditDebtViewModel._fetchCDDocumentLiveData.observe(this){
+            when(it.status){
+                Status.LOADING -> {
+                    //To observe
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+                Status.SUCCESS -> {
+                    creditDebt = it.data!!
+                    initCreditDebtView()
+
+                }
+
+            }
+        }
     }
 
     private fun fetchCattleBoughtLiveData() {
@@ -140,6 +164,7 @@ class DetailsActivity : AppCompatActivity() {
                 }
                 Status.SUCCESS -> {
                     Toast.makeText(this, "Successfully updated.", Toast.LENGTH_SHORT).show()
+                    setResult(Activity.RESULT_OK)
                     finish()
                 }
                 Status.ERROR -> {
@@ -287,7 +312,23 @@ class DetailsActivity : AppCompatActivity() {
     private fun toEditCattle() {
         val intent = Intent(this@DetailsActivity, EditCattleActivity::class.java)
         intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
-        startActivity(intent)
+        startActivityForResult(intent, 1000)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode==1000){
+            if(resultCode == Activity.RESULT_OK){
+                cattleBoughtList?.clear()
+                creditDebtViewModel.fetchMetadata(creditDebt.userId!!)
+                creditDebtViewModel.fetchCattleBought(creditDebt.creditDebtId!!)
+                creditDebtViewModel.getCreditDebtDocument(creditDebt.creditDebtId!!)
+
+
+
+            }else Toast.makeText(this, "Results cancelled", Toast.LENGTH_SHORT).show()
+
+        }else Toast.makeText(this, "Error occurred sending data to this activity", Toast.LENGTH_SHORT).show()
     }
 
     private fun toEdit() {
@@ -401,15 +442,20 @@ class DetailsActivity : AppCompatActivity() {
         creditDebtViewModel.deleteCreditDebt(creditDebt)
 
     }
+    private fun initCreditDebtView(){
+        binding.apply { tvDebtorName.text = creditDebt.name
+            tvDebtorNumber.text = creditDebt.phoneNumber
+            tvDebtorStatus.text = creditDebt.status
+            tvDebtorPaymentDate.text = creditDebt.paymentDate
+
+        }
+    }
 
 
     @SuppressLint("SetTextI18n")
     private fun initViews() {
         binding.apply {
-            tvDebtorName.text = creditDebt.name
-            tvDebtorNumber.text = creditDebt.phoneNumber
-            tvDebtorStatus.text = creditDebt.status
-            tvDebtorPaymentDate.text = creditDebt.paymentDate
+
             Log.d(TAG, "initViews: $cattleBoughtList, $products")
             when {
                 (cattleBoughtList!=null && products == null) -> {

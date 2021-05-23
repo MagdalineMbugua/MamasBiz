@@ -1,5 +1,6 @@
 package com.magda.mamasbiz.main.userInterface.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.ActivityNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.magda.mamasbiz.R
@@ -206,7 +208,20 @@ class SupplierFragment : Fragment(), ItemClickListener {
         val intent =Intent(requireActivity(), DetailsActivity::class.java)
         intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
         intent.putExtra(Constants.CREDIT, "Credit")
-        startActivity(intent)
+        startActivityForResult(intent,2000)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==2000){
+            if(resultCode== Activity.RESULT_OK){
+                creditList.clear()
+                fetchDebtData()
+
+            }else Toast.makeText(requireContext(), "Results cancelled", Toast.LENGTH_SHORT).show()
+
+        }else Toast.makeText(requireContext(), "Error occurred sending data to this screen", Toast.LENGTH_SHORT).show()
+
     }
 
 

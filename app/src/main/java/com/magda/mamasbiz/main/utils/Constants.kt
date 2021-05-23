@@ -41,6 +41,7 @@ class Constants {
         const val TOTAL_MONEY_SENT_AMOUNT :String = "totalMoneySentAmt"
         const val TOTAL_MONEY_SENT_PAID :String = "totalMoneySentPaid"
         const val TOTAL_MONEY_SENT_BAL :String = "totalMoneySentBalance"
+        const val REQUEST_CODE :Int = 1000
 
 
 

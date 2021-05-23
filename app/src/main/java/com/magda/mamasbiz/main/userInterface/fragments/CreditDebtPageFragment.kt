@@ -1,5 +1,7 @@
 package com.magda.mamasbiz.main.userInterface.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +18,7 @@ import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
 import com.magda.mamasbiz.main.data.entity.CattleBought
 import com.magda.mamasbiz.main.data.entity.CreditDebt
 import com.magda.mamasbiz.main.data.entity.Metadata
+import com.magda.mamasbiz.main.userInterface.activities.DetailsActivity
 import com.magda.mamasbiz.main.utils.CattleTableLayout
 import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.Status
@@ -211,6 +214,9 @@ class CreditDebtPageFragment : Fragment() {
                         "Successfully updated the cattle bought",
                         Toast.LENGTH_SHORT
                     ).show()
+                    requireActivity().setResult(Activity.RESULT_OK)
+                    requireActivity().finish()
+
 
 
                 }

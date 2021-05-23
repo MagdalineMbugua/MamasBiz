@@ -30,6 +30,10 @@ class CreditDebtViewModel : ViewModel() {
         MutableLiveData<NetworkResponse<MutableList<CreditDebt>>>()
     val _fetchCDLiveData: MutableLiveData<NetworkResponse<MutableList<CreditDebt>>> get() = fetchCDLiveData
 
+    private val fetchCDDocumentLiveData: MutableLiveData<NetworkResponse<CreditDebt>> =
+        MutableLiveData<NetworkResponse<CreditDebt>>()
+    val _fetchCDDocumentLiveData: MutableLiveData<NetworkResponse<CreditDebt>> get() = fetchCDDocumentLiveData
+
     private val deleteCDLiveData: MutableLiveData<NetworkResponse<Boolean>> =
         MutableLiveData<NetworkResponse<Boolean>>()
     val _deleteCDLiveData: MutableLiveData<NetworkResponse<Boolean>> get() = deleteCDLiveData
@@ -120,6 +124,27 @@ class CreditDebtViewModel : ViewModel() {
 
 
     }
+    fun getCreditDebtDocument (creditDebtId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchCDDocumentLiveData.postValue(NetworkResponse.loading())
+            creditDebtRepository.getCreditDebtDocument(creditDebtId) {
+                when (it) {
+                    is Results.Success -> {
+                        fetchCDDocumentLiveData.postValue(NetworkResponse.success(true, it.data))
+                    }
+                    is Results.Error -> {
+                        fetchCDDocumentLiveData.postValue(NetworkResponse.error("An Error has occurred while fetching data"))
+
+                    }
+                }
+
+            }
+
+        }
+
+
+    }
+
 
     fun getCreditDebtId(): String {
         return creditDebtRepository.getCreditDebtId()
