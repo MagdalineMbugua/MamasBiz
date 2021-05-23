@@ -178,11 +178,17 @@ class CreditDebtRepository {
         amountPaid: String,
         balance: String,
         status: String,
+        productPaid: String,
+        productBal : String,
+        cattleBoughtPaid: String,
+        cattleBoughtBal: String,
         callback: (Results<Boolean>) -> Unit
     ) {
         val map: MutableMap<String, String> = mutableMapOf(
             Constants.TOTAL_AMT_PAID to amountPaid, Constants.TOTAL_BALANCE to balance,
-            Constants.STATUS to status
+            Constants.STATUS to status, Constants.PRODUCT_PAID to productPaid,
+            Constants.PRODUCT_BALANCE to productBal, Constants.CATTLE_BOUGHT_BALANCE to cattleBoughtBal,
+            Constants.CATTLE_BOUGHT_PAID to cattleBoughtPaid
         )
         try {
             creditDebtReference.document(creditDebtId).update(map as Map<String, Any>)

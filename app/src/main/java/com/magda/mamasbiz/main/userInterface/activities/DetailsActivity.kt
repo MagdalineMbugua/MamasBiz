@@ -347,10 +347,7 @@ class DetailsActivity : AppCompatActivity() {
                 creditDebtViewModel.fetchMetadata(creditDebt.userId!!)
                 creditDebtViewModel.fetchCattleBought(creditDebt.creditDebtId!!)
                 creditDebtViewModel.getCreditDebtDocument(creditDebt.creditDebtId!!)
-
-
-
-            }else Toast.makeText(this, "Results cancelled", Toast.LENGTH_SHORT).show()
+            }
 
         }else Toast.makeText(this, "Error occurred sending data to this activity", Toast.LENGTH_SHORT).show()
     }
@@ -387,9 +384,12 @@ class DetailsActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 val text = s.toString()
                 if (text.isNotEmpty()) {
-                    val totalBal = creditDebt.totalAllAmount?.toInt()?.minus(text.toInt())
+                    val totalBal = creditDebt.totalAllBalance?.toInt()?.minus(text.toInt())
                     mTotalBalance.text = totalBal.toString()
 
+                } else {
+                    val totalBal = creditDebt.totalAllBalance
+                    mTotalBalance.text = totalBal.toString()
                 }
             }
 
@@ -410,12 +410,8 @@ class DetailsActivity : AppCompatActivity() {
                 newTotalBalance,
                 creditDebt.userId
             )
-            creditDebtViewModel.updateTotalMoney(
-                creditDebt.creditDebtId!!,
-                updatedTotalAmtPaid.toString(),
-                newTotalBalance,
-                status
-            )
+            checkIndividualBal(newTotalAmountPaid,updatedTotalAmtPaid.toString(), newTotalBalance, status)
+
 
 
             bottomSheetDialog.dismissWithAnimation = true
@@ -423,6 +419,52 @@ class DetailsActivity : AppCompatActivity() {
         }
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
+    }
+    private fun checkIndividualBal(
+        updatedIndividualTotalAmountPaid: String,
+        newTotalAmountPaid:String,
+        newTotalBalance: String,
+        status: String
+    ) {
+        val cattleBoughtPaid = creditDebt.cattleBoughtPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
+        val cattleBoughtBal = creditDebt.cattleBoughtBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
+        val productPaid = creditDebt.productPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
+        val productBal = creditDebt.productBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
+        if(cattleBoughtList!=null && products==null){
+            creditDebtViewModel.updateTotalMoney(
+                creditDebt.creditDebtId!!,
+                newTotalAmountPaid,
+                newTotalBalance,
+                status,
+                creditDebt.productPaid!!,
+                creditDebt.productBalance!!,
+                cattleBoughtPaid.toString(),
+                cattleBoughtBal.toString()
+            )
+
+        } else if (cattleBoughtList==null&& products!=null){
+            creditDebtViewModel.updateTotalMoney(
+                creditDebt.creditDebtId!!,
+                newTotalAmountPaid,
+                newTotalBalance,
+                status,
+                productPaid.toString(),
+                productBal.toString(),
+                creditDebt.cattleBoughtPaid!!,
+                creditDebt.cattleBoughtBalance!!
+            )
+        }else if (cattleBoughtList==null&& products==null){
+            creditDebtViewModel.updateTotalMoney(
+                creditDebt.creditDebtId!!,
+                newTotalAmountPaid,
+                newTotalBalance,
+                status,
+                productPaid.toString(),
+                productBal.toString(),
+                cattleBoughtPaid.toString(),
+                cattleBoughtBal.toString())
+        }
+
     }
 
     private fun toUpdateMetadata() {

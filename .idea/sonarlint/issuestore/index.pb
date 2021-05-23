@@ -174,8 +174,6 @@ Qapp/src/main/java/com/magda/mamasbiz/main/userInterface/fragments/EditFragment.
 Yapp/src/main/java/com/magda/mamasbiz/main/userInterface/activities/EditProductActivity.kt,c\f\cf04cf5373e76dd1c89c615d8e82b4bdeeee1922
 e
 5app/src/main/res/drawable/bottom_sheet_background.xml,8\0\80b92725c85a611b8b92bfa2744a5dcdb8d42ecf
-n
->app/src/main/res/layout/bottom_sheet_update_payment_dialog.xml,e\a\ea5dbb1a67fc283fac7ccc81172376a25c4c233a
 Y
 )app/src/main/res/layout/fragment_edit.xml,b\b\bb743c4f9688069861665b68889b80e387241eed
 ]

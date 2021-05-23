@@ -210,10 +210,15 @@ class CreditDebtViewModel : ViewModel() {
         creditDebtId: String,
         totalAmountPaid: String,
         balance: String,
-        status: String
+        status: String,
+        productPaid: String,
+        productBal : String,
+        cattleBoughtPaid: String,
+        cattleBoughtBal: String,
     ) {
         updateTotalAmountLiveData.value = NetworkResponse.loading()
-        creditDebtRepository.updateTotalMoney(creditDebtId, totalAmountPaid, balance, status) {
+        creditDebtRepository.updateTotalMoney(creditDebtId, totalAmountPaid, balance, status, productPaid, productBal,
+        cattleBoughtPaid,cattleBoughtBal) {
             when (it) {
                 is Results.Success -> {
                     updateTotalAmountLiveData.value = NetworkResponse.success(true, null)
