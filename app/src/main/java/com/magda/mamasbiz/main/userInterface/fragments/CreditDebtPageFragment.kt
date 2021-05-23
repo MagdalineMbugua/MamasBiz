@@ -64,6 +64,7 @@ class CreditDebtPageFragment : Fragment() {
         updateCattleBoughtLiveData()
         deleteCattleBoughtLiveData()
         fetchMetadataLiveData()
+        deleteMetadataLiveData()
         addMetadataLiveData()
 
         binding.nextLayout.tvNext.setOnClickListener { checkRadioButton() }
@@ -72,11 +73,28 @@ class CreditDebtPageFragment : Fragment() {
         return binding.root
     }
 
+    private fun deleteMetadataLiveData() {
+        creditDebtViewModel._deleteMetadataLiveData.observe(viewLifecycleOwner){
+            when(it.status) {
+                Status.LOADING -> {
+                    binding.progressbar.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    //Method sub
+
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     private fun addMetadataLiveData() {
         creditDebtViewModel._addMetadataLiveData.observe(viewLifecycleOwner){
             when(it.status) {
                 Status.LOADING -> {
-                    //Method sub
+                    binding.progressbar.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
                     //Method sub
@@ -122,9 +140,8 @@ class CreditDebtPageFragment : Fragment() {
                 }
                 Status.SUCCESS -> {
                     toUpdateCattleList = it.data
-                    if(toUpdateCattleList?.size!!>0){
-                        deleteCattleBought()
-                    }
+                    fetchMetadata()
+
                 }
             }
         }
@@ -135,10 +152,10 @@ class CreditDebtPageFragment : Fragment() {
         creditDebtViewModel._deleteCattleBoughtLiveData.observe(viewLifecycleOwner){
             when(it.status){
                 Status.LOADING -> {
-                    //Method sub
+                    binding.progressbar.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
-                    //Method sub
+                    deleteFromMetadata()
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
@@ -149,8 +166,9 @@ class CreditDebtPageFragment : Fragment() {
 
     private fun deleteCattleBought() {
         for(cattleBought: CattleBought in toUpdateCattleList!!){
+            Log.d(TAG, "deleteCattleBought: $cattleBought")
             creditDebtViewModel.deleteCattleBought(creditDebt!!.creditDebtId!!,cattleBought)
-            deleteFromMetadata()
+
 
         }
     }
@@ -164,7 +182,7 @@ class CreditDebtPageFragment : Fragment() {
             metadata.totalMoneyReceivedAmt,
             metadata.totalMoneyReceivedBalance
         )
-        creditDebtViewModel.addMetadata(metadata, creditDebt!!.userId!!)
+        creditDebtViewModel.deleteMetadata(metadata, creditDebt!!.userId!!)
     }
 
     private fun updateCattleBoughtLiveData() {
@@ -181,9 +199,11 @@ class CreditDebtPageFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     requireActivity().finish()
+
                 }
                 Status.LOADING -> {
                     binding.btUpdate.visibility = View.GONE
+                    binding.progressbar.visibility = View.VISIBLE
                 }
             }
         }
@@ -211,9 +231,10 @@ class CreditDebtPageFragment : Fragment() {
             when (it.status) {
                 Status.LOADING -> {
                     binding.btUpdate.visibility = View.GONE
+                    binding.progressbar.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
-                    updateCattleBought()
+                    //To be known
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
@@ -228,13 +249,14 @@ class CreditDebtPageFragment : Fragment() {
         creditDebt = requireArguments().getParcelable(Constants.CREDIT_DEBT)
         if (creditDebt != null) {
             creditDebtViewModel.fetchCattleBought(creditDebt!!.creditDebtId!!)
-            fetchMetadata()
             binding.apply {
                 nextLayout.tvNext.visibility = View.GONE
                 nextLayout.tvBack.visibility = View.GONE
                 btUpdate.visibility = View.VISIBLE
                 radioButton.visibility = View.GONE
-                btUpdate.setOnClickListener { getTexts() }
+                btUpdate.setOnClickListener {
+                    getTexts()
+                updateCattleBought()}
             }
         }
     }
@@ -386,9 +408,9 @@ class CreditDebtPageFragment : Fragment() {
                 TAG,
                 "validateInfo: $cattleBoughtAmtPaid $totalCattleBoughtAmt $totalCattleBoughtQty"
             )
-            val cattleBought = CattleBought(
+                       val cattleBought = CattleBought(
                 "",
-                "",
+                cattleBoughtId = null,
                 cattleBoughtType,
                 cattleBoughtPrice,
                 cattleBoughtQty,
@@ -396,7 +418,12 @@ class CreditDebtPageFragment : Fragment() {
             )
             Log.d(TAG, "validateInfo: $cattleBought")
             cattleList.add(cattleBought)
-            if (creditDebt != null) {updateCreditDebt(
+            Log.d(TAG, "validateInfo: ${cattleList.size}")
+            if(toUpdateCattleList!=null){
+                deleteCattleBought()
+            }
+            if (creditDebt != null) {
+                updateCreditDebt(
                 totalCattleBoughtAmt,
                 totalCattleBoughtQty,
                 cattleBoughtAmtPaid
@@ -443,11 +470,11 @@ class CreditDebtPageFragment : Fragment() {
         val totalCattleBoughtBal =
             totalCattleBoughtAmt.toInt().minus(cattleBoughtAmtPaid.toInt()).toString()
         val updatedTotalAmount =
-            creditDebt?.totalAllAmount?.toInt()!!.minus(creditDebt?.cattleBoughtAmount?.toInt()!!)
+            creditDebt?.totalAllAmount?.toInt()!!.minus(creditDebt?.cattleBoughtAmount?.toInt()!!).plus(totalCattleBoughtAmt.toInt())
         val updatedTotalPaid =
-            creditDebt?.totalAllPaid?.toInt()!!.minus(creditDebt?.cattleBoughtPaid?.toInt()!!)
+            creditDebt?.totalAllPaid?.toInt()!!.minus(creditDebt?.cattleBoughtPaid?.toInt()!!).plus(cattleBoughtAmtPaid.toInt())
         val updatedTotalBalance =
-            creditDebt?.totalAllBalance?.toInt()!!.minus(creditDebt?.cattleBoughtBalance?.toInt()!!)
+            creditDebt?.totalAllBalance?.toInt()!!.minus(creditDebt?.cattleBoughtBalance?.toInt()!!).plus(totalCattleBoughtBal.toInt())
         val creditDebt = CreditDebt(
             creditDebt?.creditDebtId,
             creditDebt?.userId,
@@ -477,17 +504,11 @@ class CreditDebtPageFragment : Fragment() {
     }
 
     private fun updateCattleBought() {
+        Log.d(TAG, "updateCattleBought: list is ${cattleList.size}")
         if (cattleList.size > 0) {
-            for (cattleBought: CattleBought in cattleList) {
-                val updatedCattleBought = CattleBought(
-                    creditDebt?.creditDebtId,
-                    creditDebtViewModel.getCattleBoughtId(creditDebt!!.creditDebtId!!),
-                    cattleBought.cattleBoughtType,
-                    cattleBought.cattlePrice,
-                    cattleBought.cattleQty,
-                    cattleBought.cattleAmt
-                )
-                Log.d(TAG, "updateCattleBought: ${creditDebt?.cattleBoughtId}")
+            for (i in 0 until cattleList.size ) {
+                val updatedCattleBought = cattleList[i]
+                Log.d(TAG, "updateCattleBought: $updatedCattleBought")
                 creditDebtViewModel.addCattleBought(
                     creditDebt!!.creditDebtId!!,
                     updatedCattleBought

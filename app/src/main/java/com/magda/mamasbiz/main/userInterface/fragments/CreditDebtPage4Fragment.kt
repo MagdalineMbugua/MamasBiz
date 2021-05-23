@@ -299,7 +299,7 @@ class CreditPage4Fragment : Fragment() {
         if (cattleBoughtList!=null) {
             for (cattleBought: CattleBought in cattleBoughtList!!) {
                 val updatedCattleBought = CattleBought(
-                    creditDebtId,
+                    creditDebtId = null,
                     cattleBoughtId = null,
                     cattleBought.cattleBoughtType,
                     cattleBought.cattlePrice,

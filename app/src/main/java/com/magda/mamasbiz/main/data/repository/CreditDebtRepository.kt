@@ -113,6 +113,7 @@ class CreditDebtRepository {
     }
 
 
+
     fun addUpdatePayments(
         updatePayments: UpdatePayments,
         creditDebt: CreditDebt,
@@ -143,6 +144,7 @@ class CreditDebtRepository {
                 .collection(Constants.CATTLE_BOUGHT_REFERENCE)
             val cattleBoughtId = cattleBoughtReference.document().id
             cattleBought.cattleBoughtId = cattleBoughtId
+            cattleBought.creditDebtId = creditDebtId
             Log.d(TAG, "addCattleBought: $creditDebtId, $cattleBoughtId")
             cattleBoughtReference.document(cattleBoughtId).set(cattleBought)
                 .addOnCompleteListener { task ->
