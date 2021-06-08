@@ -23,7 +23,9 @@
         android:fillViewport="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appbar">
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -105,20 +107,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="3"/>
+
             <Button
+                android:id="@+id/btSignUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/submit"
-                android:textColor="@color/colorFont"
-                android:fontFamily="@font/cormorantsc_semibold"
-                android:textSize="20sp"
-                android:id="@+id/btSignUp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/rounded_orange_button"
+                android:fontFamily="@font/cormorantsc_semibold"
                 android:paddingStart="70dp"
                 android:paddingEnd="70dp"
-                android:layout_marginTop="50dp"
-                />
+                android:text="@string/submit"
+                android:textColor="@color/colorFont"
+                android:textSize="20sp" />
 
 
         </LinearLayout>

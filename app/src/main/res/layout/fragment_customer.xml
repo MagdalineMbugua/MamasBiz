@@ -116,7 +116,6 @@
         android:textColor="@color/colorPrimary"
         android:textAlignment="center"
         android:textSize="20sp"
-        android:layout_marginBottom="60dp"
         android:visibility="gone"
         android:id="@+id/tvCreateDebt"/>
 
