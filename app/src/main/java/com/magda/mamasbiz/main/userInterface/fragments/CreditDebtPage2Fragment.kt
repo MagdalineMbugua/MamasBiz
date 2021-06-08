@@ -276,7 +276,6 @@ class CreditDebtPage2Fragment : Fragment() {
     }
 
     private fun checkIfFilled() {
-        if(creditDebt!=null)  deleteMetadata()
         getText()
         if (meatPrice.isNotEmpty() || meatQty.isNotEmpty() || intestinePrice.isNotEmpty() || intestineQty.isNotEmpty() ||
             africanSausagePrice.isNotEmpty() || africanSausageQty.isNotEmpty() || headAndLegsPrice.isNotEmpty() ||
@@ -289,6 +288,7 @@ class CreditDebtPage2Fragment : Fragment() {
                     balance = total.toInt().minus(amountPaid.toInt()).toString()
                     //To either update the product on firebase or proceed to the next page
                     if (creditDebt != null) {
+                        deleteMetadata()
                         updateCreditDebt()
                     } else toNextPage()
 

@@ -28,7 +28,8 @@
             app:cardCornerRadius="16dp">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/_8sdp">
                 <ImageView
                     android:layout_width="72dp"
                     android:layout_height="72dp"

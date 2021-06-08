@@ -16,7 +16,6 @@ import java.lang.Exception
 class CreditDebtRepository {
     private var creditDebtReference: CollectionReference
     private var metadataReference: CollectionReference
-    private var updatedCreditDebtList: MutableList<CreditDebt> = mutableListOf()
     private var updatedPaymentsList: MutableList<UpdatePayments> = mutableListOf()
     private var updatedCattleBoughtList: ArrayList<CattleBought> = arrayListOf()
     private val database: FirebaseFirestore = FirebaseFirestore.getInstance()

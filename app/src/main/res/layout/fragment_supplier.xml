@@ -77,7 +77,7 @@
         android:layout_marginTop="8dp"
         tools:listitem="@layout/supplier_cardview"
         android:visibility="gone"
-        android:layout_marginBottom="55dp"
+        android:layout_marginBottom="4dp"
         />
 
     <TextView
