@@ -3,6 +3,7 @@ package com.magda.mamasbiz.main.userInterface.fragments
 import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -49,20 +50,20 @@ class CreditDebtPage2Fragment : Fragment() {
     private var debt: String? = ""
     private var cattleBoughtList: ArrayList<CattleBought>? = null
     private lateinit var status: String
-    private  var totalCattleBoughtAmount: String? = null
-    private  var totalCattleBoughtQty: String? = null
-    private  var totalCattleBoughtPaid: String?= null
+    private var totalCattleBoughtAmount: String? = null
+    private var totalCattleBoughtQty: String? = null
+    private var totalCattleBoughtPaid: String? = null
     private val _binding get() = binding!!
     private lateinit var productViewModel: ProductViewModel
     private lateinit var creditDebtViewModel: CreditDebtViewModel
     private var metadata: Metadata? = null
-    private  var updatedAmount: Int = 0
-    private  var updatedBal = 0
-    private  var updatedPaid = 0
-    private  var isMetadataUpdated = false
-    private lateinit var balance :String
-    private lateinit var amountPaid :String
-    private lateinit var total :String
+    private var updatedAmount: Int = 0
+    private var updatedBal = 0
+    private var updatedPaid = 0
+    private var isMetadataUpdated = false
+    private lateinit var balance: String
+    private lateinit var amountPaid: String
+    private lateinit var total: String
 
 
     companion object {
@@ -157,29 +158,33 @@ class CreditDebtPage2Fragment : Fragment() {
     }
 
     private fun updateMetadataLiveData() {
-       creditDebtViewModel._updateMetadataLiveData.observe(viewLifecycleOwner){
-           when (it.status) {
-               Status.LOADING -> {
-                   binding.progressbar.visibility = View.VISIBLE
-                   binding.btUpdate.visibility = View.GONE
-               }
-               Status.SUCCESS -> {
-                   Toast.makeText(requireContext(), "Successful update product", Toast.LENGTH_SHORT).show()
-                   requireActivity().setResult(Activity.RESULT_OK)
-                   requireActivity().finish()
+        creditDebtViewModel._updateMetadataLiveData.observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.LOADING -> {
+                    binding.progressbar.visibility = View.VISIBLE
+                    binding.btUpdate.visibility = View.GONE
+                }
+                Status.SUCCESS -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "Successful update product",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    requireActivity().setResult(Activity.RESULT_OK)
+                    requireActivity().finish()
 
-               }
-               Status.ERROR -> {
-                   binding.progressbar.visibility = View.GONE
-                   binding.btUpdate.visibility = View.VISIBLE
-                   Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
-               }
-           }
-       }
+                }
+                Status.ERROR -> {
+                    binding.progressbar.visibility = View.GONE
+                    binding.btUpdate.visibility = View.VISIBLE
+                    Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun updateCreditDebtLiveData() {
-        creditDebtViewModel._loadCDLiveData.observe(viewLifecycleOwner){
+        creditDebtViewModel._loadCDLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.LOADING -> {
                     binding.progressbar.visibility = View.VISIBLE
@@ -259,10 +264,13 @@ class CreditDebtPage2Fragment : Fragment() {
 
                 }
                 Status.SUCCESS -> {
-                    if (isMetadataUpdated){
+                    if (isMetadataUpdated) {
                         updateMetadata()
-                    } else Toast.makeText(requireContext(), "Error occurred while updating metadata", Toast.LENGTH_SHORT).show()
-
+                    } else Toast.makeText(
+                        requireContext(),
+                        "Error occurred while updating metadata",
+                        Toast.LENGTH_SHORT
+                    ).show()
 
 
                 }
@@ -281,16 +289,13 @@ class CreditDebtPage2Fragment : Fragment() {
             africanSausagePrice.isNotEmpty() || africanSausageQty.isNotEmpty() || headAndLegsPrice.isNotEmpty() ||
             headAndLegsPrice.isNotEmpty() || liverPrice.isNotEmpty() || liverQty.isNotEmpty() || skinPrice.isNotEmpty() ||
             skinQty.isNotEmpty() || filletPrice.isNotEmpty() || filletQty.isNotEmpty()
-        ) { total = binding.tvSum.text.toString()
+        ) {
+            total = binding.tvSum.text.toString()
             if (total.isNotEmpty()) {
                 amountPaid = binding.etAmountPaid.text.toString().trim()
                 if (amountPaid.isNotEmpty()) {
-                    balance = total.toInt().minus(amountPaid.toInt()).toString()
-                    //To either update the product on firebase or proceed to the next page
-                    if (creditDebt != null) {
-                        deleteMetadata()
-                        updateCreditDebt()
-                    } else toNextPage()
+                    amountPaidCheck()
+
 
                 } else Toast.makeText(
                     requireContext(),
@@ -312,22 +317,22 @@ class CreditDebtPage2Fragment : Fragment() {
     }
 
     private fun deleteMetadata() {
-        val productPaid = if(creditDebt?.productPaid!!.isNotEmpty()){
+        val productPaid = if (creditDebt?.productPaid!!.isNotEmpty()) {
             creditDebt?.productPaid!!
         } else "0"
-        val productBalance = if(creditDebt?.productBalance!!.isNotEmpty()){
+        val productBalance = if (creditDebt?.productBalance!!.isNotEmpty()) {
             creditDebt?.productBalance!!
         } else "0"
-        val productAmt = if(creditDebt?.productAmount!!.isNotEmpty()){
+        val productAmt = if (creditDebt?.productAmount!!.isNotEmpty()) {
             creditDebt?.productAmount!!
         } else "0"
         if (creditDebt!!.type == "Credit") {
-            updatedPaid =metadata?.totalMoneySentPaid!!.minus(productPaid.toInt())
-            updatedBal =metadata?.totalMoneySentBalance!!.minus(productBalance.toInt())
-            updatedAmount =metadata?.totalMoneySentAmt!!.minus(productAmt.toInt())
+            updatedPaid = metadata?.totalMoneySentPaid!!.minus(productPaid.toInt())
+            updatedBal = metadata?.totalMoneySentBalance!!.minus(productBalance.toInt())
+            updatedAmount = metadata?.totalMoneySentAmt!!.minus(productAmt.toInt())
 
             val metadata = Metadata(
-               updatedPaid,
+                updatedPaid,
                 updatedAmount,
                 updatedBal,
                 metadata?.totalMoneyReceivedPaid!!,
@@ -338,7 +343,7 @@ class CreditDebtPage2Fragment : Fragment() {
         } else if (creditDebt!!.type == "Debt") {
             updatedAmount = metadata?.totalMoneyReceivedAmt!!.minus(productAmt.toInt())
             updatedBal = metadata?.totalMoneyReceivedBalance!!.minus(productBalance.toInt())
-            updatedPaid =metadata?.totalMoneyReceivedPaid!!.minus(productPaid.toInt())
+            updatedPaid = metadata?.totalMoneyReceivedPaid!!.minus(productPaid.toInt())
             val metadata = Metadata(
                 metadata?.totalMoneySentPaid!!,
                 metadata?.totalMoneySentAmt!!,
@@ -353,8 +358,13 @@ class CreditDebtPage2Fragment : Fragment() {
     }
 
     private fun updateMetadata() {
-        creditDebtViewModel.updateMetadata(creditDebt?.type!!, creditDebt?.userId!!,
-                updatedPaid.plus(amountPaid.toInt()),updatedBal.plus(balance.toInt()),updatedAmount.plus(total.toInt()) )
+        creditDebtViewModel.updateMetadata(
+            creditDebt?.type!!,
+            creditDebt?.userId!!,
+            updatedPaid.plus(amountPaid.toInt()),
+            updatedBal.plus(balance.toInt()),
+            updatedAmount.plus(total.toInt())
+        )
 
 
     }
@@ -378,7 +388,7 @@ class CreditDebtPage2Fragment : Fragment() {
     }
 
     private fun toCalculate() {
-        val textWatcher = object : android.text.TextWatcher {
+        val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(
                 s: CharSequence?,
                 start: Int,
@@ -394,75 +404,8 @@ class CreditDebtPage2Fragment : Fragment() {
                 before: Int,
                 count: Int
             ) {
-                binding.apply {
-                    meatPrice = if (etMeatPrice.text.toString().isNotEmpty()) {
-                        etMeatPrice.text.toString()
-                    } else "0"
-                    meatQty = if (etMeatQty.text.toString().isNotEmpty()) {
-                        etMeatQty.text.toString()
-                    } else "0"
-                    tvMeatAmt.text = meatPrice.toInt().times(meatQty.toInt()).toString()
-                    intestinePrice = if (etIntestinesPrice.text.toString().isNotEmpty()) {
-                        etIntestinesPrice.text.toString()
-                    } else "0"
-                    intestineQty = if (etIntestinesQty.text.toString().isNotEmpty()) {
-                        etIntestinesQty.text.toString()
-                    } else "0"
-                    tvIntestinesAmt.text =
-                        intestinePrice.toInt().times(intestineQty.toInt()).toString()
-                    headAndLegsPrice =
-                        if (etHeadAndLegsPrice.text.toString().isNotEmpty()) {
-                            etHeadAndLegsPrice.text.toString()
-                        } else "0"
-                    headAndLegsQty = if (etHeadAndLegsQty.text.toString().isNotEmpty()) {
-                        etHeadAndLegsQty.text.toString()
-                    } else "0"
-                    tvHeadAndLegsAmt.text =
-                        headAndLegsPrice.toInt().times(headAndLegsQty.toInt()).toString()
-                    africanSausagePrice =
-                        if (etAfricanSausagePrice.text.toString().isNotEmpty()) {
-                            etAfricanSausagePrice.text.toString()
-                        } else "0"
-                    africanSausageQty =
-                        if (etAfricanSausageQty.text.toString().isNotEmpty()) {
-                            etAfricanSausageQty.text.toString()
-                        } else "0"
-                    tvAfricanSausageAmt.text =
-                        africanSausagePrice.toInt().times(africanSausageQty.toInt())
-                            .toString()
-                    liverPrice = if (etLiverPrice.text.toString().isNotEmpty()) {
-                        etLiverPrice.text.toString()
-                    } else "0"
-                    liverQty = if (etLiverQty.text.toString().isNotEmpty()) {
-                        etLiverQty.text.toString()
-                    } else "0"
-                    tvLiverAmt.text = liverPrice.toInt().times(liverQty.toInt()).toString()
-                    filletPrice = if (etFilletPrice.text.toString().isNotEmpty()) {
-                        etFilletPrice.text.toString()
-                    } else "0"
-                    filletQty = if (etFilletQty.text.toString().isNotEmpty()) {
-                        etFilletQty.text.toString()
-                    } else "0"
-                    tvFilletAmt.text =
-                        filletPrice.toInt().times(filletQty.toInt()).toString()
-                    skinPrice = if (etSkinPrice.text.toString().isNotEmpty()) {
-                        etSkinPrice.text.toString()
-                    } else "0"
-                    skinQty = if (etSkinQty.text.toString().isNotEmpty()) {
-                        etSkinQty.text.toString()
-                    } else "0"
-                    tvSkinAmt.text = skinPrice.toInt().times(skinQty.toInt()).toString()
+                onCalculationChanged()
 
-                    tvSum.text = (tvAfricanSausageAmt.text.toString().toInt()
-                        .plus(tvFilletAmt.text.toString().toInt())
-                        .plus(tvHeadAndLegsAmt.text.toString().toInt())
-                        .plus(tvLiverAmt.text.toString().toInt())
-                        .plus(tvSkinAmt.text.toString().toInt())
-                        .plus(tvIntestinesAmt.text.toString().toInt())
-                        .plus(tvMeatAmt.text.toString().toInt()).toString())
-
-
-                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -470,6 +413,11 @@ class CreditDebtPage2Fragment : Fragment() {
             }
 
         }
+        addTextChangedListenerToViews(textWatcher)
+
+    }
+
+    private fun addTextChangedListenerToViews(textWatcher: TextWatcher) {
         binding.apply {
             etMeatPrice.addTextChangedListener(textWatcher)
             etMeatQty.addTextChangedListener(textWatcher)
@@ -485,6 +433,78 @@ class CreditDebtPage2Fragment : Fragment() {
             etSkinQty.addTextChangedListener(textWatcher)
             etFilletPrice.addTextChangedListener(textWatcher)
             etFilletQty.addTextChangedListener(textWatcher)
+        }
+    }
+
+    private fun onCalculationChanged() {
+        binding.apply {
+            meatPrice = if (etMeatPrice.text.toString().isNotEmpty()) {
+                etMeatPrice.text.toString()
+            } else "0"
+            meatQty = if (etMeatQty.text.toString().isNotEmpty()) {
+                etMeatQty.text.toString()
+            } else "0"
+            tvMeatAmt.text = meatPrice.toInt().times(meatQty.toInt()).toString()
+            intestinePrice = if (etIntestinesPrice.text.toString().isNotEmpty()) {
+                etIntestinesPrice.text.toString()
+            } else "0"
+            intestineQty = if (etIntestinesQty.text.toString().isNotEmpty()) {
+                etIntestinesQty.text.toString()
+            } else "0"
+            tvIntestinesAmt.text =
+                intestinePrice.toInt().times(intestineQty.toInt()).toString()
+            headAndLegsPrice =
+                if (etHeadAndLegsPrice.text.toString().isNotEmpty()) {
+                    etHeadAndLegsPrice.text.toString()
+                } else "0"
+            headAndLegsQty = if (etHeadAndLegsQty.text.toString().isNotEmpty()) {
+                etHeadAndLegsQty.text.toString()
+            } else "0"
+            tvHeadAndLegsAmt.text =
+                headAndLegsPrice.toInt().times(headAndLegsQty.toInt()).toString()
+            africanSausagePrice =
+                if (etAfricanSausagePrice.text.toString().isNotEmpty()) {
+                    etAfricanSausagePrice.text.toString()
+                } else "0"
+            africanSausageQty =
+                if (etAfricanSausageQty.text.toString().isNotEmpty()) {
+                    etAfricanSausageQty.text.toString()
+                } else "0"
+            tvAfricanSausageAmt.text =
+                africanSausagePrice.toInt().times(africanSausageQty.toInt())
+                    .toString()
+            liverPrice = if (etLiverPrice.text.toString().isNotEmpty()) {
+                etLiverPrice.text.toString()
+            } else "0"
+            liverQty = if (etLiverQty.text.toString().isNotEmpty()) {
+                etLiverQty.text.toString()
+            } else "0"
+            tvLiverAmt.text = liverPrice.toInt().times(liverQty.toInt()).toString()
+            filletPrice = if (etFilletPrice.text.toString().isNotEmpty()) {
+                etFilletPrice.text.toString()
+            } else "0"
+            filletQty = if (etFilletQty.text.toString().isNotEmpty()) {
+                etFilletQty.text.toString()
+            } else "0"
+            tvFilletAmt.text =
+                filletPrice.toInt().times(filletQty.toInt()).toString()
+            skinPrice = if (etSkinPrice.text.toString().isNotEmpty()) {
+                etSkinPrice.text.toString()
+            } else "0"
+            skinQty = if (etSkinQty.text.toString().isNotEmpty()) {
+                etSkinQty.text.toString()
+            } else "0"
+            tvSkinAmt.text = skinPrice.toInt().times(skinQty.toInt()).toString()
+
+            tvSum.text = (tvAfricanSausageAmt.text.toString().toInt()
+                .plus(tvFilletAmt.text.toString().toInt())
+                .plus(tvHeadAndLegsAmt.text.toString().toInt())
+                .plus(tvLiverAmt.text.toString().toInt())
+                .plus(tvSkinAmt.text.toString().toInt())
+                .plus(tvIntestinesAmt.text.toString().toInt())
+                .plus(tvMeatAmt.text.toString().toInt()).toString())
+
+
         }
     }
 
@@ -516,22 +536,25 @@ class CreditDebtPage2Fragment : Fragment() {
         }
         navController.navigate(R.id.action_creditPage2Fragment_to_creditPage3Fragment, arg)
     }
+
     private fun updateCreditDebt() {
-        val productPaid = if(creditDebt?.productPaid!!.isNotEmpty()){
+        val productPaid = if (creditDebt?.productPaid!!.isNotEmpty()) {
             creditDebt?.productPaid!!
         } else "0"
-        val productBalance = if(creditDebt?.productBalance!!.isNotEmpty()){
+        val productBalance = if (creditDebt?.productBalance!!.isNotEmpty()) {
             creditDebt?.productBalance!!
         } else "0"
-        val productAmt = if(creditDebt?.productAmount!!.isNotEmpty()){
+        val productAmt = if (creditDebt?.productAmount!!.isNotEmpty()) {
             creditDebt?.productAmount!!
         } else "0"
         val updatedTotalAmount =
             (creditDebt?.totalAllAmount?.toInt()!!.minus(productAmt.toInt())).plus(total.toInt())
         val updatedTotalPaid =
-            (creditDebt?.totalAllPaid?.toInt()!!.minus(productPaid.toInt())).plus(amountPaid.toInt())
+            (creditDebt?.totalAllPaid?.toInt()!!
+                .minus(productPaid.toInt())).plus(amountPaid.toInt())
         val updatedTotalBalance =
-            creditDebt?.totalAllBalance?.toInt()!!.minus(productBalance.toInt()).plus(balance.toInt())
+            creditDebt?.totalAllBalance?.toInt()!!.minus(productBalance.toInt())
+                .plus(balance.toInt())
         val creditDebt = CreditDebt(
             creditDebt?.creditDebtId,
             creditDebt?.userId,
@@ -560,7 +583,7 @@ class CreditDebtPage2Fragment : Fragment() {
     }
 
     private fun getProduct(): Products {
-        val productId = if (creditDebt?.productId!= null) {
+        val productId = if (creditDebt?.productId != null) {
             creditDebt?.productId
         } else productViewModel.getProductId()
         return Products(
@@ -598,6 +621,77 @@ class CreditDebtPage2Fragment : Fragment() {
 
     }
 
+    private fun amountPaidCheck() {
+        binding.apply {
+            val amountPaid = etAmountPaid.text.toString()
+            val amount = tvSum.text.toString()
+            when {
+                amountPaid.toInt() < 0 -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "Amount paid cannot be negative",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+                amountPaid.toInt() > amount.toInt() -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "The amount paid is more than the amount of the products bought",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else -> {
+                    statusCheck(amount, amountPaid)
+
+
+                }
+            }
+
+        }
+
+    }
+
+    private fun statusCheck(amount: String, amountPaid: String) {
+
+            when (status) {
+                "not fully paid" -> {
+                    if (amountPaid.toInt() == 0) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Enter the amount partially paid",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    } else toCheckNewOrUpdate()
+
+                }
+                "paid" -> {
+
+                    if (amountPaid.toInt() != amount.toInt()) {
+                        Toast.makeText(
+                            requireContext(),
+                            "The amount paid should be equal to the amount of the products",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }else toCheckNewOrUpdate()
+                }
+                else -> {
+                    toCheckNewOrUpdate()
+                }
+
+            }
+
+    }
+
+    private fun toCheckNewOrUpdate() {
+        balance = total.toInt().minus(amountPaid.toInt()).toString()
+        //To either update the product on firebase or proceed to the next page
+        if (creditDebt != null) {
+            deleteMetadata()
+            updateCreditDebt()
+        } else toNextPage()
+    }
 
 
 }

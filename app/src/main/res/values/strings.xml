@@ -68,6 +68,7 @@
     <array name="status">
         <item>Select Status</item>
         <item>Paid</item>
+        <item>Not Fully Paid</item>
         <item>Not Paid</item>
     </array>
     <string name="title_activity_splash_screen">SplashScreen</string>

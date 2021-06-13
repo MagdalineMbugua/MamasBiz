@@ -89,8 +89,6 @@ Z
 *app/src/main/res/layout/month_resource.xml,0\d\0d28c8b4f8c41795ad1a0c61918f4c7d1ce6ad26
 W
 'app/src/main/res/layout/next_layout.xml,8\a\8a40cdddbdae39a64015240331a302f271ea0149
-\
-,app/src/main/res/layout/textview_spinner.xml,6\4\6478bb96c3341d99e7ad7f4b037a34213c7b7730
 b
 2app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml,8\e\8e27ba16c655f421171956147d0fde89b7d25d17
 h
