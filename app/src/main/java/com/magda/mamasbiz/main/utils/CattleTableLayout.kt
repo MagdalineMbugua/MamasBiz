@@ -24,7 +24,7 @@ class CattleTableLayout (context: Context, attrs: AttributeSet?): LinearLayout(c
     private lateinit var price : String
     private lateinit var callback: (String) -> Unit
     private lateinit var removeCallback: (String) -> Unit
-    private lateinit var onCompleteCallback: (String) -> Unit
+    private lateinit var onCompleteCallback: (ArrayList<String>) -> Unit
     private val TAG = "CattleTableLayout"
 
     init {
@@ -88,6 +88,10 @@ class CattleTableLayout (context: Context, attrs: AttributeSet?): LinearLayout(c
     }
     fun onRemoveAmountListener (callback:(String)-> Unit){
         this.removeCallback = callback
+
+    }
+    fun onCompleteListener (callback:(ArrayList<String>)-> Unit){
+        this.onCompleteCallback = callback
 
     }
     fun setTableTitle (position : Int){

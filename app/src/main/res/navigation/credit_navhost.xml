@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_creditPage3Fragment_to_creditPage2Fragment"
             app:destination="@id/creditPage2Fragment" />
+        <action
+            android:id="@+id/action_creditPage3Fragment_to_creditDebtPageFragment"
+            app:destination="@id/creditDebtPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/creditPage4Fragment"

@@ -13,7 +13,7 @@ import com.magda.mamasbiz.databinding.FragmentCreditDebtPage3Binding
 import com.magda.mamasbiz.main.data.entity.CattleBought
 import com.magda.mamasbiz.main.data.entity.Products
 import com.magda.mamasbiz.main.utils.Constants
-import java.util.ArrayList
+import java.util.*
 
 
 class CreditPage3Fragment : Fragment() {
@@ -152,14 +152,29 @@ class CreditPage3Fragment : Fragment() {
 
     private fun toPreviousPage() {
         val navController = Navigation.findNavController(binding.root)
-        navController.navigate(R.id.action_creditPage3Fragment_to_creditPage2Fragment)
+        val arg = Bundle()
+        arg.putString(Constants.DEBTOR_NAME, name)
+        arg.putString(Constants.DEBTOR_NUMBER, phoneNumber)
+        arg.putString(Constants.DEBTOR_STATUS, status)
+        if(credit!=null){
+            arg.putString(Constants.CREDIT, credit)
+        } else if (debt!=null){
+            arg.putString(Constants.DEBT, debt)
+        }
+        if (products!=null){
+            navController.navigate(R.id.action_creditPage3Fragment_to_creditPage2Fragment, arg)
+        } else navController.navigate(R.id.action_creditPage3Fragment_to_creditDebtPageFragment, arg)
+
 
     }
 
 
     private fun initViews() {
         binding.apply {
-            calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DATE ,-1)
+            calendar.also { calendarView.minDate = it.timeInMillis }
+            calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
                 paymentDate =
                     StringBuilder(dayOfMonth).append(dayOfMonth).append("/").append(month + 1)
                         .append("/")
@@ -167,6 +182,7 @@ class CreditPage3Fragment : Fragment() {
                 tvDate.text = paymentDate
 
             }
+
         }
 
     }
