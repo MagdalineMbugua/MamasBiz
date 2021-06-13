@@ -384,11 +384,11 @@ class CreditDebtPageFragment : Fragment() {
         var totalQty = 0
         for (i in 0 until binding.cattleLinearLayout.childCount) {
             val table = binding.cattleLinearLayout.getChildAt(i) as? CattleTableLayout
-            val getQty = if(table?.getQty() == ""){
+            val getQty = if (table?.getQty() == "") {
                 "0"
-            }else {
+            } else {
                 table?.getQty()
-           }
+            }
             totalQty += getQty?.toInt() ?: 0
         }
 
@@ -419,7 +419,11 @@ class CreditDebtPageFragment : Fragment() {
         cattleBoughtAmtPaid = binding.etAmountPaid.text.toString()
 
         if (cattleBoughtPrice == "0" || cattleBoughtQty == "0" || cattleBoughtAmt == "0") {
-            Toast.makeText(requireContext(), "You did not fill all the cattle details", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                "You did not fill all the cattle details",
+                Toast.LENGTH_SHORT
+            ).show()
         } else {
             if (cattleBoughtAmtPaid.isEmpty()) {
                 Toast.makeText(
@@ -427,38 +431,42 @@ class CreditDebtPageFragment : Fragment() {
                     "Fill in the Amount paid for the cattle",
                     Toast.LENGTH_SHORT
                 ).show()
-            }
-            Log.d(TAG, "validateInfo: and $cattleBoughtQty")
-            val totalCattleBoughtQty = calculateQty().toString()
-
-            totalCattleBoughtAmt = binding.tvTotalExactAmt.text.toString()
-            Log.d(
-                TAG,
-                "validateInfo: $cattleBoughtAmtPaid $totalCattleBoughtAmt $totalCattleBoughtQty"
-            )
-            val cattleBought = CattleBought(
-                "",
-                cattleBoughtId = null,
+            } else amountPaidCheck(
                 cattleBoughtType,
                 cattleBoughtPrice,
                 cattleBoughtQty,
                 cattleBoughtAmt
             )
-            Log.d(TAG, "validateInfo: $cattleBought")
-            cattleList.add(cattleBought)
-            Log.d(TAG, "validateInfo: ${cattleList.size}")
-            if (toUpdateCattleList != null) {
-                deleteCattleBought()
-            }
-            if (creditDebt != null) {
-                totalCattleBoughtBal =
-                    totalCattleBoughtAmt.toInt().minus(cattleBoughtAmtPaid.toInt()).toString()
-                updateCreditDebt(totalCattleBoughtQty)
-
-            } else toTheNextPage(totalCattleBoughtQty)
-
-
         }
+    }
+
+    private fun toCheckIfNewOrUpdate(
+        cattleBoughtType: String,
+        cattleBoughtPrice: String,
+        cattleBoughtQty: String,
+        cattleBoughtAmt: String
+    ) {
+        val totalCattleBoughtQty = calculateQty().toString()
+        totalCattleBoughtAmt = binding.tvTotalExactAmt.text.toString()
+        val cattleBought = CattleBought(
+            "",
+            cattleBoughtId = null,
+            cattleBoughtType,
+            cattleBoughtPrice,
+            cattleBoughtQty,
+            cattleBoughtAmt
+        )
+        cattleList.add(cattleBought)
+        if (toUpdateCattleList != null) {
+            deleteCattleBought()
+        }
+        if (creditDebt != null) {
+            totalCattleBoughtBal =
+                totalCattleBoughtAmt.toInt().minus(cattleBoughtAmtPaid.toInt()).toString()
+            updateCreditDebt(totalCattleBoughtQty)
+
+        } else toTheNextPage(totalCattleBoughtQty)
+
     }
 
     private fun toTheNextPage(
@@ -570,27 +578,125 @@ class CreditDebtPageFragment : Fragment() {
 
     private fun checkAllLayoutIfFilled(cattleTableLayout: CattleTableLayout?) {
         Log.d(TAG, "checkAllLayoutIfFilled: starts the check $cattleTableLayout")
-          val cattleDetails = arrayListOf<String>()
-            val cattleBoughtType = cattleTableLayout?.tvCattleType?.text.toString()
-            val cattleBoughtPrice = cattleTableLayout?.etPrice?.text.toString()
-            val cattleBoughtQty = cattleTableLayout?.etQty?.text.toString()
-            val cattleBoughtAmt = cattleTableLayout?.tvCattleAmount?.text.toString()
-            Log.d(TAG, "checkAllLayoutIfFilled: $cattleBoughtPrice  and $cattleBoughtQty")
-            cattleDetails.add(cattleBoughtPrice)
-            cattleDetails.add(cattleBoughtQty)
-            Log.d(TAG, "checkAllLayoutIfFilled: ${cattleDetails.size}")
-            if (cattleDetails.size < 2) {
-                Toast.makeText(
-                    requireContext(),
-                    "Fill in the price and quantity or delete the type",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                validateInfo(cattleBoughtType, cattleBoughtPrice, cattleBoughtQty, cattleBoughtAmt)
+        val cattleDetails = arrayListOf<String>()
+        val cattleBoughtType = cattleTableLayout?.tvCattleType?.text.toString()
+        val cattleBoughtPrice = cattleTableLayout?.etPrice?.text.toString()
+        val cattleBoughtQty = cattleTableLayout?.etQty?.text.toString()
+        val cattleBoughtAmt = cattleTableLayout?.tvCattleAmount?.text.toString()
+        Log.d(TAG, "checkAllLayoutIfFilled: $cattleBoughtPrice  and $cattleBoughtQty")
+        cattleDetails.add(cattleBoughtPrice)
+        cattleDetails.add(cattleBoughtQty)
+        Log.d(TAG, "checkAllLayoutIfFilled: ${cattleDetails.size}")
+        if (cattleDetails.size < 2) {
+            Toast.makeText(
+                requireContext(),
+                "Fill in the price and quantity or delete the type",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            validateInfo(cattleBoughtType, cattleBoughtPrice, cattleBoughtQty, cattleBoughtAmt)
 
 
         }
 
+
+    }
+
+    private fun amountPaidCheck(
+        cattleBoughtType: String,
+        cattleBoughtPrice: String,
+        cattleBoughtQty: String,
+        cattleBoughtAmt: String
+    ) {
+        binding.apply {
+            val amountPaid = etAmountPaid.text.toString()
+            val amount = tvTotalExactAmt.text.toString()
+            when {
+                amountPaid.toInt() < 0 -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "Amount paid cannot be negative",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+                amountPaid.toInt() > amount.toInt() -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "The amount paid is more than the amount of the products bought",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else -> {
+                    statusCheck(
+                        amount,
+                        amountPaid,
+                        cattleBoughtType,
+                        cattleBoughtPrice,
+                        cattleBoughtQty,
+                        cattleBoughtAmt
+                    )
+
+
+                }
+            }
+
+        }
+
+    }
+
+    private fun statusCheck(
+        amount: String,
+        amountPaid: String,
+        cattleBoughtType: String,
+        cattleBoughtPrice: String,
+        cattleBoughtQty: String,
+        cattleBoughtAmt: String
+    ) {
+
+        when (status) {
+            "not fully paid" -> {
+                if (amountPaid.toInt() == 0) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Enter the amount partially paid",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                } else toCheckIfNewOrUpdate(
+                    cattleBoughtType,
+                    cattleBoughtPrice,
+                    cattleBoughtQty,
+                    cattleBoughtAmt
+                )
+
+            }
+            "paid" -> {
+
+                if (amountPaid.toInt() != amount.toInt()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "The amount paid should be equal to the amount of the products",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else toCheckIfNewOrUpdate(
+                    cattleBoughtType,
+                    cattleBoughtPrice,
+                    cattleBoughtQty,
+                    cattleBoughtAmt
+                )
+            }
+            else -> {
+                toCheckIfNewOrUpdate(
+                    cattleBoughtType,
+                    cattleBoughtPrice,
+                    cattleBoughtQty,
+                    cattleBoughtAmt
+                )
+
+            }
+
+        }
 
     }
 
