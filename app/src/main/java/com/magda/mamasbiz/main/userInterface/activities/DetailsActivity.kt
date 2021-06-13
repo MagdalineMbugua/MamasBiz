@@ -37,7 +37,7 @@ class DetailsActivity : AppCompatActivity() {
     private lateinit var productViewModel: ProductViewModel
     private lateinit var creditDebtViewModel: CreditDebtViewModel
     private var products: Products? = null
-    private var cattleBoughtList : ArrayList<CattleBought>? = null
+    private var cattleBoughtList: ArrayList<CattleBought>? = null
     private var updatePayments: UpdatePayments? = null
     private var credit: String? = ""
     private var debt: String? = ""
@@ -59,8 +59,6 @@ class DetailsActivity : AppCompatActivity() {
         //initiate view model
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
-
-
 
 
         //Get products
@@ -99,12 +97,10 @@ class DetailsActivity : AppCompatActivity() {
         fetchCattleBoughtLiveData()
 
 
-       fetchCreditDebtDocumentLiveData()
+        fetchCreditDebtDocumentLiveData()
 
 
         deleteCattleBoughtLiveData()
-
-
 
 
         //Setting click listeners on the fabs
@@ -122,8 +118,8 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun deleteCattleBoughtLiveData() {
-        creditDebtViewModel._deleteCattleBoughtLiveData.observe(this){
-            when(it.status){
+        creditDebtViewModel._deleteCattleBoughtLiveData.observe(this) {
+            when (it.status) {
                 Status.LOADING -> {
                     //To observe
                 }
@@ -131,11 +127,12 @@ class DetailsActivity : AppCompatActivity() {
                     Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
                 }
                 Status.SUCCESS -> {
-                   creditDebtViewModel.deleteCreditDebt(creditDebt)
+                    creditDebtViewModel.deleteCreditDebt(creditDebt)
 
                 }
+            }
         }
-    }}
+    }
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -143,8 +140,8 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun fetchCreditDebtDocumentLiveData() {
-        creditDebtViewModel._fetchCDDocumentLiveData.observe(this){
-            when(it.status){
+        creditDebtViewModel._fetchCDDocumentLiveData.observe(this) {
+            when (it.status) {
                 Status.LOADING -> {
                     //To observe
                 }
@@ -163,11 +160,11 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun fetchCattleBoughtLiveData() {
-        creditDebtViewModel._fetchCattleBoughtLiveData.observe(this){
-            when (it.status){
+        creditDebtViewModel._fetchCattleBoughtLiveData.observe(this) {
+            when (it.status) {
                 Status.SUCCESS -> {
                     cattleBoughtList = it.data
-                    if(cattleBoughtList?.size!!<1) cattleBoughtList = null
+                    if (cattleBoughtList?.size!! < 1) cattleBoughtList = null
                     initViews()
                 }
                 Status.ERROR -> {
@@ -329,7 +326,7 @@ class DetailsActivity : AppCompatActivity() {
         binding.apply {
             fabDelete.setOnClickListener { toDelete() }
             fabEdit.setOnClickListener { toEdit() }
-            fabEditCattle.setOnClickListener{toEditCattle()}
+            fabEditCattle.setOnClickListener { toEditCattle() }
             fabUpdate.setOnClickListener { toUpdatePayment() }
         }
     }
@@ -342,29 +339,32 @@ class DetailsActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode==1000){
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == 1000) {
+            if (resultCode == Activity.RESULT_OK) {
                 cattleBoughtList?.clear()
                 creditDebtViewModel.fetchMetadata(creditDebt.userId!!)
                 creditDebtViewModel.fetchCattleBought(creditDebt.creditDebtId!!)
                 creditDebtViewModel.getCreditDebtDocument(creditDebt.creditDebtId!!)
             }
 
-        }else if (requestCode==2000){
-            if(resultCode == Activity.RESULT_OK){
+        } else if (requestCode == 2000) {
+            if (resultCode == Activity.RESULT_OK) {
                 creditDebtViewModel.fetchMetadata(creditDebt.userId!!)
                 creditDebtViewModel.getCreditDebtDocument(creditDebt.creditDebtId!!)
             }
 
-        }else Toast.makeText(this, "Error occurred sending data to this activity", Toast.LENGTH_SHORT).show()
+        } else Toast.makeText(
+            this,
+            "Error occurred sending data to this activity",
+            Toast.LENGTH_SHORT
+        ).show()
     }
-
 
 
     private fun toEdit() {
         val intent = Intent(this@DetailsActivity, EditProductActivity::class.java)
         intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
-        startActivityForResult(intent,2000)
+        startActivityForResult(intent, 2000)
     }
 
     private fun toUpdatePayment() {
@@ -392,13 +392,19 @@ class DetailsActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 val text = s.toString()
-                if (text.isNotEmpty()) {
-                    val totalBal = creditDebt.totalAllBalance?.toInt()?.minus(text.toInt())
-                    mTotalBalance.text = totalBal.toString()
-
+                val totalBal = if (text.isNotEmpty()) {
+                    creditDebt.totalAllBalance?.toInt()?.minus(text.toInt())
                 } else {
-                    val totalBal = creditDebt.totalAllBalance
-                    mTotalBalance.text = totalBal.toString()
+                    creditDebt.totalAllBalance?.toInt()
+                }
+                mTotalBalance.text = totalBal.toString()
+                val currentTotalPaid = creditDebt.totalAllPaid?.toInt()?.plus(text.toInt())
+                if (totalBal?.plus(currentTotalPaid!!) != creditDebt.totalAllAmount?.toInt()) {
+                    Toast.makeText(
+                        this@DetailsActivity,
+                        "You cannot pay more than the sold or purchased amount",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -410,7 +416,7 @@ class DetailsActivity : AppCompatActivity() {
                 newTotalAmountPaid.toInt().plus(creditDebt.totalAllPaid!!.toInt())
             val status = if (newTotalBalance == "0") {
                 "paid"
-            } else "not paid"
+            } else "not fully paid"
             updatePayments = UpdatePayments(
                 creditDebt.creditDebtId,
                 creditDebtViewModel.getUpdatePaymentId(creditDebt),
@@ -420,7 +426,12 @@ class DetailsActivity : AppCompatActivity() {
                 creditDebt.userId
             )
             Log.d(TAG, "toUpdatePayment: $updatePayments")
-            checkIndividualBal(newTotalAmountPaid,updatedTotalAmtPaid.toString(), newTotalBalance, status)
+            checkIndividualBal(
+                newTotalAmountPaid,
+                updatedTotalAmtPaid.toString(),
+                newTotalBalance,
+                status
+            )
 
 
 
@@ -430,19 +441,24 @@ class DetailsActivity : AppCompatActivity() {
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
     }
+
     private fun checkIndividualBal(
         updatedIndividualTotalAmountPaid: String,
-        newTotalAmountPaid:String,
+        newTotalAmountPaid: String,
         newTotalBalance: String,
         status: String
     ) {
-        val cattleBoughtPaid = creditDebt.cattleBoughtPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
-        val cattleBoughtBal = creditDebt.cattleBoughtBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
-        val productPaid = creditDebt.productPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
-        val productBal = creditDebt.productBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
+        val cattleBoughtPaid =
+            creditDebt.cattleBoughtPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
+        val cattleBoughtBal =
+            creditDebt.cattleBoughtBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
+        val productPaid =
+            creditDebt.productPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
+        val productBal =
+            creditDebt.productBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
         Log.d(TAG, "checkIndividualBal: ${cattleBoughtList?.size}, $products")
-        Log.d(TAG, "checkIndividualBal: ${cattleBoughtList!=null}, ${products!=null}")
-        if(cattleBoughtList!=null && products==null){
+        Log.d(TAG, "checkIndividualBal: ${cattleBoughtList != null}, ${products != null}")
+        if (cattleBoughtList != null && products == null) {
             creditDebtViewModel.updateTotalMoney(
                 creditDebt.creditDebtId!!,
                 newTotalAmountPaid,
@@ -454,7 +470,7 @@ class DetailsActivity : AppCompatActivity() {
                 cattleBoughtBal.toString()
             )
 
-        } else if (cattleBoughtList==null&& products!=null){
+        } else if (cattleBoughtList == null && products != null) {
             creditDebtViewModel.updateTotalMoney(
                 creditDebt.creditDebtId!!,
                 newTotalAmountPaid,
@@ -465,7 +481,7 @@ class DetailsActivity : AppCompatActivity() {
                 creditDebt.cattleBoughtPaid!!,
                 creditDebt.cattleBoughtBalance!!
             )
-        }else if (cattleBoughtList!=null&& products!=null){
+        } else if (cattleBoughtList != null && products != null) {
             creditDebtViewModel.updateTotalMoney(
                 creditDebt.creditDebtId!!,
                 newTotalAmountPaid,
@@ -474,7 +490,8 @@ class DetailsActivity : AppCompatActivity() {
                 creditDebt.productPaid!!,
                 creditDebt.productBalance!!,
                 creditDebt.cattleBoughtPaid!!,
-                creditDebt.cattleBoughtBalance!!)
+                creditDebt.cattleBoughtBalance!!
+            )
         }
         Log.d(TAG, "checkIndividualBal: $newTotalAmountPaid, $newTotalBalance")
 
@@ -521,8 +538,10 @@ class DetailsActivity : AppCompatActivity() {
         creditDebtViewModel.deleteCattleBought(creditDebt.creditDebtId!!)
 
     }
-    private fun initCreditDebtView(){
-        binding.apply { tvDebtorName.text = creditDebt.name
+
+    private fun initCreditDebtView() {
+        binding.apply {
+            tvDebtorName.text = creditDebt.name
             tvDebtorNumber.text = creditDebt.phoneNumber
             tvDebtorStatus.text = creditDebt.status
             tvDebtorPaymentDate.text = creditDebt.paymentDate
@@ -537,13 +556,13 @@ class DetailsActivity : AppCompatActivity() {
 
             Log.d(TAG, "initViews: $cattleBoughtList, $products")
             when {
-                (cattleBoughtList!=null && products == null) -> {
+                (cattleBoughtList != null && products == null) -> {
                     setRecyclerViewAndViews()
                 }
-                (cattleBoughtList==null && products != null) -> {
+                (cattleBoughtList == null && products != null) -> {
                     setProductViews()
                 }
-                (cattleBoughtList!=null && products != null) -> {
+                (cattleBoughtList != null && products != null) -> {
                     setRecyclerViewAndViews()
                     setProductViews()
                 }
@@ -552,6 +571,7 @@ class DetailsActivity : AppCompatActivity() {
 
         }
     }
+
     @SuppressLint("SetTextI18n")
     private fun setRecyclerViewAndViews() {
         binding.apply {
@@ -560,7 +580,7 @@ class DetailsActivity : AppCompatActivity() {
             tvTotalCattleBalance.visibility = View.VISIBLE
             tvTotalExactCattleBalance.text = "Kes: ${creditDebt.cattleBoughtBalance}"
             tvTotalCattleAmount.visibility = View.VISIBLE
-            tvTotalCattleExactAmount.visibility =View.VISIBLE
+            tvTotalCattleExactAmount.visibility = View.VISIBLE
             tvTotalCattleExactAmount.text = "Kes: ${creditDebt.cattleBoughtAmount}"
             tvTotalCattleDebt.visibility = View.VISIBLE
             tvTotalExactCattleDebt.visibility = View.VISIBLE
