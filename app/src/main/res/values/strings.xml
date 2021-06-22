@@ -90,7 +90,7 @@
     <string name="no_records">No Records have been created yet. But don\'t worry we can create one now!</string>
     <string name="_31_2_2021">31/2/2021</string>
     <string name="search">Search Name or Payment Status</string>
-    <string name="balance">Balance</string>
+    <string name="balance">Balance: </string>
     <string name="total_amount_paid">Total Amount Paid:</string>
     <string name="_0">0</string>
     <string name="user_not_found">User not found. Do not worry,let us try another word.</string>
@@ -106,7 +106,7 @@
     <string name="total_unpaid">Total Unpaid</string>
     <string name="total_balance">Balance</string>
     <string name="creditor">Creditor</string>
-    <string name="total_amount">Total Amt</string>
+    <string name="total_amount">Total Amount:</string>
     <string name="account">Account</string>
     <string name="biz_owner">Biz Owner</string>
     <string name="tell_a_friend">Tell A friend</string>
@@ -136,5 +136,7 @@
     <string name="total_balance_kes">Total Balance: Kes</string>
     <string name="create_supplier">Create Supplier</string>
     <string name="create_customer">Create customer</string>
+    <string name="paid">Paid:</string>
+    <string name="product_amount">Product Amount</string>
 
 </resources>

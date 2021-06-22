@@ -439,11 +439,18 @@ class CreditPage4Fragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun initViews() {
         binding.apply {
-
+            val totalAmount =totalAmount!!.toInt().plus(totalCattleBoughtAmount!!.toInt())
+            val totalPaid =  totalPaid?.toInt()?.plus(totalCattleBoughtPaid!!.toInt())
+            val totalBal = totalAmount.minus(totalPaid!!)
             tvDebtorName.text = debtorName
             tvCustomerNumber.text = phoneNumber
             tvDebtorStatus.text = status
             tvDebtorPaymentDate.text = paymentDate
+            tvCustomerTotalPaid.text = "Kes: $totalPaid"
+            tvDebtorTotalBalance.text= "Kes: $totalBal"
+            tvDebtorTotalAllAMount.text ="Kes: $totalAmount"
+
+
 
 
             when {
@@ -457,10 +464,7 @@ class CreditPage4Fragment : Fragment() {
                 ((cattleBoughtList!=null) && (products != null)) -> {
                     setProductViews()
                     setRecyclerViewAndViews()
-                    binding.tvTotalAllAmount.visibility = View.VISIBLE
-                    binding.tvDebtorTotalAllAMount.visibility = View.VISIBLE
-                    binding.tvDebtorTotalAllAMount.text =
-                        "Kes: ${totalAmount!!.toInt().plus(totalCattleBoughtAmount!!.toInt())}"
+
                 }
             }
 
@@ -471,14 +475,8 @@ class CreditPage4Fragment : Fragment() {
     private fun setProductViews() {
         binding.apply {
             purchasedProductTable.visibility = View.VISIBLE
-            tvCustomerTotalPaid.visibility = View.VISIBLE
-            tvTotalPaid.visibility = View.VISIBLE
-            tvTotalBalance.visibility = View.VISIBLE
-            tvDebtorTotalBalance.visibility = View.VISIBLE
             tvProductAmount.visibility = View.VISIBLE
             tvTotalExactProductAmount.visibility = View.VISIBLE
-            tvCustomerTotalPaid.text = "KES: $totalPaid"
-            tvDebtorTotalBalance.text = "KES: $totalBalance"
             tvTotalExactProductAmount.text = "KES: $totalAmount"
             toFillTable()
 

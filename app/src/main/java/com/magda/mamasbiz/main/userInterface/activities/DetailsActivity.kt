@@ -363,7 +363,7 @@ class DetailsActivity : AppCompatActivity() {
 
         } else Toast.makeText(
             this,
-            "Error occurred sending data to this activity",
+            "Error occurred updating data to this page",
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -551,6 +551,12 @@ class DetailsActivity : AppCompatActivity() {
         binding.apply {
             tvDebtorName.text = creditDebt.name
             tvCustomerNumber.text = creditDebt.phoneNumber
+            val totalBalance = "Kes: ${creditDebt.totalAllBalance}"
+            val totalPaid = "Kes: ${creditDebt.totalAllPaid}"
+            val totalAmount = "Kes: ${creditDebt.totalAllAmount}"
+            tvTotalExactBalance.text = totalBalance
+            tvCustomerTotalPaid.text = totalPaid
+            tvCustomerTotalAllAMount.text = totalAmount
             tvDebtorStatus.text = creditDebt.status
             tvDebtorPaymentDate.text = creditDebt.paymentDate
 
@@ -614,9 +620,9 @@ class DetailsActivity : AppCompatActivity() {
     private fun setProductViews() {
         binding.apply {
             purchasedProductTable.visibility = View.VISIBLE
-            tvTotalBalance.visibility = View.VISIBLE
             tvProductAmount.visibility = View.VISIBLE
-            tvProductAmount.text = "KES: ${creditDebt.productAmount}"
+            tvTotalExactProductAmount.visibility = View.VISIBLE
+            tvTotalExactProductAmount.text = "KES: ${creditDebt.productAmount}"
             toFillTable()
 
         }

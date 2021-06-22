@@ -84,15 +84,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvTotalPaid"
-                android:text="@string/total_paid"
+                android:text="@string/paid"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintTop_toBottomOf="@id/tvNumber"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"/>
+                android:layout_marginTop="10dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,22 +104,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="40dp"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"/>
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvTotalBalance"
-                android:text="@string/products_balance"
+                android:text="@string/balance"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintTop_toBottomOf="@id/tvTotalPaid"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"/>
+                android:layout_marginTop="10dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -133,8 +130,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="40dp"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"/>
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -147,8 +143,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tvTotalBalance"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"/>
+                android:layout_marginTop="10dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -161,13 +156,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="40dp"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"/>
+                android:layout_marginTop="10dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvProductAmount"
-                android:text="@string/total_cattle_amount"
+                android:text="@string/product_amount"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorPrimary"
