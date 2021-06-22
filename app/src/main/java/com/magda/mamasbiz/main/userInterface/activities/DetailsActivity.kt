@@ -288,12 +288,20 @@ class DetailsActivity : AppCompatActivity() {
         debt = intent.getStringExtra(Constants.DEBT)
         credit = intent.getStringExtra(Constants.CREDIT)
         if (credit != null) {
-            val creditName = resources.getString(R.string.creditor_name)
-            val creditNumber = resources.getString(R.string.creditor_number)
-            binding.tvName.text = creditName
-            binding.tvNumber.text = creditNumber
+            val supplierName = resources.getString(R.string.supplier_name)
+            val supplierNumber = resources.getString(R.string.supplier_number)
+            val pageTitle = resources.getString(R.string.details_of_the_supplier)
+            binding.apply {
+                tvName.text = supplierName
+                tvNumber.text = supplierNumber
+                tvInfo.text = pageTitle
+            }
             fabEditCattle.visibility = View.VISIBLE
-        } else fabEditCattle.visibility = View.GONE
+        } else{
+            val pageTitle = resources.getString(R.string.details_of_the_customer)
+            binding.tvInfo.text = pageTitle
+            fabEditCattle.visibility = View.GONE
+        }
     }
 
     private fun deleteMetadata() {
@@ -542,7 +550,7 @@ class DetailsActivity : AppCompatActivity() {
     private fun initCreditDebtView() {
         binding.apply {
             tvDebtorName.text = creditDebt.name
-            tvDebtorNumber.text = creditDebt.phoneNumber
+            tvCustomerNumber.text = creditDebt.phoneNumber
             tvDebtorStatus.text = creditDebt.status
             tvDebtorPaymentDate.text = creditDebt.paymentDate
 
@@ -576,15 +584,9 @@ class DetailsActivity : AppCompatActivity() {
     private fun setRecyclerViewAndViews() {
         binding.apply {
             cattleBoughtTitle.visibility = View.VISIBLE
-            tvTotalExactCattleBalance.visibility = View.VISIBLE
-            tvTotalCattleBalance.visibility = View.VISIBLE
-            tvTotalExactCattleBalance.text = "Kes: ${creditDebt.cattleBoughtBalance}"
             tvTotalCattleAmount.visibility = View.VISIBLE
             tvTotalCattleExactAmount.visibility = View.VISIBLE
             tvTotalCattleExactAmount.text = "Kes: ${creditDebt.cattleBoughtAmount}"
-            tvTotalCattleDebt.visibility = View.VISIBLE
-            tvTotalExactCattleDebt.visibility = View.VISIBLE
-            tvTotalExactCattleDebt.text = "Kes: ${creditDebt.cattleBoughtPaid}"
             tvTotalCattleQty.visibility = View.VISIBLE
             tvTotalExactCattleQty.visibility = View.VISIBLE
             tvTotalExactCattleQty.text = "${creditDebt.cattleBoughtQty}"
@@ -612,14 +614,9 @@ class DetailsActivity : AppCompatActivity() {
     private fun setProductViews() {
         binding.apply {
             purchasedProductTable.visibility = View.VISIBLE
-            tvDebtorTotalDebt.visibility = View.VISIBLE
-            tvTotalDebt.visibility = View.VISIBLE
             tvTotalBalance.visibility = View.VISIBLE
-            tvDebtorTotalBalance.visibility = View.VISIBLE
-            tvTotalAmt.visibility = View.VISIBLE
-            tvDebtorTotalDebt.text = "KES: ${creditDebt.productPaid}"
-            tvDebtorTotalBalance.text = "KES: ${creditDebt.productBalance}"
-            tvTotalAmt.text = "KES: ${creditDebt.productAmount}"
+            tvProductAmount.visibility = View.VISIBLE
+            tvProductAmount.text = "KES: ${creditDebt.productAmount}"
             toFillTable()
 
         }

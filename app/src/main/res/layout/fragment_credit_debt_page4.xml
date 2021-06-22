@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvName"
-                android:text="@string/debtor_name"
+                android:text="@string/customer_name"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorPrimary"
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvNumber"
-                android:text="@string/debtor_number"
+                android:text="@string/customer_number"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorPrimary"
@@ -70,7 +70,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvDebtorNumber"
+                android:id="@+id/tvCustomerNumber"
                 android:text="@string/_2547xx_xxx_xxx"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
@@ -83,8 +83,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvTotalDebt"
-                android:text="@string/products_paid"
+                android:id="@+id/tvTotalPaid"
+                android:text="@string/total_paid"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorPrimary"
@@ -96,44 +96,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvDebtorTotalDebt"
+                android:id="@+id/tvCustomerTotalPaid"
                 android:text="@string/kes_4000"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorDarkFont"
-                app:layout_constraintTop_toBottomOf="@id/tvDebtorNumber"
+                app:layout_constraintTop_toBottomOf="@id/tvCustomerNumber"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
                 android:visibility="gone"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvTotalCattleDebt"
-                android:text="@string/cattle_paid"
-                android:textSize="16sp"
-                android:fontFamily="@font/cormorantsc_bold"
-                android:textColor="@color/colorPrimary"
-                app:layout_constraintTop_toBottomOf="@id/tvTotalDebt"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvTotalExactCattleDebt"
-                android:text="@string/kes_4000"
-                android:textSize="16sp"
-                android:fontFamily="@font/cormorantsc_bold"
-                android:textColor="@color/colorDarkFont"
-                app:layout_constraintTop_toBottomOf="@id/tvDebtorTotalDebt"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -142,7 +116,7 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorPrimary"
-                app:layout_constraintTop_toBottomOf="@id/tvTotalCattleDebt"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalPaid"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
@@ -155,17 +129,18 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorDarkFont"
-                app:layout_constraintTop_toBottomOf="@id/tvTotalExactCattleDebt"
+                app:layout_constraintTop_toBottomOf="@id/tvCustomerTotalPaid"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
                 android:visibility="gone"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvTotalCattleBalance"
-                android:text="@string/cattle_balance"
+                android:id="@+id/tvTotalAllAmount"
+                android:text="@string/total_amount"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorPrimary"
@@ -177,7 +152,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvTotalExactCattleBalance"
+                android:id="@+id/tvDebtorTotalAllAMount"
                 android:text="@string/kes_4000"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
@@ -191,12 +166,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvTotalAllAmount"
-                android:text="@string/total_amount"
+                android:id="@+id/tvProductAmount"
+                android:text="@string/total_cattle_amount"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorPrimary"
-                app:layout_constraintTop_toBottomOf="@id/tvTotalCattleBalance"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalAllAmount"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
@@ -204,12 +179,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvDebtorTotalAllAMount"
+                android:id="@+id/tvTotalExactProductAmount"
                 android:text="@string/kes_4000"
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorDarkFont"
-                app:layout_constraintTop_toBottomOf="@id/tvTotalExactCattleBalance"
+                app:layout_constraintTop_toBottomOf="@id/tvDebtorTotalAllAMount"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="40dp"
@@ -223,7 +198,7 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorPrimary"
-                app:layout_constraintTop_toBottomOf="@id/tvTotalAllAmount"
+                app:layout_constraintTop_toBottomOf="@id/tvProductAmount"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
@@ -236,7 +211,7 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/cormorantsc_bold"
                 android:textColor="@color/colorDarkFont"
-                app:layout_constraintTop_toBottomOf="@id/tvDebtorTotalAllAMount"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalExactProductAmount"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="40dp"
@@ -655,42 +630,6 @@
                         android:fontFamily="@font/cormorantsc_semibold"
                         android:textSize="14sp"
                         android:id="@+id/tvSkinAmt"/>
-                </TableRow>
-                <TableRow android:background="@drawable/table_bottom_borderline"
-                    android:id="@+id/TotalRow">
-                    <TextView
-                        android:textColor="@color/colorPrimary"
-                        android:fontFamily="@font/cormorantsc_semibold"
-                        android:textSize="16sp"
-                        android:id="@+id/tvTSkin"/>
-
-                    <TextView
-                        android:textColor="@color/colorPrimary"
-                        android:fontFamily="@font/cormorantsc_semibold"
-                        android:textSize="14sp"
-                        android:id="@+id/tvTSkinUnit"/>
-                    <TextView
-                        android:textColor="@color/colorDarkFont"
-                        android:fontFamily="@font/cormorantsc_semibold"
-                        android:textSize="14sp"
-                        android:id="@+id/tvTSkinQty"
-                        android:autofillHints="null"
-                        android:backgroundTint="@color/colorIcon"
-                        tools:ignore="LabelFor" />
-                    <TextView
-                        android:textColor="@color/colorDarkFont"
-                        android:text="@string/total"
-                        android:fontFamily="@font/cormorantsc_semibold"
-                        android:textSize="14sp"
-                        android:id="@+id/tvTotal"
-                        android:autofillHints="null"
-                        android:backgroundTint="@color/colorIcon"
-                        tools:ignore="LabelFor" />
-                    <TextView android:text="@string/_200"
-                        android:textColor="@color/colorDarkFont"
-                        android:fontFamily="@font/cormorantsc_semibold"
-                        android:textSize="14sp"
-                        android:id="@+id/tvTotalAmt"/>
                 </TableRow>
             </TableLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

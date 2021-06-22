@@ -118,10 +118,11 @@
                 android:padding="16dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:text="@string/create_credit"
+                android:drawablePadding="@dimen/_4sdp"
+                android:text="@string/create_supplier"
                 android:textAlignment="textEnd"
                 android:textColor="@color/colorPrimary"
-                android:textSize="28sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:layout_width="match_parent"
@@ -133,11 +134,12 @@
                 android:padding="16dp"
                 android:id="@+id/btCreateDebt"
                 android:background="@drawable/orange_rounded_rectangle"
-                android:text="@string/create_debt"
+                android:text="@string/create_customer"
                 android:textColor="@color/colorPrimary"
-                android:textSize="28sp"
+                android:textSize="20sp"
                 android:fontFamily="@font/cormorantsc_semibold"
                 android:drawableStart="@drawable/debt_money"
+                android:drawablePadding="@dimen/_4sdp"
                 android:textAlignment="textEnd"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"/>

@@ -1,7 +1,6 @@
 package com.magda.mamasbiz.main.userInterface.fragments
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -143,8 +142,8 @@ class CreditPage4Fragment : Fragment() {
         creditDebtViewModel.fetchMetadata(getUserId())
         binding.apply {
             if (credit?.isNotEmpty() == true) {
-                val creditName = resources.getString(R.string.creditor_name)
-                val creditNumber = resources.getString(R.string.creditor_number)
+                val creditName = resources.getString(R.string.supplier_name)
+                val creditNumber = resources.getString(R.string.supplier_number)
                 tvName.text = creditName
                 tvNumber.text = creditNumber
                 type = Constants.CREDIT
@@ -442,7 +441,7 @@ class CreditPage4Fragment : Fragment() {
         binding.apply {
 
             tvDebtorName.text = debtorName
-            tvDebtorNumber.text = phoneNumber
+            tvCustomerNumber.text = phoneNumber
             tvDebtorStatus.text = status
             tvDebtorPaymentDate.text = paymentDate
 
@@ -472,14 +471,15 @@ class CreditPage4Fragment : Fragment() {
     private fun setProductViews() {
         binding.apply {
             purchasedProductTable.visibility = View.VISIBLE
-            tvDebtorTotalDebt.visibility = View.VISIBLE
-            tvTotalDebt.visibility = View.VISIBLE
+            tvCustomerTotalPaid.visibility = View.VISIBLE
+            tvTotalPaid.visibility = View.VISIBLE
             tvTotalBalance.visibility = View.VISIBLE
             tvDebtorTotalBalance.visibility = View.VISIBLE
-            tvTotalAmt.visibility = View.VISIBLE
-            tvDebtorTotalDebt.text = "KES: $totalPaid"
+            tvProductAmount.visibility = View.VISIBLE
+            tvTotalExactProductAmount.visibility = View.VISIBLE
+            tvCustomerTotalPaid.text = "KES: $totalPaid"
             tvDebtorTotalBalance.text = "KES: $totalBalance"
-            tvTotalAmt.text = "KES: $totalAmount"
+            tvTotalExactProductAmount.text = "KES: $totalAmount"
             toFillTable()
 
         }
@@ -489,18 +489,9 @@ class CreditPage4Fragment : Fragment() {
     private fun setRecyclerViewAndViews() {
         binding.apply {
             cattleBoughtTitle.visibility = View.VISIBLE
-            tvTotalExactCattleBalance.visibility = View.VISIBLE
-            tvTotalCattleBalance.visibility = View.VISIBLE
-            val totalCattleExactBalance = "Kes: ${
-                totalCattleBoughtAmount!!.toInt().minus(totalCattleBoughtPaid!!.toInt())
-            }"
-            tvTotalExactCattleBalance.text = totalCattleExactBalance
             tvTotalCattleAmount.visibility = View.VISIBLE
             tvTotalCattleExactAmount.visibility =View.VISIBLE
             tvTotalCattleExactAmount.text = "Kes: $totalCattleBoughtAmount"
-            tvTotalCattleDebt.visibility = View.VISIBLE
-            tvTotalExactCattleDebt.visibility = View.VISIBLE
-            tvTotalExactCattleDebt.text = "Kes: $totalCattleBoughtPaid"
             tvTotalCattleQty.visibility = View.VISIBLE
             tvTotalExactCattleQty.visibility = View.VISIBLE
             tvTotalExactCattleQty.text = totalCattleBoughtQty

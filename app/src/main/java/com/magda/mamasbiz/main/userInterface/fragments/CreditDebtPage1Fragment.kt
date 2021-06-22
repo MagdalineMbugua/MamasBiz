@@ -55,8 +55,8 @@ class CreditDebtPage1Fragment : Fragment() {
 
     private fun toAlterCreditWords(credit: String?, debt: String?) {
         if (credit != null && debt == null) {
-            val name = resources.getString(R.string.name_of_the_creditor)
-            val phoneNumber = resources.getString(R.string.phone_number_of_the_creditor_optional)
+            val name = resources.getString(R.string.name_of_the_supplier)
+            val phoneNumber = resources.getString(R.string.phone_number_of_the_supplier_optional)
             binding.apply {
                 tvName.text = name
                 tvPhone.text = phoneNumber

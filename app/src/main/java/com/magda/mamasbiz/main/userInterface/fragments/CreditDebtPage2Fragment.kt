@@ -291,7 +291,7 @@ class CreditDebtPage2Fragment : Fragment() {
             skinQty.isNotEmpty() || filletPrice.isNotEmpty() || filletQty.isNotEmpty()
         ) {
             total = binding.tvSum.text.toString()
-            if (total.isNotEmpty()) {
+            if (total.isNotEmpty()&& total != "0") {
                 amountPaid = binding.etAmountPaid.text.toString().trim()
                 if (amountPaid.isNotEmpty()) {
                     amountPaidCheck()
@@ -653,8 +653,8 @@ class CreditDebtPage2Fragment : Fragment() {
     }
 
     private fun statusCheck(amount: String, amountPaid: String) {
-
-            when (status) {
+        if(creditDebt!=null) status = creditDebt?.status!!
+        when (status) {
                 "not fully paid" -> {
                     if (amountPaid.toInt() == 0) {
                         Toast.makeText(
