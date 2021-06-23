@@ -291,7 +291,7 @@ class CreditDebtPage2Fragment : Fragment() {
             skinQty.isNotEmpty() || filletPrice.isNotEmpty() || filletQty.isNotEmpty()
         ) {
             total = binding.tvSum.text.toString()
-            if (total.isNotEmpty()&& total != "0") {
+            if (total.isNotEmpty() && total != "0") {
                 amountPaid = binding.etAmountPaid.text.toString().trim()
                 if (amountPaid.isNotEmpty()) {
                     amountPaidCheck()
@@ -317,19 +317,15 @@ class CreditDebtPage2Fragment : Fragment() {
     }
 
     private fun deleteMetadata() {
-        val productPaid = if (creditDebt?.productPaid!!.isNotEmpty()) {
-            creditDebt?.productPaid!!
-        } else "0"
-        val productBalance = if (creditDebt?.productBalance!!.isNotEmpty()) {
-            creditDebt?.productBalance!!
-        } else "0"
         val productAmt = if (creditDebt?.productAmount!!.isNotEmpty()) {
             creditDebt?.productAmount!!
         } else "0"
         if (creditDebt!!.type == "Credit") {
-            updatedPaid = metadata?.totalMoneySentPaid!!.minus(productPaid.toInt())
-            updatedBal = metadata?.totalMoneySentBalance!!.minus(productBalance.toInt())
-            updatedAmount = metadata?.totalMoneySentAmt!!.minus(productAmt.toInt())
+            updatedPaid = metadata?.totalMoneySentPaid!!.minus(creditDebt?.totalAllPaid!!.toInt())
+            updatedBal =
+                metadata?.totalMoneySentBalance!!.minus(creditDebt?.totalAllBalance!!.toInt())
+            updatedAmount =
+                metadata?.totalMoneySentAmt!!.minus(productAmt.toInt())
 
             val metadata = Metadata(
                 updatedPaid,
@@ -342,8 +338,8 @@ class CreditDebtPage2Fragment : Fragment() {
             creditDebtViewModel.addMetadata(metadata, creditDebt!!.userId!!)
         } else if (creditDebt!!.type == "Debt") {
             updatedAmount = metadata?.totalMoneyReceivedAmt!!.minus(productAmt.toInt())
-            updatedBal = metadata?.totalMoneyReceivedBalance!!.minus(productBalance.toInt())
-            updatedPaid = metadata?.totalMoneyReceivedPaid!!.minus(productPaid.toInt())
+            updatedBal = metadata?.totalMoneyReceivedBalance!!.minus(creditDebt?.totalAllBalance!!.toInt())
+            updatedPaid = metadata?.totalMoneyReceivedPaid!!.minus(creditDebt?.totalAllPaid!!.toInt())
             val metadata = Metadata(
                 metadata?.totalMoneySentPaid!!,
                 metadata?.totalMoneySentAmt!!,
@@ -538,13 +534,13 @@ class CreditDebtPage2Fragment : Fragment() {
     }
 
     private fun updateCreditDebt() {
+        val productAmt = if (creditDebt?.productAmount!!.isNotEmpty()) {
+            creditDebt?.productAmount!!
+        } else "0"
         val productPaid = if (creditDebt?.productPaid!!.isNotEmpty()) {
-            creditDebt?.productPaid!!
+            creditDebt?.productAmount!!
         } else "0"
         val productBalance = if (creditDebt?.productBalance!!.isNotEmpty()) {
-            creditDebt?.productBalance!!
-        } else "0"
-        val productAmt = if (creditDebt?.productAmount!!.isNotEmpty()) {
             creditDebt?.productAmount!!
         } else "0"
         val updatedTotalAmount =
@@ -568,7 +564,6 @@ class CreditDebtPage2Fragment : Fragment() {
             updatedTotalPaid.toString(),
             updatedTotalBalance.toString(),
             creditDebt?.productId,
-            creditDebt?.cattleBoughtId,
             amountPaid,
             balance,
             total,
@@ -576,7 +571,7 @@ class CreditDebtPage2Fragment : Fragment() {
             creditDebt?.cattleBoughtBalance,
             creditDebt?.cattleBoughtAmount,
             totalCattleBoughtQty,
-            creditDebt?.updatedId
+
         )
         Log.d(TAG, "updateCreditDebt: $amountPaid, $balance, $total")
         creditDebtViewModel.addCreditDebt(creditDebt)
@@ -653,34 +648,34 @@ class CreditDebtPage2Fragment : Fragment() {
     }
 
     private fun statusCheck(amount: String, amountPaid: String) {
-        if(creditDebt!=null) status = creditDebt?.status!!
+        if (creditDebt != null) status = creditDebt?.status!!
         when (status) {
-                "not fully paid" -> {
-                    if (amountPaid.toInt() == 0) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Enter the amount partially paid",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    } else toCheckNewOrUpdate()
-
-                }
-                "paid" -> {
-
-                    if (amountPaid.toInt() != amount.toInt()) {
-                        Toast.makeText(
-                            requireContext(),
-                            "The amount paid should be equal to the amount of the products",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }else toCheckNewOrUpdate()
-                }
-                else -> {
-                    toCheckNewOrUpdate()
-                }
+            "not fully paid" -> {
+                if (amountPaid.toInt() == 0) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Enter the amount partially paid",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                } else toCheckNewOrUpdate()
 
             }
+            "paid" -> {
+
+                if (amountPaid.toInt() != amount.toInt()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "The amount paid should be equal to the amount of the products",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else toCheckNewOrUpdate()
+            }
+            else -> {
+                toCheckNewOrUpdate()
+            }
+
+        }
 
     }
 

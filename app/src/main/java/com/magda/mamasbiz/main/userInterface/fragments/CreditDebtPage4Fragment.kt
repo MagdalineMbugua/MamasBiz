@@ -406,7 +406,6 @@ class CreditPage4Fragment : Fragment() {
                 totalAllPaid.toString(),
                 totalAllBalance.toString(),
                 products?.productId,
-                cattleBoughtId,
                 totalPaid,
                 totalBalance,
                 totalAmount,

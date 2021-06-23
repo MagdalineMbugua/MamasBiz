@@ -297,7 +297,7 @@ class DetailsActivity : AppCompatActivity() {
                 tvInfo.text = pageTitle
             }
             fabEditCattle.visibility = View.VISIBLE
-        } else{
+        } else {
             val pageTitle = resources.getString(R.string.details_of_the_customer)
             binding.tvInfo.text = pageTitle
             fabEditCattle.visibility = View.GONE
@@ -382,10 +382,10 @@ class DetailsActivity : AppCompatActivity() {
             findViewById(R.id.updateBottomSheetContainer)
         )
         val mTotalAmtPaid = bottomSheetView.findViewById<EditText>(R.id.etTotalAmtPaid)
-        val mTotalBalance = bottomSheetView.findViewById<TextView>(R.id.tvExactTotalBal)
+        val mTotalBalance = bottomSheetView.findViewById<TextView>(R.id.tvTotalBal)
         val mTotalAmt = bottomSheetView.findViewById<TextView>(R.id.tvTotalAmt)
         val mUpdatePayment = bottomSheetView.findViewById<Button>(R.id.btUpdate)
-        val totalBalance = creditDebt.totalAllBalance
+        val totalBalance = "Total Balance: Kes ${creditDebt.totalAllBalance}"
         val totalAmount = "Total Amount: Kes ${creditDebt.totalAllAmount}"
         mTotalAmt.text = totalAmount
         mTotalBalance.text = totalBalance
@@ -400,49 +400,33 @@ class DetailsActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 val text = s.toString()
-                val totalBal = if (text.isNotEmpty()) {
-                    creditDebt.totalAllBalance?.toInt()?.minus(text.toInt())
-                } else {
-                    creditDebt.totalAllBalance?.toInt()
-                }
-                mTotalBalance.text = totalBal.toString()
-                val currentTotalPaid = creditDebt.totalAllPaid?.toInt()?.plus(text.toInt())
-                if (totalBal?.plus(currentTotalPaid!!) != creditDebt.totalAllAmount?.toInt()) {
-                    Toast.makeText(
+                if (text.isNotEmpty()) {
+                    val paidAmt = text.toIntOrNull()
+                    if (paidAmt != null) {
+                        if (paidAmt > 0) {
+                            calculateBalance(paidAmt, mTotalBalance)
+                        } else Toast.makeText(
+                            this@DetailsActivity,
+                            "Total amount paid cannot be negative",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    } else Toast.makeText(
                         this@DetailsActivity,
-                        "You cannot pay more than the sold or purchased amount",
+                        "Add only Integers",
                         Toast.LENGTH_SHORT
-                    ).show()
+                    )
+                        .show()
                 }
+
             }
 
         })
         mUpdatePayment.setOnClickListener {
-            val newTotalBalance = mTotalBalance.text.toString()
-            newTotalAmountPaid = mTotalAmtPaid.text.toString()
-            val updatedTotalAmtPaid =
-                newTotalAmountPaid.toInt().plus(creditDebt.totalAllPaid!!.toInt())
-            val status = if (newTotalBalance == "0") {
-                "paid"
-            } else "not fully paid"
-            updatePayments = UpdatePayments(
-                creditDebt.creditDebtId,
-                creditDebtViewModel.getUpdatePaymentId(creditDebt),
-                newTotalAmountPaid,
-                DateCreated.getDateCreated(),
-                newTotalBalance,
-                creditDebt.userId
-            )
-            Log.d(TAG, "toUpdatePayment: $updatePayments")
-            checkIndividualBal(
-                newTotalAmountPaid,
-                updatedTotalAmtPaid.toString(),
-                newTotalBalance,
-                status
-            )
-
-
-
+            val updatedPaidAmt = mTotalAmtPaid.text.toString()
+            val updatedBalance = mTotalBalance.text.toString()
+            val updatedBalanceInteger = updatedBalance.filter { it.isDigit() }
+            validateUpdatedAmount(updatedPaidAmt, updatedBalanceInteger)
             bottomSheetDialog.dismissWithAnimation = true
             bottomSheetDialog.dismiss()
         }
@@ -450,23 +434,75 @@ class DetailsActivity : AppCompatActivity() {
         bottomSheetDialog.show()
     }
 
+    private fun validateUpdatedAmount(updatedPaidAmt: String, updatedBalance: String) {
+        newTotalAmountPaid = updatedPaidAmt
+        val updatedTotalAmtPaid =
+            updatedPaidAmt.toInt().plus(creditDebt.totalAllPaid!!.toInt())
+        when (updatedTotalAmtPaid.plus(updatedBalance.toInt())) {
+            creditDebt.totalAllAmount?.toInt() -> {
+                val status = if (updatedBalance == "0") {
+                    "paid"
+                } else "not fully paid"
+                updatePayments = UpdatePayments(
+                    creditDebt.creditDebtId,
+                    creditDebtViewModel.getUpdatePaymentId(creditDebt),
+                    updatedPaidAmt,
+                    DateCreated.getDateCreated(),
+                    updatedBalance,
+                    creditDebt.userId
+                )
+                Log.d(TAG, "toUpdatePayment: $updatePayments")
+                checkIndividualBal(
+                    updatedPaidAmt,
+                    updatedTotalAmtPaid.toString(),
+                    updatedBalance,
+                    status
+                )
+
+            }
+            else -> Toast.makeText(
+                this@DetailsActivity,
+                "The amount paid and balance does not total the amount. Try again.",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
+
+
+    }
+
+    private fun calculateBalance(paidAmt: Int, mTotalBalance: TextView) {
+        val totalBal = creditDebt.totalAllBalance?.toInt()?.minus(paidAmt)
+        if (totalBal != null) {
+            if (totalBal >= 0) {
+                val totalBalance = "Total Balance: Kes $totalBal"
+                mTotalBalance.text = totalBalance
+
+            } else Toast.makeText(
+                this@DetailsActivity,
+                "You cannot pay more than the sold or purchased amount",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+    }
+
+
     private fun checkIndividualBal(
         updatedIndividualTotalAmountPaid: String,
         newTotalAmountPaid: String,
         newTotalBalance: String,
         status: String
     ) {
-        val cattleBoughtPaid =
-            creditDebt.cattleBoughtPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
-        val cattleBoughtBal =
-            creditDebt.cattleBoughtBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
-        val productPaid =
-            creditDebt.productPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
-        val productBal =
-            creditDebt.productBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
+
+
         Log.d(TAG, "checkIndividualBal: ${cattleBoughtList?.size}, $products")
         Log.d(TAG, "checkIndividualBal: ${cattleBoughtList != null}, ${products != null}")
         if (cattleBoughtList != null && products == null) {
+            val cattleBoughtPaid =
+                creditDebt.cattleBoughtPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
+            val cattleBoughtBal =
+                creditDebt.cattleBoughtBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
             creditDebtViewModel.updateTotalMoney(
                 creditDebt.creditDebtId!!,
                 newTotalAmountPaid,
@@ -479,6 +515,10 @@ class DetailsActivity : AppCompatActivity() {
             )
 
         } else if (cattleBoughtList == null && products != null) {
+            val productPaid =
+                creditDebt.productPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
+            val productBal =
+                creditDebt.productBalance?.toInt()?.minus(updatedIndividualTotalAmountPaid.toInt())
             creditDebtViewModel.updateTotalMoney(
                 creditDebt.creditDebtId!!,
                 newTotalAmountPaid,

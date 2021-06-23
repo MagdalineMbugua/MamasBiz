@@ -523,7 +523,6 @@ class CreditDebtPageFragment : Fragment() {
             updatedTotalPaid.toString(),
             updatedTotalBalance.toString(),
             creditDebt?.productId,
-            creditDebt?.cattleBoughtId,
             creditDebt?.productPaid,
             creditDebt?.productBalance,
             creditDebt?.productAmount,
@@ -531,7 +530,7 @@ class CreditDebtPageFragment : Fragment() {
             totalCattleBoughtBal,
             totalCattleBoughtAmt,
             totalCattleBoughtQty,
-            creditDebt?.updatedId
+
         )
         creditDebtViewModel.addCreditDebt(creditDebt)
 

@@ -26,21 +26,20 @@ class CreditDebtRepository {
         metadataReference = database.collection(Constants.METADATA_REFERENCE)
     }
 
-    fun getCreditDebtDocument(creditDebtId: String, callback: (Results<CreditDebt>) -> Unit){
-        try {creditDebtReference.document(creditDebtId).get().addOnCompleteListener{ task ->
-            if (task.isComplete){
-                val creditDebt = task.result?.toObject(CreditDebt::class.java)
-                callback(Success(creditDebt!!))
-            }else callback(Error("Fetching this data was unsuccessful"))
-        }
+    fun getCreditDebtDocument(creditDebtId: String, callback: (Results<CreditDebt>) -> Unit) {
+        try {
+            creditDebtReference.document(creditDebtId).get().addOnCompleteListener { task ->
+                if (task.isComplete) {
+                    val creditDebt = task.result?.toObject(CreditDebt::class.java)
+                    callback(Success(creditDebt!!))
+                } else callback(Error("Fetching this data was unsuccessful"))
+            }
 
-        } catch (e:Exception){
+        } catch (e: Exception) {
             callback(Error("Fetching this data was unsuccessful ${e.message}"))
         }
 
     }
-
-
 
 
     fun addCreditDebt(creditDebt: CreditDebt, callback: (Results<Boolean>) -> Unit) {
@@ -67,13 +66,12 @@ class CreditDebtRepository {
                         task.result?.let {
                             val updateList = it.documents
                                 .map { snapshot -> snapshot.toObject(CreditDebt::class.java) }
-                                .sortedByDescending {creditDebt -> creditDebt?.dateCreated  }
+                                .sortedByDescending { creditDebt -> creditDebt?.dateCreated }
                                 .filterNotNull()
 
                             callback(Success(updateList.toMutableList()))
 
-                          }
-
+                        }
 
 
                     } else {
@@ -110,7 +108,8 @@ class CreditDebtRepository {
             callback(Error("Deleting was not successful ${e.message}"))
         }
     }
-    fun deleteCattleBoughtList (creditDebtId: String,callback: (Results<Boolean>) -> Unit) {
+
+    fun deleteCattleBoughtList(creditDebtId: String, callback: (Results<Boolean>) -> Unit) {
         try {
             val cattleBoughtReference = database.collection(Constants.CREDIT_DEBT_REFERENCE)
                 .document(creditDebtId)
@@ -126,7 +125,6 @@ class CreditDebtRepository {
             callback(Error("Deleting was not successful ${e.message}"))
         }
     }
-
 
 
     fun addUpdatePayments(
@@ -148,6 +146,7 @@ class CreditDebtRepository {
             callback(Error("Updating Payments Failed ${e.message}"))
         }
     }
+
     fun addCattleBought(
         cattleBought: CattleBought,
         creditDebtId: String,
@@ -178,16 +177,19 @@ class CreditDebtRepository {
         balance: String,
         status: String,
         productPaid: String,
-        productBal : String,
+        productBal: String,
         cattleBoughtPaid: String,
-        cattleBoughtBal: String,
+        cattleBoughtBalance: String,
         callback: (Results<Boolean>) -> Unit
     ) {
         val map: MutableMap<String, String> = mutableMapOf(
-            Constants.TOTAL_ALL_PAID to amountPaid, Constants.TOTAL_ALL_BALANCE to balance,
-            Constants.STATUS to status, Constants.PRODUCT_PAID to productPaid,
-            Constants.PRODUCT_BALANCE to productBal, Constants.CATTLE_BOUGHT_BALANCE to cattleBoughtBal,
-            Constants.CATTLE_BOUGHT_PAID to cattleBoughtPaid
+            Constants.TOTAL_ALL_PAID to amountPaid,
+            Constants.TOTAL_ALL_BALANCE to balance,
+            Constants.STATUS to status,
+            Constants.PRODUCT_PAID to productPaid,
+            Constants.PRODUCT_BALANCE to productBal,
+            Constants.CATTLE_BOUGHT_PAID to cattleBoughtPaid,
+            Constants.CATTLE_BOUGHT_BALANCE to cattleBoughtBalance
         )
         try {
             creditDebtReference.document(creditDebtId).update(map as Map<String, Any>)
@@ -200,22 +202,25 @@ class CreditDebtRepository {
             callback(Error("Updating Payment Failed ${e.message}"))
         }
     }
+
     fun updateMetadata(
         creditDebtType: String,
-       userId: String,
+        userId: String,
         amountPaid: Int,
         balance: Int,
-        amount:Int,
+        amount: Int,
         callback: (Results<Boolean>) -> Unit
     ) {
-        val map: MutableMap<String, Int> = if(creditDebtType == Constants.CREDIT){
+        val map: MutableMap<String, Int> = if (creditDebtType == Constants.CREDIT) {
             mutableMapOf(
-                Constants.TOTAL_MONEY_SENT_PAID to amountPaid, Constants.TOTAL_MONEY_SENT_BAL to balance,
+                Constants.TOTAL_MONEY_SENT_PAID to amountPaid,
+                Constants.TOTAL_MONEY_SENT_BAL to balance,
                 Constants.TOTAL_MONEY_SENT_AMOUNT to amount
             )
-        } else{
+        } else {
             mutableMapOf(
-                Constants.TOTAL_MONEY_RECEIVED_PAID to amountPaid, Constants.TOTAL_MONEY_RECEIVED_BAL to balance,
+                Constants.TOTAL_MONEY_RECEIVED_PAID to amountPaid,
+                Constants.TOTAL_MONEY_RECEIVED_BAL to balance,
                 Constants.TOTAL_MONEY_RECEIVED_AMOUNT to amount
             )
         }
@@ -236,6 +241,7 @@ class CreditDebtRepository {
         return creditDebtReference.document(creditDebt.creditDebtId!!)
             .collection(Constants.UPDATE_REFERENCE).document().id
     }
+
     fun getCattleBoughtId(creditDebtId: String): String {
         return creditDebtReference.document(creditDebtId)
             .collection(Constants.CATTLE_BOUGHT_REFERENCE).document().id
@@ -261,12 +267,14 @@ class CreditDebtRepository {
         }
 
     }
+
     fun getCattleBoughtList(
         creditDebtId: String,
         callback: (Results<ArrayList<CattleBought>>) -> Unit
     ) {
         try {
-            creditDebtReference.document(creditDebtId).collection(Constants.CATTLE_BOUGHT_REFERENCE).get()
+            creditDebtReference.document(creditDebtId).collection(Constants.CATTLE_BOUGHT_REFERENCE)
+                .get()
                 .addOnSuccessListener { queryDocumentSnapshots ->
                     for (snapshot: DocumentSnapshot in queryDocumentSnapshots) {
                         val cattleBought = snapshot.toObject(CattleBought::class.java)

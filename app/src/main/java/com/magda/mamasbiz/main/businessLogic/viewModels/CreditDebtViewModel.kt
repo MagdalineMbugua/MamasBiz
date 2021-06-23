@@ -124,7 +124,8 @@ class CreditDebtViewModel : ViewModel() {
 
 
     }
-    fun getCreditDebtDocument (creditDebtId: String) {
+
+    fun getCreditDebtDocument(creditDebtId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             fetchCDDocumentLiveData.postValue(NetworkResponse.loading())
             creditDebtRepository.getCreditDebtDocument(creditDebtId) {
@@ -212,13 +213,21 @@ class CreditDebtViewModel : ViewModel() {
         balance: String,
         status: String,
         productPaid: String,
-        productBal : String,
+        productBal: String,
         cattleBoughtPaid: String,
         cattleBoughtBal: String,
     ) {
         updateTotalAmountLiveData.value = NetworkResponse.loading()
-        creditDebtRepository.updateTotalMoney(creditDebtId, totalAmountPaid, balance, status, productPaid, productBal,
-        cattleBoughtPaid,cattleBoughtBal) {
+        creditDebtRepository.updateTotalMoney(
+            creditDebtId,
+            totalAmountPaid,
+            balance,
+            status,
+            productPaid,
+            productBal,
+            cattleBoughtPaid,
+            cattleBoughtBal
+        ) {
             when (it) {
                 is Results.Success -> {
                     updateTotalAmountLiveData.value = NetworkResponse.success(true, null)
@@ -258,8 +267,12 @@ class CreditDebtViewModel : ViewModel() {
             creditDebtRepository.getCattleBoughtList(creditDebtId) {
                 when (it) {
                     is Results.Success -> {
-                        fetchCattleBoughtLiveData.postValue(NetworkResponse.success(true,
-                            it.data))
+                        fetchCattleBoughtLiveData.postValue(
+                            NetworkResponse.success(
+                                true,
+                                it.data
+                            )
+                        )
                     }
                     is Results.Error -> {
                         fetchCattleBoughtLiveData.postValue(NetworkResponse.error(it.error))
@@ -269,20 +282,20 @@ class CreditDebtViewModel : ViewModel() {
         }
     }
 
-    fun deleteCattleBought(creditDebtId: String){
-    viewModelScope.launch (Dispatchers.IO) {
-        deleteCattleBoughtLiveData.postValue(NetworkResponse.loading())
-        creditDebtRepository.deleteCattleBoughtList(creditDebtId){
-            when (it) {
-                is Results.Success -> {
-                    deleteCattleBoughtLiveData.postValue(NetworkResponse.success(true, it.data))
-                }
-                is Results.Error -> {
-                    deleteCattleBoughtLiveData.postValue(NetworkResponse.error(it.error))
+    fun deleteCattleBought(creditDebtId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteCattleBoughtLiveData.postValue(NetworkResponse.loading())
+            creditDebtRepository.deleteCattleBoughtList(creditDebtId) {
+                when (it) {
+                    is Results.Success -> {
+                        deleteCattleBoughtLiveData.postValue(NetworkResponse.success(true, it.data))
+                    }
+                    is Results.Error -> {
+                        deleteCattleBoughtLiveData.postValue(NetworkResponse.error(it.error))
+                    }
                 }
             }
         }
-    }
 
     }
 
@@ -318,10 +331,22 @@ class CreditDebtViewModel : ViewModel() {
         }
     }
 
-    fun updateMetadata( creditDebtType:String,userId: String, amountPaid: Int, balance: Int, amount:Int) {
+    fun updateMetadata(
+        creditDebtType: String,
+        userId: String,
+        amountPaid: Int,
+        balance: Int,
+        amount: Int
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             updateMetadataLiveData.postValue(NetworkResponse.loading())
-            creditDebtRepository.updateMetadata( creditDebtType,userId, amountPaid,balance,amount) {
+            creditDebtRepository.updateMetadata(
+                creditDebtType,
+                userId,
+                amountPaid,
+                balance,
+                amount
+            ) {
                 when (it) {
                     is Results.Success -> {
                         updateMetadataLiveData.postValue(NetworkResponse.success(true, null))

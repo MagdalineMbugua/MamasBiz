@@ -18,14 +18,11 @@ data class CreditDebt(
     var totalAllPaid: String? = null,
     var totalAllBalance: String? = null,
     var productId: String? = null,
-    var cattleBoughtId: String? = null,
+    var productAmount: String? = null,
     var productPaid: String? = null,
     var productBalance: String? = null,
-    var productAmount: String? = null,
+    var cattleBoughtAmount: String? = null,
     var cattleBoughtPaid: String? = null,
     var cattleBoughtBalance: String? = null,
-    var cattleBoughtAmount: String? = null,
-    var cattleBoughtQty: String? = null,
-    var updatedId: String? = null
-
-) : Parcelable {}
+    var cattleBoughtQty: String? = null
+) : Parcelable
