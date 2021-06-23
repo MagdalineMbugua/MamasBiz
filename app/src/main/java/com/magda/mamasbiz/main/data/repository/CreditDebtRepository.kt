@@ -12,6 +12,8 @@ import com.magda.mamasbiz.main.utils.Results
 import com.magda.mamasbiz.main.utils.Results.Error
 import com.magda.mamasbiz.main.utils.Results.Success
 import java.lang.Exception
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class CreditDebtRepository {
     private var creditDebtReference: CollectionReference
@@ -64,9 +66,11 @@ class CreditDebtRepository {
                     if (task.isSuccessful) {
                         Log.d(TAG, "getCreditDebt: is Successful ${task.result?.size()}")
                         task.result?.let {
+                            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm:ss")
                             val updateList = it.documents
                                 .map { snapshot -> snapshot.toObject(CreditDebt::class.java) }
-                                .sortedByDescending { creditDebt -> creditDebt?.dateCreated }
+                                .sortedByDescending { creditDebt ->
+                                    LocalDate.parse(creditDebt?.dateCreated, formatter)}
                                 .filterNotNull()
 
                             callback(Success(updateList.toMutableList()))

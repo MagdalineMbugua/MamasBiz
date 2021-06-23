@@ -320,10 +320,16 @@ class CreditDebtPage2Fragment : Fragment() {
         val productAmt = if (creditDebt?.productAmount!!.isNotEmpty()) {
             creditDebt?.productAmount!!
         } else "0"
+        val productPaid = if (creditDebt?.productPaid!!.isNotEmpty()) {
+            creditDebt?.productPaid!!
+        } else "0"
+        val productBalance = if (creditDebt?.productBalance!!.isNotEmpty()) {
+            creditDebt?.productBalance!!
+        } else "0"
         if (creditDebt!!.type == "Credit") {
-            updatedPaid = metadata?.totalMoneySentPaid!!.minus(creditDebt?.totalAllPaid!!.toInt())
+            updatedPaid = metadata?.totalMoneySentPaid!!.minus(productPaid.toInt())
             updatedBal =
-                metadata?.totalMoneySentBalance!!.minus(creditDebt?.totalAllBalance!!.toInt())
+                metadata?.totalMoneySentBalance!!.minus(productBalance.toInt())
             updatedAmount =
                 metadata?.totalMoneySentAmt!!.minus(productAmt.toInt())
 
