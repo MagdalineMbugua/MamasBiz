@@ -653,7 +653,7 @@ class CreditDebtPageFragment : Fragment() {
         cattleBoughtQty: String,
         cattleBoughtAmt: String
     ) {
-
+        if(creditDebt!=null) status = creditDebt?.status!!
         when (status) {
             "not fully paid" -> {
                 if (amountPaid.toInt() == 0) {

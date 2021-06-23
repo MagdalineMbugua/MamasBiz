@@ -28,6 +28,7 @@ import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.DateCreated
 import com.magda.mamasbiz.main.utils.SessionManager
 import com.magda.mamasbiz.main.utils.Status
+import kotlinx.android.synthetic.main.fragment_credit_debt_page2.*
 import java.util.*
 
 
@@ -36,30 +37,30 @@ class CreditPage4Fragment : Fragment() {
     private val _binding get() = binding!!
     private lateinit var paymentDate: String
     private var products: Products? = null
-    private lateinit var  cattleBoughtAdapter: CattleBoughtAdapter
+    private lateinit var cattleBoughtAdapter: CattleBoughtAdapter
     private lateinit var debtorName: String
     private lateinit var phoneNumber: String
     private lateinit var status: String
-    private var totalAmount: String? =""
+    private var totalAmount: String? = ""
     private lateinit var creditDebtViewModel: CreditDebtViewModel
     private lateinit var productViewModel: ProductViewModel
     private var cattleBoughtList: ArrayList<CattleBought>? = null
     private lateinit var type: String
     private var credit: String? = ""
     private var debt: String? = ""
-    private var totalPaid: String? =""
-    private var totalBalance: String? =""
+    private var totalPaid: String? = ""
+    private var totalBalance: String? = ""
     private lateinit var metadata: Metadata
     private lateinit var creditDebt: CreditDebt
     private lateinit var creditDebtId: String
-    private var cattleBoughtId: String? =""
+    private var cattleBoughtId: String? = ""
     private var totalCattleBoughtAmount: String? = "0"
-    private var totalCattleBoughtQty: String? ="0"
-    private var totalCattleBoughtPaid: String? ="0"
+    private var totalCattleBoughtQty: String? = "0"
+    private var totalCattleBoughtPaid: String? = "0"
     private var totalAllPaid: Int = 0
-    private  var totalAllAmount: Int = 0
-    private var totalAllBalance: Int =0
-    private  val TAG ="CreditDebtPage4Fragment"
+    private var totalAllAmount: Int = 0
+    private var totalAllBalance: Int = 0
+    private val TAG = "CreditDebtPage4Fragment"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +83,8 @@ class CreditPage4Fragment : Fragment() {
         }
         requireArguments().getParcelableArrayList<CattleBought>(Constants.CATTLE_BOUGHT_LIST)
             ?.let { cattleBoughtList ->
-                this.cattleBoughtList = cattleBoughtList}
+                this.cattleBoughtList = cattleBoughtList
+            }
         Log.d(TAG, "getExtraArgument: ${cattleBoughtList?.size}")
         arguments?.getString(Constants.DEBTOR_STATUS)?.let { status ->
             this.status = status
@@ -131,8 +133,6 @@ class CreditPage4Fragment : Fragment() {
         binding = FragmentCreditDebtPage4Binding.inflate(inflater)
 
         cattleBoughtAdapter = CattleBoughtAdapter(requireContext())
-
-
 
 
         //Setting text to the text views
@@ -295,7 +295,7 @@ class CreditPage4Fragment : Fragment() {
     }
 
     private fun toAddCattleBought() {
-        if (cattleBoughtList!=null) {
+        if (cattleBoughtList != null) {
             for (cattleBought: CattleBought in cattleBoughtList!!) {
                 val updatedCattleBought = CattleBought(
                     creditDebtId = null,
@@ -314,7 +314,7 @@ class CreditPage4Fragment : Fragment() {
     }
 
     private fun toUpdateProductData() {
-        if(products!=null) productViewModel.addProducts(products!!)
+        if (products != null) productViewModel.addProducts(products!!)
     }
 
 
@@ -359,20 +359,21 @@ class CreditPage4Fragment : Fragment() {
 
     private fun confirmTheAmount() {
         when {
-            (cattleBoughtList!=null && products==null) -> {
+            (cattleBoughtList != null && products == null) -> {
                 totalAllPaid = totalCattleBoughtPaid!!.toInt()
                 totalAllAmount = totalCattleBoughtAmount!!.toInt()
-                totalAllBalance = totalCattleBoughtAmount!!.toInt().minus(totalCattleBoughtPaid!!.toInt())
+                totalAllBalance =
+                    totalCattleBoughtAmount!!.toInt().minus(totalCattleBoughtPaid!!.toInt())
             }
-            (products != null && cattleBoughtList==null) -> {
+            (products != null && cattleBoughtList == null) -> {
                 totalAllPaid = this.totalPaid!!.toInt()
                 totalAllAmount = this.totalAmount!!.toInt()
                 totalAllBalance = this.totalBalance!!.toInt()
             }
-            ((cattleBoughtList!=null) && (products != null)) -> {
+            ((cattleBoughtList != null) && (products != null)) -> {
                 totalAllPaid = totalCattleBoughtPaid!!.toInt().plus(this.totalPaid!!.toInt())
                 totalAllAmount = totalCattleBoughtAmount!!.toInt().plus(this.totalAmount!!.toInt())
-                val totalPartBalance =(totalCattleBoughtAmount!!.toInt()
+                val totalPartBalance = (totalCattleBoughtAmount!!.toInt()
                     .minus(totalCattleBoughtPaid!!.toInt()))
                 totalAllBalance = totalPartBalance.plus(this.totalBalance!!.toInt())
             }
@@ -386,9 +387,11 @@ class CreditPage4Fragment : Fragment() {
         Log.d(TAG, "toSubmitData: data")
         val dateCreated = DateCreated.getDateCreated()
         creditDebtId = creditDebtViewModel.getCreditDebtId()
-        if(cattleBoughtList!=null) cattleBoughtId =  creditDebtViewModel.getCattleBoughtId(creditDebtId)
+        if (cattleBoughtList != null) cattleBoughtId =
+            creditDebtViewModel.getCattleBoughtId(creditDebtId)
         val userId = getUserId()
-        val totalCattleBoughtBal = totalCattleBoughtAmount!!.toInt().minus(totalCattleBoughtPaid!!.toInt()).toString()
+        val totalCattleBoughtBal =
+            totalCattleBoughtAmount!!.toInt().minus(totalCattleBoughtPaid!!.toInt()).toString()
         creditDebt =
             CreditDebt(
                 creditDebtId,
@@ -433,41 +436,70 @@ class CreditPage4Fragment : Fragment() {
     //Navigating back on fragment
     private fun toPreviousPage() {
         val navController: NavController = Navigation.findNavController(binding.root)
-        navController.navigate(R.id.action_creditPage4Fragment_to_creditPage3Fragment)
+        val arg = Bundle()
+        if (products != null) arg.putParcelable(Constants.PRODUCTS_BOUGHT, products)
+        arg.putString(Constants.DEBTOR_NAME, debtorName)
+        arg.putString(Constants.DEBTOR_NUMBER, phoneNumber)
+        arg.putString(Constants.DEBTOR_STATUS, status)
+        arg.putString(Constants.BALANCE, totalBalance)
+        arg.putString(Constants.TOTAL_PAID, totalPaid)
+        arg.putString(Constants.TOTAL_AMOUNT, totalAmount)
+        if (credit != null) {
+            arg.putString(Constants.CREDIT, credit)
+        } else if (debt != null) {
+            arg.putString(Constants.DEBT, debt)
+        }
+        if (cattleBoughtList != null) {
+            arg.putParcelableArrayList(Constants.CATTLE_BOUGHT_LIST, cattleBoughtList)
+            arg.putString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT, totalCattleBoughtAmount)
+            arg.putString(Constants.TOTAL_CATTLE_BOUGHT_PAID, totalCattleBoughtPaid)
+            arg.putString(Constants.TOTAL_CATTLE_BOUGHT_QTY, totalCattleBoughtQty)
+        }
+        navController.navigate(R.id.action_creditPage4Fragment_to_creditPage3Fragment, arg)
     }
 
     @SuppressLint("SetTextI18n")
     private fun initViews() {
         binding.apply {
-            val totalAmount =totalAmount!!.toInt().plus(totalCattleBoughtAmount!!.toInt())
-            val totalPaid =  totalPaid?.toInt()?.plus(totalCattleBoughtPaid!!.toInt())
-            val totalBal = totalAmount.minus(totalPaid!!)
+            val totalAmount = if (products != null && cattleBoughtList == null) {
+                totalAmount?.toInt()
+            } else if (cattleBoughtList != null && products == null) {
+                totalCattleBoughtAmount?.toInt()
+            } else totalAmount!!.toInt().plus(totalCattleBoughtAmount!!.toInt())
+
+            val totalPaid = if (products != null && cattleBoughtList == null) {
+                totalPaid?.toInt()
+            } else if (cattleBoughtList != null && products == null) {
+                totalCattleBoughtPaid?.toInt()
+            } else totalPaid?.toInt()?.plus(totalCattleBoughtPaid!!.toInt())
+
+            val totalBal = totalAmount?.minus(totalPaid!!)
             tvDebtorName.text = debtorName
             tvCustomerNumber.text = phoneNumber
             tvDebtorStatus.text = status
             tvDebtorPaymentDate.text = paymentDate
             tvCustomerTotalPaid.text = "Kes: $totalPaid"
-            tvDebtorTotalBalance.text= "Kes: $totalBal"
-            tvDebtorTotalAllAMount.text ="Kes: $totalAmount"
+            tvDebtorTotalBalance.text = "Kes: $totalBal"
+            tvDebtorTotalAllAMount.text = "Kes: $totalAmount"
 
+            checkViews()
+        }
+    }
 
+    private fun checkViews() {
+        when {
+            (cattleBoughtList != null && products == null) -> {
 
-
-            when {
-                (cattleBoughtList!=null&& products==null) -> {
-
-                    setRecyclerViewAndViews()
-                }
-                (products != null && cattleBoughtList==null) -> {
-                    setProductViews()
-                }
-                ((cattleBoughtList!=null) && (products != null)) -> {
-                    setProductViews()
-                    setRecyclerViewAndViews()
-
-                }
+                setRecyclerViewAndViews()
             }
+            (products != null && cattleBoughtList == null) -> {
+                setProductViews()
+            }
+            ((cattleBoughtList != null) && (products != null)) -> {
+                setProductViews()
+                setRecyclerViewAndViews()
 
+            }
         }
     }
 
@@ -488,7 +520,7 @@ class CreditPage4Fragment : Fragment() {
         binding.apply {
             cattleBoughtTitle.visibility = View.VISIBLE
             tvTotalCattleAmount.visibility = View.VISIBLE
-            tvTotalCattleExactAmount.visibility =View.VISIBLE
+            tvTotalCattleExactAmount.visibility = View.VISIBLE
             tvTotalCattleExactAmount.text = "Kes: $totalCattleBoughtAmount"
             tvTotalCattleQty.visibility = View.VISIBLE
             tvTotalExactCattleQty.visibility = View.VISIBLE
