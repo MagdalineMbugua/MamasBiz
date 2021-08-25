@@ -26,7 +26,6 @@ import com.magda.mamasbiz.main.utils.ConnectionLiveData
 class OtpActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOtpBinding
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val TAG = OtpActivity::class.simpleName
     private lateinit var verificationId: String
     private var firstName: String? = ""
     private var lastName: String? = ""
@@ -45,10 +44,8 @@ class OtpActivity : AppCompatActivity() {
         binding = ActivityOtpBinding.inflate(layoutInflater)
         setContentView(binding.root)
         connectionLiveData= ConnectionLiveData(this)
-        Log.d(TAG, "onCreate: $connectionLiveData")
         connectionLiveData.observe(this){
             hasInternet = it
-            Log.d(TAG, "onCreate: $hasInternet")
             if(!hasInternet){
                 binding.btConnectivity.visibility = View.VISIBLE
 
@@ -71,7 +68,6 @@ class OtpActivity : AppCompatActivity() {
         password = intent.getStringExtra(Constants.PASSWORD)
         isLoggedIn = intent.getBooleanExtra(Constants.IS_LOGGED_IN,false)
         dateCreated = intent.getStringExtra(Constants.DATE_CREATED)
-        Log.d(TAG, "onCreate: $phoneNumber")
 
         val infoText = "One time pin will be sent to +254$phoneNumber within 60 seconds. Standard SMS rates apply."
         binding.tvInfo.text = infoText
@@ -170,12 +166,12 @@ class OtpActivity : AppCompatActivity() {
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             val code = credential.smsCode
             if (code!=null) {
+               signInWithPhoneAuthCredential(credential)
                 Toast.makeText(this@OtpActivity, "Verification completed", Toast.LENGTH_SHORT)
                     .show()
-                Log.d(TAG, "onVerificationCompleted: $code")
-                signInWithPhoneAuthCredential(credential)
 
-            } else Log.d(TAG, "onVerificationCompleted: code is null")
+            } else  Toast.makeText(this@OtpActivity, "Fill in the OTP", Toast.LENGTH_SHORT)
+                .show()
 
         }
 

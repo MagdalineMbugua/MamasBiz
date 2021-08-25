@@ -11,7 +11,6 @@ import com.magda.mamasbiz.main.userInterface.fragments.CreditDebtPageFragment
 import com.magda.mamasbiz.main.utils.Constants
 
 class EditCattleActivity : AppCompatActivity() {
-    private val TAG = "EditProductActivity"
     private lateinit var binding: ActivityEditCattleBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,9 +19,6 @@ class EditCattleActivity : AppCompatActivity() {
 
         //get intent extra from details activity
         val creditDebt =intent.getParcelableExtra<CreditDebt>(Constants.CREDIT_DEBT)
-        Log.d(TAG, "onCreate: $creditDebt")
-
-
         // send arguments to the fragment
         if(creditDebt!=null){
             val fragment = CreditDebtPageFragment.newInstance(creditDebt)

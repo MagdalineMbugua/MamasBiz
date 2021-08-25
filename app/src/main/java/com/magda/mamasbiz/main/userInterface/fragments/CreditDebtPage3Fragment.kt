@@ -1,7 +1,6 @@
 package com.magda.mamasbiz.main.userInterface.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +28,6 @@ class CreditPage3Fragment : Fragment() {
     private var credit: String? = ""
     private var debt: String? = ""
     private val _binding get() = binding!!
-    private val TAG = "CreditDebtPage3Fragment"
     private var cattleBoughtList: ArrayList<CattleBought>? = null
     private lateinit var totalCattleBoughtAmount: String
     private lateinit var totalCattleBoughtQty: String
@@ -76,7 +74,6 @@ class CreditPage3Fragment : Fragment() {
             ?.let { cattleBoughtList ->
                 this.cattleBoughtList = cattleBoughtList
             }
-        Log.d(TAG, "getExtraArguments: ${cattleBoughtList?.size}")
         requireArguments().getString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT)?.let { totalCattleBoughtAmount ->
             this.totalCattleBoughtAmount = totalCattleBoughtAmount
         }
@@ -120,7 +117,6 @@ class CreditPage3Fragment : Fragment() {
     }
 
     private fun toNextPage() {
-        Log.d(TAG, "toNextPage: ${cattleBoughtList?.size}")
         val args = Bundle()
         val navController = Navigation.findNavController(binding.root)
         if (paymentDate.isNotEmpty()) {

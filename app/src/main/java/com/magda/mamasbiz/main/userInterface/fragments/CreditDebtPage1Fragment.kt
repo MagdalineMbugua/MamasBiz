@@ -1,9 +1,7 @@
 package com.magda.mamasbiz.main.userInterface.fragments
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -121,10 +119,6 @@ class CreditDebtPage1Fragment : Fragment() {
             arg.putString(Constants.DEBT, debt)
             navController.navigate(R.id.action_creditPage1Fragment_to_creditPage2Fragment, arg)
         }
-        Log.d(TAG, "toTheNextPage: $name $phoneNumber $status")
-
-
-
     }
 
 

@@ -43,8 +43,6 @@ class CreditDebtPageFragment : Fragment() {
     private lateinit var totalCattleBoughtBal: String
     private var isMetadataUpdated: Boolean = false
 
-    private val TAG = "CreditDebtPageFragment"
-
     companion object {
         //This new instance allows the fragment activity to share the extras from the Details activity
         fun newInstance(creditDebt: CreditDebt) = CreditDebtPageFragment().apply {
@@ -107,9 +105,7 @@ class CreditDebtPageFragment : Fragment() {
                     binding.progressbar.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
-                    Log.d(TAG, "addMetadataLiveData: added")
-
-
+                    //Method successful
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
@@ -225,7 +221,6 @@ class CreditDebtPageFragment : Fragment() {
     }
 
     private fun addMetadata() {
-        Log.d(TAG, "addMetadata: $isMetadataUpdated")
         if (isMetadataUpdated) {
             val metadata = Metadata(
                 updatedTotalMoneySentPaid.plus(cattleBoughtAmtPaid.toInt()),
@@ -241,12 +236,6 @@ class CreditDebtPageFragment : Fragment() {
                 metadata.totalMoneySentPaid,
                 metadata.totalMoneySentBalance,
                 metadata.totalMoneySentAmt
-            )
-            Log.d(
-                TAG,
-                "addMetadata: ${updatedTotalMoneySentPaid.plus(cattleBoughtAmtPaid.toInt())}paid, ${
-                    updatedTotalMoneySentAmt.plus(totalCattleBoughtAmt.toInt())
-                }amt,${updatedTotalMoneySentBal.plus(totalCattleBoughtBal.toInt())} bal"
             )
 
         }
@@ -341,8 +330,6 @@ class CreditDebtPageFragment : Fragment() {
             cattleBoughtQty,
             cattleBoughtAmt
         )
-        Log.d(TAG, "addView: $cattleList")
-        Log.d(TAG, "addView: ${cattleList.size}")
         cattleTableLayout.onAmountChangeListener {
             calculateTotals()
         }
@@ -357,12 +344,10 @@ class CreditDebtPageFragment : Fragment() {
     }
 
     private fun updateTitles() {
-        Log.d(TAG, "updateTitles: ${binding.cattleLinearLayout.childCount}")
         if (binding.cattleLinearLayout.childCount < 1) {
             return
         }
         for (i in 0..binding.cattleLinearLayout.childCount) {
-            Log.d(TAG, "updateTitles: $i")
             val table = binding.cattleLinearLayout.getChildAt(i) as? CattleTableLayout
             table?.setTableTitle(i + 1)
 
@@ -396,14 +381,11 @@ class CreditDebtPageFragment : Fragment() {
     }
 
     private fun getTexts() {
-        Log.d(TAG, "getTexts Counts: ${binding.cattleLinearLayout.childCount}")
         if (binding.cattleLinearLayout.childCount > 0) {
             for (i in 0 until binding.cattleLinearLayout.childCount) {
                 val cattleTableLayout =
                     binding.cattleLinearLayout.getChildAt(i) as? CattleTableLayout
-                Log.d(TAG, "getTexts: $cattleTableLayout")
                 checkAllLayoutIfFilled(cattleTableLayout)
-                Log.d(TAG, "getTexts: checked layouts")
             }
             if (creditDebt != null) updateCattleBought()
         }
@@ -474,7 +456,6 @@ class CreditDebtPageFragment : Fragment() {
     ) {
         val arg = setArguments()
         arg.putParcelableArrayList(Constants.CATTLE_BOUGHT_LIST, cattleList)
-        Log.d(TAG, "toTheNextPage: ${cattleList.size}")
         arg.putString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT, totalCattleBoughtAmt)
         arg.putString(Constants.TOTAL_CATTLE_BOUGHT_PAID, cattleBoughtAmtPaid)
         arg.putString(Constants.TOTAL_CATTLE_BOUGHT_QTY, totalCattleBoughtQty)
@@ -537,18 +518,14 @@ class CreditDebtPageFragment : Fragment() {
     }
 
     private fun updateCattleBought() {
-        Log.d(TAG, "updateCattleBought: list is ${cattleList.size}")
         if (cattleList.size > 0) {
             for (i in 0 until cattleList.size) {
                 val updatedCattleBought = cattleList[i]
-                Log.d(TAG, "updateCattleBought: $updatedCattleBought")
                 creditDebtViewModel.addCattleBought(
                     creditDebt!!.creditDebtId!!,
                     updatedCattleBought
                 )
             }
-
-
         }
     }
 
@@ -576,16 +553,13 @@ class CreditDebtPageFragment : Fragment() {
     }
 
     private fun checkAllLayoutIfFilled(cattleTableLayout: CattleTableLayout?) {
-        Log.d(TAG, "checkAllLayoutIfFilled: starts the check $cattleTableLayout")
         val cattleDetails = arrayListOf<String>()
         val cattleBoughtType = cattleTableLayout?.tvCattleType?.text.toString()
         val cattleBoughtPrice = cattleTableLayout?.etPrice?.text.toString()
         val cattleBoughtQty = cattleTableLayout?.etQty?.text.toString()
         val cattleBoughtAmt = cattleTableLayout?.tvCattleAmount?.text.toString()
-        Log.d(TAG, "checkAllLayoutIfFilled: $cattleBoughtPrice  and $cattleBoughtQty")
         cattleDetails.add(cattleBoughtPrice)
         cattleDetails.add(cattleBoughtQty)
-        Log.d(TAG, "checkAllLayoutIfFilled: ${cattleDetails.size}")
         if (cattleDetails.size < 2) {
             Toast.makeText(
                 requireContext(),
@@ -594,8 +568,6 @@ class CreditDebtPageFragment : Fragment() {
             ).show()
         } else {
             validateInfo(cattleBoughtType, cattleBoughtPrice, cattleBoughtQty, cattleBoughtAmt)
-
-
         }
 
 

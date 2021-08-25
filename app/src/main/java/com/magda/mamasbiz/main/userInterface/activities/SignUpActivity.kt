@@ -1,13 +1,10 @@
 package com.magda.mamasbiz.main.userInterface.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.app.AppCompatActivity
 import com.magda.mamasbiz.databinding.ActivitySignUpBinding
-import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
-import com.magda.mamasbiz.main.data.entity.Metadata
 import com.magda.mamasbiz.main.utils.Constants
 
 class SignUpActivity : AppCompatActivity() {
@@ -17,11 +14,6 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-
-
-
 
         //To navigate to login page and password page
 

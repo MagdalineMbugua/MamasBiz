@@ -17,7 +17,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
     private lateinit var userViewModel: UserViewModel
     private lateinit var phoneNumber: String
-    private val TAG : String = "Login Activity"
 
 
 
@@ -97,7 +96,6 @@ class LoginActivity : AppCompatActivity() {
         userPassword: String,
         userDateCreated: String
     ) {
-        Log.d(TAG, "toOtpActivity: $userFirstName $userLastName, $userPassword, $userDateCreated")
         val intent = Intent(this, OtpActivity::class.java)
         intent.putExtra(Constants.FIRST_NAME,userFirstName)
         intent.putExtra(Constants.LAST_NAME,userLastName)

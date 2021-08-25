@@ -17,7 +17,7 @@ class ProductsRepository {
     }
     fun addProducts(product: Products,callback: (Results<Boolean>)-> Unit){
         product.productId?.let {
-            productReference.document(it!!).set(product).addOnCompleteListener{ task ->
+            productReference.document(it).set(product).addOnCompleteListener{ task ->
                 if(task.isSuccessful){
                     callback(Results.Success(true))
                 }else Results.Error("Error occurred while adding products")

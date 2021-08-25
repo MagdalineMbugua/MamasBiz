@@ -3,7 +3,6 @@ package com.magda.mamasbiz.main.userInterface.fragments
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +27,6 @@ import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.DateCreated
 import com.magda.mamasbiz.main.utils.SessionManager
 import com.magda.mamasbiz.main.utils.Status
-import kotlinx.android.synthetic.main.fragment_credit_debt_page2.*
 import java.util.*
 
 
@@ -60,7 +58,6 @@ class CreditPage4Fragment : Fragment() {
     private var totalAllPaid: Int = 0
     private var totalAllAmount: Int = 0
     private var totalAllBalance: Int = 0
-    private val TAG = "CreditDebtPage4Fragment"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +82,6 @@ class CreditPage4Fragment : Fragment() {
             ?.let { cattleBoughtList ->
                 this.cattleBoughtList = cattleBoughtList
             }
-        Log.d(TAG, "getExtraArgument: ${cattleBoughtList?.size}")
         arguments?.getString(Constants.DEBTOR_STATUS)?.let { status ->
             this.status = status
         }
@@ -122,7 +118,6 @@ class CreditPage4Fragment : Fragment() {
         requireArguments().getString(Constants.TOTAL_CATTLE_BOUGHT_QTY)
             ?.let { totalCattleBoughtQty ->
                 this.totalCattleBoughtQty = totalCattleBoughtQty
-                Log.d(TAG, "getExtraArgument: $totalCattleBoughtQty")
             }
     }
 
@@ -136,7 +131,6 @@ class CreditPage4Fragment : Fragment() {
 
 
         //Setting text to the text views
-        Log.d(TAG, "onCreateView: ${cattleBoughtList?.size}")
         initViews()
 
         creditDebtViewModel.fetchMetadata(getUserId())
@@ -265,7 +259,6 @@ class CreditPage4Fragment : Fragment() {
 
     private fun loadCdLiveData() {
         creditDebtViewModel._loadCDLiveData.observe(viewLifecycleOwner, {
-            Log.d(TAG, "toSubmitData: Called viewmodel")
             when (it.status) {
                 Status.LOADING -> {
                     Toast.makeText(requireActivity(), "Uploading...", Toast.LENGTH_SHORT).show()
@@ -341,8 +334,6 @@ class CreditPage4Fragment : Fragment() {
             val totalMoneyReceivedBalance = 0 + metadata.totalMoneyReceivedBalance
 
             confirmTheAmount()
-            Log.d(TAG, "addMetadata: $totalAllAmount, $totalAllPaid, $totalAllBalance")
-
 
             val totalMoneySentPaid = totalAllPaid.plus(metadata.totalMoneySentPaid)
             val totalMoneySentAmt = totalAllAmount.plus(metadata.totalMoneySentAmt)
@@ -378,13 +369,11 @@ class CreditPage4Fragment : Fragment() {
                 totalAllBalance = totalPartBalance.plus(this.totalBalance!!.toInt())
             }
         }
-        Log.d(TAG, "confirmTheAmount: $totalAllBalance , $totalAllAmount, $totalAllPaid")
     }
 
 
     // Upload data to firebase
     private fun toUploadCreditDebtData() {
-        Log.d(TAG, "toSubmitData: data")
         val dateCreated = DateCreated.getDateCreated()
         creditDebtId = creditDebtViewModel.getCreditDebtId()
         if (cattleBoughtList != null) cattleBoughtId =
@@ -406,23 +395,17 @@ class CreditPage4Fragment : Fragment() {
                 totalAllPaid.toString(),
                 totalAllBalance.toString(),
                 products?.productId,
+                totalAmount,
                 totalPaid,
                 totalBalance,
-                totalAmount,
                 totalCattleBoughtPaid,
                 totalCattleBoughtBal,
                 totalCattleBoughtAmount,
                 totalCattleBoughtQty
 
             )
-
-        Log.d(TAG, "toSubmitData: $creditDebt")
         creditDebtViewModel.addCreditDebt(creditDebt)
-
-        Log.d(TAG, "toSubmitData: after Viewmodel")
-
-
-    }
+        }
 
     private fun getUserId(): String {
         val sessionManager = SessionManager(requireContext())

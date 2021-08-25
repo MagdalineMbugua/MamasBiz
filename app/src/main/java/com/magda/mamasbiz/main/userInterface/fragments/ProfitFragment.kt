@@ -1,7 +1,6 @@
 package com.magda.mamasbiz.main.userInterface.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import com.magda.mamasbiz.main.businessLogic.viewModels.CreditDebtViewModel
 import com.magda.mamasbiz.main.data.entity.Metadata
 import com.magda.mamasbiz.main.utils.SessionManager
 import com.magda.mamasbiz.main.utils.Status
-import com.mikhaellopez.circularprogressbar.CircularProgressBar
 import java.math.RoundingMode
 
 
@@ -21,10 +19,6 @@ class ProfitFragment : Fragment() {
     private lateinit var binding: FragmentProfitBinding
     private lateinit var creditDebtViewModel: CreditDebtViewModel
     private lateinit var metadata: Metadata
-    private val TAG = "ProfitFragment"
-
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

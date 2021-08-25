@@ -6,7 +6,6 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.net.NetworkRequest
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,15 +13,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ConnectionLiveData(context: Context) : MutableLiveData<Boolean>() {
-    private val TAG ="ConnectionLiveData"
-
-    private val connectivityManager =
+       private val connectivityManager =
         context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
     private val validNetworks: MutableSet<Network> = HashSet()
 
     override fun onActive() {
-        Log.d(TAG, "onActive: called")
         networkCallback = createNetworkCallBack()
         val networkRequest = NetworkRequest.Builder()
             .addCapability(NET_CAPABILITY_INTERNET)
@@ -43,7 +39,6 @@ class ConnectionLiveData(context: Context) : MutableLiveData<Boolean>() {
             if (hasInternetCapabilities == true) {
                 CoroutineScope(Dispatchers.IO).launch {
                     val hasInternet = DoesNetworkHaveInternet.execute(network.socketFactory)
-                    Log.d(TAG, "onAvailable: $hasInternet")
                     if(hasInternet){
                         withContext(Dispatchers.Main){
                             validNetworks.add(network)
@@ -58,7 +53,6 @@ class ConnectionLiveData(context: Context) : MutableLiveData<Boolean>() {
 
         //If the network is lost, remove from the available networks
         override fun onLost(network: Network) {
-            Log.d(TAG, "onLost: called")
             super.onLost(network)
             validNetworks.remove(network)
             checkValidNetworks()
@@ -69,7 +63,6 @@ class ConnectionLiveData(context: Context) : MutableLiveData<Boolean>() {
 
     override fun onInactive() {
         connectivityManager.unregisterNetworkCallback(networkCallback)
-        Log.d(TAG, "onInactive: called")
         super.onInactive()
     }
     private fun checkValidNetworks() {

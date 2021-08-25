@@ -1,12 +1,10 @@
 package com.magda.mamasbiz.main.userInterface.activities
 
 import android.content.Intent
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.magda.mamasbiz.databinding.ActivityPasswordBinding
@@ -24,11 +22,7 @@ import com.magda.mamasbiz.main.utils.Constants.Companion.PHONE_NUMBER
 import com.magda.mamasbiz.main.utils.DateCreated
 import com.magda.mamasbiz.main.utils.SessionManager
 import com.magda.mamasbiz.main.utils.Status
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.properties.Delegates
 
 class PasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPasswordBinding
@@ -43,7 +37,7 @@ class PasswordActivity : AppCompatActivity() {
     private lateinit var creditDebtViewModel: CreditDebtViewModel
     private lateinit var passwordInput: String
     private val metadata = Metadata()
-    private var isNetworkAvailable by Delegates.notNull<Boolean>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -135,7 +129,6 @@ class PasswordActivity : AppCompatActivity() {
 
     private fun toConfirmPassword() {
         passwordInput = binding.etPassword.text.toString().trim()
-        Log.d(TAG, "toConfirmPassword: $passwordInput $password")
         if(passwordInput==password){
             toDashboardActivity()
         } else Toast.makeText(this, "Wrong password. Try again", Toast.LENGTH_SHORT).show()
@@ -204,18 +197,7 @@ class PasswordActivity : AppCompatActivity() {
         val user= User(phoneNumber,firstName,lastName,password,dateCreated)
 
         userViewModel.addUser(user)
-
-
-
     }
 
-
-
-
-
-
-    companion object {
-        private const val TAG = "Password Activity"
-    }
 
 }

@@ -19,10 +19,8 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         //set up full screen
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
-
 
         //Animate the image view
         val cowAnimation = AnimationUtils.loadAnimation(this,R.anim.splash_animation)

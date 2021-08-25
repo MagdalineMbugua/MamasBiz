@@ -47,7 +47,6 @@ class CreditDebtRepository {
     fun addCreditDebt(creditDebt: CreditDebt, callback: (Results<Boolean>) -> Unit) {
         creditDebtReference.document(creditDebt.creditDebtId.toString()).set(creditDebt)
             .addOnCompleteListener { task ->
-                Log.d(TAG, "addCreditDebt: $creditDebt ")
                 if (task.isSuccessful) {
                     callback(Success(true))
                     Log.d(TAG, "addCreditDebt: was successful")
@@ -64,7 +63,6 @@ class CreditDebtRepository {
             creditDebtReference.whereEqualTo(Constants.USER_ID, userId).get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "getCreditDebt: is Successful ${task.result?.size()}")
                         task.result?.let {
                             val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm:ss")
                             val updateList = it.documents
@@ -163,7 +161,6 @@ class CreditDebtRepository {
             val cattleBoughtId = cattleBoughtReference.document().id
             cattleBought.cattleBoughtId = cattleBoughtId
             cattleBought.creditDebtId = creditDebtId
-            Log.d(TAG, "addCattleBought: $creditDebtId, $cattleBoughtId")
             cattleBoughtReference.document(cattleBoughtId).set(cattleBought)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -261,7 +258,6 @@ class CreditDebtRepository {
                 .addOnSuccessListener { queryDocumentSnapshots ->
                     for (snapshot: DocumentSnapshot in queryDocumentSnapshots) {
                         val updatePayments = snapshot.toObject(UpdatePayments::class.java)
-                        Log.d(TAG, "getUpdateList: $updatePayments")
                         updatedPaymentsList.add(updatePayments!!)
                     }
                     callback(Success(updatedPaymentsList))
@@ -282,7 +278,6 @@ class CreditDebtRepository {
                 .addOnSuccessListener { queryDocumentSnapshots ->
                     for (snapshot: DocumentSnapshot in queryDocumentSnapshots) {
                         val cattleBought = snapshot.toObject(CattleBought::class.java)
-                        Log.d(TAG, "getUpdateList: $cattleBought")
                         updatedCattleBoughtList.add(cattleBought!!)
                     }
                     callback(Success(updatedCattleBoughtList))

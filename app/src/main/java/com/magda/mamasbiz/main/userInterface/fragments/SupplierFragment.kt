@@ -3,21 +3,17 @@ package com.magda.mamasbiz.main.userInterface.fragments
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.ActivityNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.magda.mamasbiz.R
-import com.magda.mamasbiz.databinding.FragmentCustomerBinding
 import com.magda.mamasbiz.databinding.FragmentSupplierBinding
 import com.magda.mamasbiz.main.businessLogic.adapter.CreditDebtAdapter
 import com.magda.mamasbiz.main.businessLogic.adapter.ItemClickListener
@@ -29,7 +25,6 @@ import com.magda.mamasbiz.main.userInterface.activities.DetailsActivity
 import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.SessionManager
 import com.magda.mamasbiz.main.utils.Status
-import kotlinx.android.synthetic.main.customer_cardview.view.*
 import java.util.*
 
 
@@ -40,7 +35,6 @@ class SupplierFragment : Fragment(), ItemClickListener {
     private lateinit var creditDebtViewModel: CreditDebtViewModel
     private lateinit var productViewModel: ProductViewModel
     private lateinit var creditDebtAdapter : CreditDebtAdapter
-    private val TAG = "Supplier Fragment"
 
 
 
@@ -79,12 +73,9 @@ class SupplierFragment : Fragment(), ItemClickListener {
                 Status.SUCCESS -> {
                     binding.progressbar.visibility = View.GONE
                     val creditDebtList = it.data!!
-
-                    Log.d(TAG, "onCreateView: ${creditDebtList.size}")
                     creditList = creditDebtList.filter {credit -> credit.type == Constants.CREDIT}.toMutableList()
                     setViews()
                     creditDebtAdapter.addList(creditList)
-                    Log.d(TAG, "onCreateView: ${creditList.size}")
                     initViews()
 
                 }
@@ -167,10 +158,8 @@ class SupplierFragment : Fragment(), ItemClickListener {
     }
 
     private fun setViews() {
-        Log.d(TAG, "setViews: passed the set view method")
         if(creditList.size>0){
             binding.apply {
-                Log.d(TAG, "setViews: creditList is greater than 0")
                 consumerRecyclerView.visibility = View.VISIBLE
                 etSearch.visibility = View.VISIBLE
                 tvCreateCredit.visibility = View.GONE
@@ -179,7 +168,6 @@ class SupplierFragment : Fragment(), ItemClickListener {
             }
         } else{
             binding.apply {
-                Log.d(TAG, "setViews: creditList is less than 0")
                 consumerRecyclerView.visibility = View.GONE
                 etSearch.visibility = View.GONE
                 tvCreateCredit.visibility = View.VISIBLE

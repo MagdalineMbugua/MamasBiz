@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,11 +23,10 @@ import com.magda.mamasbiz.main.data.entity.Products
 import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.Status
 import kotlinx.android.synthetic.main.fragment_credit_debt_page2.*
-import java.util.ArrayList
+import java.util.*
 
 class CreditDebtPage2Fragment : Fragment() {
     private lateinit var binding: FragmentCreditDebtPage2Binding
-    private val TAG = "CreditDebtPage2Fragment"
     private lateinit var meatPrice: String
     private lateinit var meatQty: String
     private lateinit var intestinePrice: String
@@ -64,6 +62,7 @@ class CreditDebtPage2Fragment : Fragment() {
     private lateinit var balance: String
     private lateinit var amountPaid: String
     private lateinit var total: String
+    private  var productId: String? = null
 
 
     companion object {
@@ -132,6 +131,10 @@ class CreditDebtPage2Fragment : Fragment() {
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
 
+        productId = if (creditDebt?.productId != null) {
+            creditDebt?.productId
+        } else productViewModel.getProductId()
+
         addProductLiveData()
         fetchMetadataLiveData()
         addMetadataLiveData()
@@ -192,8 +195,7 @@ class CreditDebtPage2Fragment : Fragment() {
                 }
                 Status.SUCCESS -> {
                     productViewModel.addProducts(getProduct())
-
-                }
+                   }
                 Status.ERROR -> {
                     binding.progressbar.visibility = View.GONE
                     binding.btUpdate.visibility = View.VISIBLE
@@ -241,16 +243,14 @@ class CreditDebtPage2Fragment : Fragment() {
         }
     }
 
-    private fun getCreditDebtArguments() {
+    private fun getCreditDebtArguments() = with(binding) {
         creditDebt = requireArguments().getParcelable(Constants.CREDIT_DEBT)
         if (creditDebt != null) {
             creditDebtViewModel.fetchMetadata(creditDebt!!.userId!!)
-            binding.apply {
-                nextLayout.tvNext.visibility = View.GONE
-                nextLayout.tvBack.visibility = View.GONE
-                btUpdate.visibility = View.VISIBLE
-                btUpdate.setOnClickListener { checkIfFilled() }
-            }
+            nextLayout.tvNext.visibility = View.GONE
+            nextLayout.tvBack.visibility = View.GONE
+            btUpdate.visibility = View.VISIBLE
+            btUpdate.setOnClickListener { checkIfFilled() }
         }
     }
 
@@ -344,8 +344,10 @@ class CreditDebtPage2Fragment : Fragment() {
             creditDebtViewModel.addMetadata(metadata, creditDebt!!.userId!!)
         } else if (creditDebt!!.type == "Debt") {
             updatedAmount = metadata?.totalMoneyReceivedAmt!!.minus(productAmt.toInt())
-            updatedBal = metadata?.totalMoneyReceivedBalance!!.minus(creditDebt?.totalAllBalance!!.toInt())
-            updatedPaid = metadata?.totalMoneyReceivedPaid!!.minus(creditDebt?.totalAllPaid!!.toInt())
+            updatedBal =
+                metadata?.totalMoneyReceivedBalance!!.minus(creditDebt?.totalAllBalance!!.toInt())
+            updatedPaid =
+                metadata?.totalMoneyReceivedPaid!!.minus(creditDebt?.totalAllPaid!!.toInt())
             val metadata = Metadata(
                 metadata?.totalMoneySentPaid!!,
                 metadata?.totalMoneySentAmt!!,
@@ -528,10 +530,8 @@ class CreditDebtPage2Fragment : Fragment() {
         } else if (debt != null) {
             arg.putString(Constants.DEBT, debt)
         }
-        Log.d(TAG, "toNextPage: ${cattleBoughtList?.size}")
         if (cattleBoughtList != null) {
             arg.putParcelableArrayList(Constants.CATTLE_BOUGHT_LIST, cattleBoughtList)
-            Log.d(TAG, "toNextPage: ${cattleBoughtList?.size}")
             arg.putString(Constants.TOTAL_CATTLE_BOUGHT_AMOUNT, totalCattleBoughtAmount)
             arg.putString(Constants.TOTAL_CATTLE_BOUGHT_PAID, totalCattleBoughtPaid)
             arg.putString(Constants.TOTAL_CATTLE_BOUGHT_QTY, totalCattleBoughtQty)
@@ -569,7 +569,7 @@ class CreditDebtPage2Fragment : Fragment() {
             updatedTotalAmount.toString(),
             updatedTotalPaid.toString(),
             updatedTotalBalance.toString(),
-            creditDebt?.productId,
+            productId,
             amountPaid,
             balance,
             total,
@@ -578,15 +578,12 @@ class CreditDebtPage2Fragment : Fragment() {
             creditDebt?.cattleBoughtAmount,
             totalCattleBoughtQty,
 
-        )
-        Log.d(TAG, "updateCreditDebt: $amountPaid, $balance, $total")
+            )
         creditDebtViewModel.addCreditDebt(creditDebt)
     }
 
     private fun getProduct(): Products {
-        val productId = if (creditDebt?.productId != null) {
-            creditDebt?.productId
-        } else productViewModel.getProductId()
+
         return Products(
             productId,
             meatPrice,

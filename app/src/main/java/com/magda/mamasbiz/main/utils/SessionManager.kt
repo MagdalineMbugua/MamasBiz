@@ -12,8 +12,8 @@ import com.magda.mamasbiz.main.utils.Constants.Companion.SHARED_PREF
 import com.magda.mamasbiz.main.utils.Constants.Companion.USER_ID
 
 class SessionManager(context: Context) {
-    private lateinit var sharedPreferences:SharedPreferences
-    private lateinit var editor:SharedPreferences.Editor
+    private var sharedPreferences:SharedPreferences
+    private  var editor:SharedPreferences.Editor
 
     init {
       sharedPreferences = context.getSharedPreferences(SHARED_PREF, android.content.Context.MODE_PRIVATE)

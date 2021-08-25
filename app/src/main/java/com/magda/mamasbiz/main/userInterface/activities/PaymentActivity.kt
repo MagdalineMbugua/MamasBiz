@@ -1,8 +1,6 @@
 package com.magda.mamasbiz.main.userInterface.activities
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,14 +21,12 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var updatePaymentList: MutableList<UpdatePayments>
     private lateinit var creditDebt: CreditDebt
     private val activityAdapter = ActivityAdapter()
-    private val TAG = "Payment Activity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityPaymentBinding.inflate(layoutInflater)
 
         creditDebt = intent.getParcelableExtra(Constants.CREDIT_DEBT)
         activityAdapter.getCreditDebt(creditDebt)
-        Log.d(TAG, "onCreate: $creditDebt")
 
         creditDebtViewModel = ViewModelProvider(this).get(CreditDebtViewModel::class.java)
         fetchUpdatePayments()
@@ -42,7 +38,6 @@ class PaymentActivity : AppCompatActivity() {
                 Status.SUCCESS -> {
                     binding.progressbar.visibility = View.GONE
                     updatePaymentList = it.data!!
-                    Log.d(TAG, "onCreate: ${updatePaymentList.size}")
                     activityAdapter.addList(updatePaymentList)
                     initViews()
                 }
@@ -113,6 +108,5 @@ class PaymentActivity : AppCompatActivity() {
     private fun fetchUpdatePayments() {
         //Fetch list of update payments to display on the recycler view
         creditDebtViewModel.fetchUpdatePayments(creditDebt.creditDebtId!!)
-        Log.d(TAG, "fetchUpdatePayments: ${creditDebt.creditDebtId}")
     }
 }

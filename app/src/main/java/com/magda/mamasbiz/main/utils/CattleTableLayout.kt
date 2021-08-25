@@ -4,13 +4,10 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.util.Log
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.widget.addTextChangedListener
 import com.magda.mamasbiz.R
 
 class CattleTableLayout (context: Context, attrs: AttributeSet?): LinearLayout(context, attrs){
@@ -24,8 +21,6 @@ class CattleTableLayout (context: Context, attrs: AttributeSet?): LinearLayout(c
     private lateinit var price : String
     private lateinit var callback: (String) -> Unit
     private lateinit var removeCallback: (String) -> Unit
-    private lateinit var onCompleteCallback: (ArrayList<String>) -> Unit
-    private val TAG = "CattleTableLayout"
 
     init {
         inflate(context, R.layout.cattle_layout,this)
@@ -64,23 +59,16 @@ class CattleTableLayout (context: Context, attrs: AttributeSet?): LinearLayout(c
             override fun afterTextChanged(s: Editable?) {
                 //Method sub
             }
-
-
-
         }
 
         mQty.addTextChangedListener(textWatcher)
         mPrice.addTextChangedListener(textWatcher)
     }
     fun getAmount ():String{
-        val string = mAmount.text.toString()
-        Log.d(TAG, "getAmount: $string")
-        return string
+        return mAmount.text.toString()
     }
     fun getQty(): String{
-        val string = mQty.text.toString()
-        Log.d(TAG, "getAmount: $string")
-        return string
+        return mQty.text.toString()
     }
     fun onAmountChangeListener (callback:(String)-> Unit){
         this.callback = callback
@@ -88,10 +76,6 @@ class CattleTableLayout (context: Context, attrs: AttributeSet?): LinearLayout(c
     }
     fun onRemoveAmountListener (callback:(String)-> Unit){
         this.removeCallback = callback
-
-    }
-    fun onCompleteListener (callback:(ArrayList<String>)-> Unit){
-        this.onCompleteCallback = callback
 
     }
     fun setTableTitle (position : Int){

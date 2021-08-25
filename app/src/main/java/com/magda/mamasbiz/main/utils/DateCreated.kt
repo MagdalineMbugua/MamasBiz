@@ -9,8 +9,7 @@ import java.util.*
 class DateCreated {
     companion object{
         fun getDateCreated():String{
-            val dateToString: String
-            dateToString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val currentDateTime= LocalDateTime.now()
                 val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm:ss")
                 currentDateTime.format(formatter)
@@ -22,7 +21,6 @@ class DateCreated {
                 formatter.format(currentDateTime)
 
             }
-            return dateToString
         }
     }
 

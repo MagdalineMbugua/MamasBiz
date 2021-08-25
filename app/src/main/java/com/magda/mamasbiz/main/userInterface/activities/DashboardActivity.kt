@@ -7,8 +7,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.magda.mamasbiz.R
 import com.magda.mamasbiz.databinding.ActivityDashboardBinding
-import com.magda.mamasbiz.main.userInterface.fragments.SupplierFragment
-import com.magda.mamasbiz.main.utils.UpdateFragment
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var binding : ActivityDashboardBinding

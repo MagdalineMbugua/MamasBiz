@@ -31,7 +31,6 @@ import com.magda.mamasbiz.main.utils.Status
 import kotlinx.android.synthetic.main.activity_details.*
 
 class DetailsActivity : AppCompatActivity() {
-    private val TAG = "Details Activity"
     private lateinit var binding: ActivityDetailsBinding
     private lateinit var creditDebt: CreditDebt
     private lateinit var productViewModel: ProductViewModel
@@ -62,8 +61,9 @@ class DetailsActivity : AppCompatActivity() {
 
 
         //Get products
-        creditDebt.productId?.let { productViewModel.getProducts(it) }
-        Log.d(TAG, "onCreate: ${creditDebt.productId}")
+        creditDebt.productId?.let {
+            productViewModel.getProducts(it)
+        }
         // fetch metadata
         creditDebtViewModel.fetchMetadata(creditDebt.userId!!)
 
@@ -109,7 +109,6 @@ class DetailsActivity : AppCompatActivity() {
 
         binding.tvViewUpdatePayment.setOnClickListener {
             val intent = Intent(this@DetailsActivity, PaymentActivity::class.java)
-            Log.d(TAG, "onCreate: $creditDebt")
             intent.putExtra(Constants.CREDIT_DEBT, creditDebt)
             startActivity(intent)
         }
@@ -225,7 +224,6 @@ class DetailsActivity : AppCompatActivity() {
                 }
                 Status.ERROR -> {
                     Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, "onCreate: ${it.error}")
                 }
             }
 
@@ -451,7 +449,6 @@ class DetailsActivity : AppCompatActivity() {
                     updatedBalance,
                     creditDebt.userId
                 )
-                Log.d(TAG, "toUpdatePayment: $updatePayments")
                 checkIndividualBal(
                     updatedPaidAmt,
                     updatedTotalAmtPaid.toString(),
@@ -494,10 +491,6 @@ class DetailsActivity : AppCompatActivity() {
         newTotalBalance: String,
         status: String
     ) {
-
-
-        Log.d(TAG, "checkIndividualBal: ${cattleBoughtList?.size}, $products")
-        Log.d(TAG, "checkIndividualBal: ${cattleBoughtList != null}, ${products != null}")
         if (cattleBoughtList != null && products == null) {
             val cattleBoughtPaid =
                 creditDebt.cattleBoughtPaid?.toInt()?.plus(updatedIndividualTotalAmountPaid.toInt())
@@ -541,8 +534,6 @@ class DetailsActivity : AppCompatActivity() {
                 creditDebt.cattleBoughtBalance!!
             )
         }
-        Log.d(TAG, "checkIndividualBal: $newTotalAmountPaid, $newTotalBalance")
-
     }
 
     private fun toUpdateMetadata() {
@@ -607,8 +598,6 @@ class DetailsActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun initViews() {
         binding.apply {
-
-            Log.d(TAG, "initViews: $cattleBoughtList, $products")
             when {
                 (cattleBoughtList != null && products == null) -> {
                     setRecyclerViewAndViews()

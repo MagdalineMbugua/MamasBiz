@@ -5,14 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
@@ -28,7 +27,6 @@ import com.magda.mamasbiz.main.utils.Constants
 import com.magda.mamasbiz.main.utils.SessionManager
 import com.magda.mamasbiz.main.utils.Status
 import com.magda.mamasbiz.main.utils.Status.LOADING
-import kotlinx.android.synthetic.main.customer_cardview.view.*
 import java.util.*
 
 
@@ -38,7 +36,6 @@ class CustomerFragment : Fragment(), ItemClickListener {
     private var debtList : MutableList<CreditDebt> = mutableListOf()
     private lateinit var creditDebtViewModel:CreditDebtViewModel
     private lateinit var creditDebtAdapter: CreditDebtAdapter
-    private val TAG = "Customer Fragment"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,8 +68,6 @@ class CustomerFragment : Fragment(), ItemClickListener {
                 Status.SUCCESS -> {
                     binding.progressbar.visibility = GONE
                     val creditDebtList = it.data!!
-
-                    Log.d(TAG, "onCreateView: ${creditDebtList.size}")
                     getDebtList(creditDebtList)
                 }
                 Status.ERROR -> {
@@ -115,10 +110,11 @@ class CustomerFragment : Fragment(), ItemClickListener {
                     val string = s.toString().toLowerCase(Locale.ROOT)
                     filterUsingTheText(string)
 
-                }else {binding.consumerRecyclerView.visibility = View.VISIBLE
+                }else {binding.consumerRecyclerView.visibility = VISIBLE
                     creditDebtAdapter.addList(debtList)
-                    binding.ivUserNotFound.visibility = View.GONE
-                    binding.tvUserNotFound.visibility = View.GONE}
+                    binding.ivUserNotFound.visibility = GONE
+                    binding.tvUserNotFound.visibility = GONE
+                }
             }
             }
 
@@ -132,9 +128,10 @@ class CustomerFragment : Fragment(), ItemClickListener {
         if(filteredList.size>0){
             creditDebtAdapter.filteredList(filteredList)
         } else {
-            binding.ivUserNotFound.visibility = View.VISIBLE
-            binding.tvUserNotFound.visibility = View.VISIBLE
-            binding.consumerRecyclerView.visibility = View.GONE}
+            binding.ivUserNotFound.visibility = VISIBLE
+            binding.tvUserNotFound.visibility = VISIBLE
+            binding.consumerRecyclerView.visibility = GONE
+        }
 
     }
 
@@ -152,19 +149,19 @@ class CustomerFragment : Fragment(), ItemClickListener {
     private fun setViews() {
         if(debtList.size>0){
             binding.apply {
-                consumerRecyclerView.visibility = View.VISIBLE
-                etSearch.visibility = View.VISIBLE
-                tvCreateDebt.visibility = View.GONE
-                tvRecords.visibility = View.GONE
-                ivSplashImage.visibility = View.GONE
+                consumerRecyclerView.visibility = VISIBLE
+                etSearch.visibility = VISIBLE
+                tvCreateDebt.visibility = GONE
+                tvRecords.visibility = GONE
+                ivSplashImage.visibility = GONE
             }
         } else{
             binding.apply {
-                consumerRecyclerView.visibility = View.GONE
-                etSearch.visibility = View.GONE
-                tvCreateDebt.visibility = View.VISIBLE
-                tvRecords.visibility = View.VISIBLE
-                ivSplashImage.visibility = View.VISIBLE
+                consumerRecyclerView.visibility = GONE
+                etSearch.visibility = GONE
+                tvCreateDebt.visibility = VISIBLE
+                tvRecords.visibility = VISIBLE
+                ivSplashImage.visibility = VISIBLE
             }
         }
     }
@@ -181,7 +178,6 @@ class CustomerFragment : Fragment(), ItemClickListener {
          .toMutableList())
             creditDebtAdapter = CreditDebtAdapter(requireContext(), this)
             creditDebtAdapter.addList(debtList)
-    Log.d(TAG, "getDebtList: ${debtList.size}")
             initViews()
 
 

@@ -137,6 +137,8 @@
     <string name="create_supplier">Create Supplier</string>
     <string name="create_customer">Create customer</string>
     <string name="paid">Paid:</string>
+    <string name="paid1">Paid</string>
     <string name="product_amount">Product Amount</string>
+    <string name="amount">Amount</string>
 
 </resources>
